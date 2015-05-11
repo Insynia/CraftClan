@@ -1,3 +1,7 @@
 name: CraftClanPlugin
 main: fr.insynia.craftclan.CraftClanPlugin
 version: 1.0
+commands:
+   addpoint:
+      description: Add a point to your position.
+      usage: /<command> [name] [radius]

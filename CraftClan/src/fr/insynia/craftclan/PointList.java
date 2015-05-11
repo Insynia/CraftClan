@@ -20,10 +20,10 @@ public class PointList implements Loadable {
         try {
             while (rs.next()) {
                 String name = rs.getString("name");
-                int range = rs.getInt("range");
+                int radius = rs.getInt("radius");
                 World world = Bukkit.getWorld(DEFAULT_WORLD);
                 Location loc = new Location(world, rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
-                pointlist.add(new Point(name, range, loc));
+                pointlist.add(new Point(name, radius, loc));
                 MapState.getInstance().setPoints(pointlist);
             }
         } catch (SQLException e) {

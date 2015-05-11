@@ -13,18 +13,22 @@ import java.sql.SQLException;
 public class Point {
     private Location loc;
     private String name;
-    private int range; //TODO
+    private int radius; //TODO
 
-    public Point(String name, int range, Location loc) {
+    public Point(String name, int radius, Location loc) {
         this.name = name;
         this.loc = loc;
-        this.range = range;
+        this.radius = radius;
+    }
+
+    public String toString() {
+        return "x: " + loc.getX() + " y: " + loc.getY() + " z: " + loc.getZ();
     }
 
     public void saveSQL() {
         SQLManager sqlm = new SQLManager();
-        sqlm.execUpdate("INSERT INTO points(name, range, x, y, z) " +
-                "VALUES(" + name + ", " + range + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ");");
+        sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z) " +
+                "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ");");
     }
 
     public static Point fromSQL() {

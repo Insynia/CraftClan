@@ -2,6 +2,7 @@ package fr.insynia.craftclan;
 
 import org.bukkit.Bukkit;
 
+import java.sql.Array;
 import java.util.List;
 
 /**
@@ -11,7 +12,6 @@ public class MapState {
     private static MapState instance = null;
     private List<Point> points;
 
-
     protected MapState() {}
     public static MapState getInstance() {
         if(instance == null) {
@@ -20,8 +20,15 @@ public class MapState {
         return instance;
     }
 
-    public void displayPoints() {
-        Bukkit.getLogger().info(points.toString());
+    public String stringPoints() {
+        //Bukkit.getLogger().info();
+        if (points == null) return "No point";
+        String test = "";
+        Point[] arr = points.toArray(new Point[points.size()]);
+        for (Point anArr : arr) {
+            test = test + "| Point: " + anArr.toString() + " ";
+        }
+        return test;
     }
 
     public List<Point> getPoints() {

@@ -1,6 +1,10 @@
 package fr.insynia.craftclan;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CraftClanPlugin extends JavaPlugin {
@@ -21,5 +25,17 @@ public class CraftClanPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
+	}
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (cmd.getName().equalsIgnoreCase("addpoint")) {
+			Location loc = Bukkit.getPlayer(sender.getName()).getLocation();
+			Point p = new Point(args[0], Integer.parseInt(args[1]), loc);
+			p.saveSQL();
+			sender.sendMessage("Point saved at " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
+			return true;
+		}
+		return false;
 	}
 }
