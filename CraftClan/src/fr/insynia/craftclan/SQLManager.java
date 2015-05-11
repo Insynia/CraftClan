@@ -2,34 +2,35 @@ package fr.insynia.craftclan;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.sql.*;
-import java.util.Properties;
-import javax.sql.*;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SQLManager {
+    private DataSource ds;
 
-    private static DataSource getMySQLDataSource() {
-        Properties props = new Properties();
-        FileInputStream fis = null;
-        MysqlDataSource mysqlDS = null;
+    public SQLManager() {
         try {
-            fis = new FileInputStream("db.properties");
-            props.load(fis);
-            mysqlDS = new MysqlDataSource();
-            mysqlDS.setURL(props.getProperty("MYSQL_DB_URL"));
-            mysqlDS.setUser(props.getProperty("MYSQL_DB_USERNAME"));
-            mysqlDS.setPassword(props.getProperty("MYSQL_DB_PASSWORD"));
-        } catch (IOException e) {
+            ds = getMySQLDataSource();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private static DataSource getMySQLDataSource() throws SQLException {
+        MysqlDataSource mysqlDS;
+        mysqlDS = new MysqlDataSource();
+        if (System.getenv("DB_URL") == null || System.getenv("DB_USERNAME") == null || System.getenv("DB_PASSWORD") == null)
+            throw new SQLException("/!\\ ---------- MYSQL ENV VARS NOT CONFIGURED ---------- /!\\");
+        mysqlDS.setURL("jdbc:mysql://" + System.getenv("DB_URL"));
+        mysqlDS.setUser(System.getenv("DB_USERNAME"));
+        mysqlDS.setPassword(System.getenv("DB_PASSWORD"));
         return mysqlDS;
     }
 
-    public static void exec(String sql) {
-        DataSource ds = getMySQLDataSource();
-
+    public void execQuery(String sql) {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -42,6 +43,25 @@ public class SQLManager {
         } finally {
             try {
                 if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void execUpdate(String sql) {
+        Connection con = null;
+        Statement stmt = null;
+        try {
+            con = ds.getConnection();
+            stmt = con.createStatement();
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
                 if (stmt != null) stmt.close();
                 if (con != null) con.close();
             } catch (SQLException e) {
