@@ -30,7 +30,7 @@ public class SQLManager {
         return mysqlDS;
     }
 
-    public void execQuery(String sql) {
+    public void fetchQuery(String sql, Loadable elem) {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -38,6 +38,7 @@ public class SQLManager {
             con = ds.getConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sql);
+            elem.load(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

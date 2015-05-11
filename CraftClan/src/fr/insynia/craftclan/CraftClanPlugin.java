@@ -16,8 +16,6 @@ public class CraftClanPlugin extends JavaPlugin {
 		InitPlugin initializer = new InitPlugin();
 		initializer.createPoints();
 		getServer().getPluginManager().registerEvents(new PlayerRestriction(), this);
-		SQLManager sqlm = new SQLManager();
-		sqlm.execUpdate("CREATE TABLE TEST(ID INT);");
 	}
 	// Fired when plugin is disabled
 	@Override
