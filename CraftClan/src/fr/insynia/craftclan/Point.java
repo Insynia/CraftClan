@@ -34,4 +34,8 @@ public class Point {
     public static Point fromSQL() {
         return null;
     }
+
+    public String getName() {
+        return name;
+    }
 }

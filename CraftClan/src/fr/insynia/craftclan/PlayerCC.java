@@ -37,7 +37,7 @@ public class PlayerCC implements Loadable {
                 level = rs.getInt("level");
                 uuid = UUID.fromString(rs.getString("uuid"));
                 MapState.getInstance().addPlayer(this);
-                Bukkit.getLogger().info("Fetched player: " + this.name + "from the database");
+                Bukkit.getLogger().info("Fetched player: " + this.name + " from the database");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,5 +59,9 @@ public class PlayerCC implements Loadable {
         SQLManager sqlm = new SQLManager();
         sqlm.execUpdate("INSERT INTO users(name, faction_id, level, uuid) " +
                 "VALUES(\"" + name + "\", " + factionId + ", " + level + ", \"" + uuid + "\");");
+    }
+
+    public String getName() {
+        return name;
     }
 }

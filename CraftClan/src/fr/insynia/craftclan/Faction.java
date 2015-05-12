@@ -15,13 +15,13 @@ public class Faction {
     }
 
     public String toString() {
-        return "name: " + name + " color: " + color + " z: " + level;
+        return "name: " + name + " color: " + color + " level: " + level;
     }
 
     public void save() {
         SQLManager sqlm = new SQLManager();
         sqlm.execUpdate("INSERT INTO factions(name, color, level) " +
-                "VALUES(\"" + name + "\", " + color + ", " + level + ");");
+                "VALUES(\"" + name + "\", \"" + color + "\", " + level + ");");
         this.addToMap();
     }
 
@@ -31,5 +31,9 @@ public class Faction {
 
     public static Faction fromSQL() {
         return null;
+    }
+
+    public String getName() {
+        return name;
     }
 }

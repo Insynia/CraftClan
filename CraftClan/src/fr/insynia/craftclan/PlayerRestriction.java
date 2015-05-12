@@ -8,6 +8,9 @@ public class PlayerRestriction implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event)
     {
         event.getPlayer().sendMessage(MapState.getInstance().stringPoints());
+        event.getPlayer().sendMessage(MapState.getInstance().stringFactions());
+        event.getPlayer().sendMessage(MapState.getInstance().stringPlayers());
+
         //event.setCancelled(true);
     }
 }

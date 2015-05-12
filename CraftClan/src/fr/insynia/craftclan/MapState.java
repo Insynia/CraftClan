@@ -1,5 +1,9 @@
 package fr.insynia.craftclan;
 
+import org.bukkit.Bukkit;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +16,11 @@ public class MapState {
     private List<PlayerCC> playerCCs;
     private List<Faction> factions;
 
-    protected MapState() {}
+    protected MapState() {
+        points = new ArrayList<Point>();
+        playerCCs = new ArrayList<PlayerCC>();
+        factions = new ArrayList<Faction>();
+    }
     public static MapState getInstance() {
         if(instance == null) {
             instance = new MapState();
@@ -87,18 +95,43 @@ public class MapState {
     }
 
     public void removePlayer(PlayerCC playerCC) {
-        playerCCs.remove(playerCC);
+        String msg = "Players left: ";
+        Iterator<PlayerCC> itr = playerCCs.iterator();
+        while (itr.hasNext()) {
+            PlayerCC player = itr.next();
+            if (player.getUUID().equals(playerCC.getUUID())) {
+                itr.remove();
+            }
+        }
+        for (PlayerCC p : playerCCs) {
+            if (p.getUUID().equals(playerCC.getUUID())) {
+                msg = msg + p.getName() + " ";
+            }
+        }
+        Bukkit.getLogger().info(msg);
     }
 
-    public void removePoint(Point point) {
-        points.remove(point);
+    public void removePoint(String name) {
+        Iterator<Point> itr = points.iterator();
+        while (itr.hasNext()) {
+            Point point = itr.next();
+            if (point.getName().equals(name)) {
+                itr.remove();
+            }
+        }
     }
 
     public void addFaction(Faction faction) {
         factions.add(faction);
     }
 
-    public void removeFaction(Faction faction) {
-        factions.remove(faction);
+    public void removeFaction(String name) {
+        Iterator<Faction> itr = factions.iterator();
+        while (itr.hasNext()) {
+            Faction faction = itr.next();
+            if (faction.getName().equals(name)) {
+                itr.remove();
+            }
+        }
     }
 }

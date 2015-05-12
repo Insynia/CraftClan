@@ -13,7 +13,7 @@ public class PlayerEvents implements Listener {
     {
         SQLManager sqlm = new SQLManager();
         Player p = event.getPlayer();
-        sqlm.fetchQuery("SELECT * FROM users WHERE uuid = " + p.getUniqueId() + ";", new PlayerCC());
+        sqlm.fetchQuery("SELECT * FROM users WHERE uuid = \"" + p.getUniqueId() + "\";", new PlayerCC());
         event.getPlayer().sendMessage("Hello");
         PlayerCC player = MapState.getInstance().findPlayer(p.getUniqueId());
         if (player == null) {

@@ -20,6 +20,7 @@ public class CraftClanPlugin extends JavaPlugin {
         InitPlugin initializer = new InitPlugin();
         initializer.init();
         getServer().getPluginManager().registerEvents(new PlayerRestriction(), this);
+        getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
     }
     // Fired when plugin is disabled
     @Override
