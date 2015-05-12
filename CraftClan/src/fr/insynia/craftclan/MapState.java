@@ -1,9 +1,7 @@
 package fr.insynia.craftclan;
 
-import org.bukkit.Bukkit;
-
-import java.sql.Array;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Doc on 11/05/2015.
@@ -11,6 +9,7 @@ import java.util.List;
 public class MapState {
     private static MapState instance = null;
     private List<Point> points;
+    private List<PlayerCC> playerCCs;
     private List<Faction> factions;
 
     protected MapState() {}
@@ -43,6 +42,17 @@ public class MapState {
         return test;
     }
 
+    public String stringPlayers() {
+        //Bukkit.getLogger().info();
+        if (points == null) return "No player";
+        String test = "";
+        PlayerCC[] arr = playerCCs.toArray(new PlayerCC[playerCCs.size()]);
+        for (PlayerCC anArr : arr) {
+            test = test + "| PlayerCC: " + anArr.toString() + " ";
+        }
+        return test;
+    }
+
     public List<Point> getPoints() {
         return points;
     }
@@ -61,6 +71,23 @@ public class MapState {
 
     public void addPoint(Point point) {
         points.add(point);
+    }
+
+    public void addPlayer(PlayerCC playerCC) {
+        playerCCs.add(playerCC);
+    }
+
+    public PlayerCC findPlayer(UUID uuid) {
+        for (PlayerCC p : playerCCs) {
+            if (p.getUUID().equals(uuid)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public void removePlayer(PlayerCC playerCC) {
+        playerCCs.remove(playerCC);
     }
 
     public void removePoint(Point point) {

@@ -22,6 +22,11 @@ public class Faction {
         SQLManager sqlm = new SQLManager();
         sqlm.execUpdate("INSERT INTO factions(name, color, level) " +
                 "VALUES(\"" + name + "\", " + color + ", " + level + ");");
+        this.addToMap();
+    }
+
+    private void addToMap() {
+        MapState.getInstance().addFaction(this);
     }
 
     public static Faction fromSQL() {

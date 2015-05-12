@@ -21,6 +21,13 @@ public class InitPlugin {
                 " color VARCHAR(255)," +
                 " level INT(12)," +
                 " PRIMARY KEY (id));");
+        sqlm.execUpdate("CREATE TABLE IF NOT EXISTS users (" +
+                " id int NOT NULL AUTO_INCREMENT," +
+                " name VARCHAR(255)," +
+                " faction_id INT(12)," +
+                " level INT(12)," +
+                " uuid VARCHAR(255)," +
+                " PRIMARY KEY (id));");
     }
     private void fetchItems() {
         SQLManager sqlm = new SQLManager();
