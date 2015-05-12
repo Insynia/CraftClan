@@ -33,14 +33,20 @@ public class CraftClanPlugin extends JavaPlugin {
         if (cmd.getName().equalsIgnoreCase("addpoint")) {
             Location loc = Bukkit.getPlayer(sender.getName()).getLocation();
             Point p = new Point(args[0], Integer.parseInt(args[1]), loc);
-            p.save();
-            sender.sendMessage("Point saved at " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
-            return true;
+            boolean ret = p.save();
+            if (ret)
+                sender.sendMessage("Point saved at " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
+            else
+                sender.sendMessage("A point named " + args[0] + " already exists");
+            return ret;
         } else if (cmd.getName().equalsIgnoreCase("addfaction")) {
             Faction f = new Faction(args[0], args[1], Integer.parseInt(args[2]));
-            f.save();
-            sender.sendMessage("Faction saved : " + args[0] + ", " + args[1] + ", " + args[2]);
-            return true;
+            boolean ret = f.save();
+            if (ret)
+                sender.sendMessage("Faction saved : " + args[0] + ", " + args[1] + ", " + args[2]);
+            else
+                sender.sendMessage("A faction named " + args[0] + " already exists");
+            return ret;
         }
         return false;
     }

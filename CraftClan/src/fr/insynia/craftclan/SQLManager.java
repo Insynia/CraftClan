@@ -52,15 +52,18 @@ public class SQLManager {
         }
     }
 
-    public void execUpdate(String sql) {
+    public boolean execUpdate(String sql) {
         Connection con = null;
         Statement stmt = null;
+        boolean ret;
         try {
             con = ds.getConnection();
             stmt = con.createStatement();
             stmt.executeUpdate(sql);
+            ret = true;
         } catch (SQLException e) {
             e.printStackTrace();
+            ret = false;
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -69,5 +72,6 @@ public class SQLManager {
                 e.printStackTrace();
             }
         }
+        return ret;
     }
 }

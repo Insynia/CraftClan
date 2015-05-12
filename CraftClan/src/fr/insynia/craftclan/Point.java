@@ -20,11 +20,12 @@ public class Point {
         return "x: " + loc.getX() + " y: " + loc.getY() + " z: " + loc.getZ();
     }
 
-    public void save() {
+    public boolean save() {
         SQLManager sqlm = new SQLManager();
-        sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z) " +
+        boolean ret = sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z) " +
                 "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ");");
         this.addToMap();
+        return ret;
     }
 
     private void addToMap() {

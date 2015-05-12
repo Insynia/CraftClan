@@ -18,11 +18,13 @@ public class Faction {
         return "name: " + name + " color: " + color + " level: " + level;
     }
 
-    public void save() {
+    public boolean save() {
         SQLManager sqlm = new SQLManager();
-        sqlm.execUpdate("INSERT INTO factions(name, color, level) " +
+        boolean ret = sqlm.execUpdate("INSERT INTO factions(name, color, level) " +
                 "VALUES(\"" + name + "\", \"" + color + "\", " + level + ");");
-        this.addToMap();
+        if (ret)
+            this.addToMap();
+        return ret;
     }
 
     private void addToMap() {
