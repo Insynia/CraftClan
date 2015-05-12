@@ -30,6 +30,7 @@ public class Point {
 
     private void addToMap() {
         MapState.getInstance().addPoint(this);
+        BlockSpawner.createBeacon(loc);
     }
 
     public static Point fromSQL() {

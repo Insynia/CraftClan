@@ -31,6 +31,8 @@ public class CraftClanPlugin extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("addpoint")) {
+            if (!sender.isOp())
+                return false;
             Location loc = Bukkit.getPlayer(sender.getName()).getLocation();
             Point p = new Point(args[0], Integer.parseInt(args[1]), loc);
             boolean ret = p.save();
@@ -40,6 +42,8 @@ public class CraftClanPlugin extends JavaPlugin {
                 sender.sendMessage("A point named " + args[0] + " already exists");
             return ret;
         } else if (cmd.getName().equalsIgnoreCase("addfaction")) {
+            if (!sender.isOp())
+                return false;
             Faction f = new Faction(args[0], args[1], Integer.parseInt(args[2]));
             boolean ret = f.save();
             if (ret)
