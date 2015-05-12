@@ -1,11 +1,6 @@
 package fr.insynia.craftclan;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * Created by Doc on 11/05/2015.
@@ -25,10 +20,15 @@ public class Point {
         return "x: " + loc.getX() + " y: " + loc.getY() + " z: " + loc.getZ();
     }
 
-    public void saveSQL() {
+    public void save() {
         SQLManager sqlm = new SQLManager();
         sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z) " +
                 "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ");");
+        this.addToMap();
+    }
+
+    private void addToMap() {
+        MapState.getInstance().addPoint(this);
     }
 
     public static Point fromSQL() {

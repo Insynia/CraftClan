@@ -5,3 +5,6 @@ commands:
    addpoint:
       description: Add a point to your position.
       usage: /<command> [name] [radius]
+   addfaction:
+      description: Add a faction.
+      usage: /<command> [name] [color] [level]
