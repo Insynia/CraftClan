@@ -5,18 +5,16 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 
 /**
  * Created by Doc on 12/05/2015.
  * Last modified by Sharowin on 13/05/2015_6:00
  */
-//        Bukkit.getLogger().info("yMax: " + yMax);
 public class BlockSpawner {
     private static final String DELIMITER = ",";
+    private static final String DEFAULT_FILE = "structure.css";
     private static final String DEFAULT_WORLD = "world";
 
     public static void createBeacon(Location location) {
@@ -38,7 +36,7 @@ public class BlockSpawner {
     public static void testBeaconBase(Location location) {
         emptySky(location);
 
-        String filepath = "test_file.ccs";
+        String filepath = DEFAULT_FILE;
         BufferedReader br;
         String curline;
         try {
@@ -67,6 +65,48 @@ public class BlockSpawner {
         world.getBlockAt(x, y, z).setType(Material.getMaterial(mat)); // Debug
     }
 
+    public static void saveStructure(Location from, Location to) {
+        int x, y, z, yb, zb;
+
+        x = (int) from.getX();
+        yb = y = (int) from.getY();
+        zb = z = (int) from.getZ();
+
+        World world = Bukkit.getWorld(DEFAULT_WORLD);
+
+        while (x != to.getX() && y != to.getY() && z != to.getZ()) {
+            y = yb;
+            while (y != to.getY() && z != to.getZ()) {
+                z = zb;
+                while (z != to.getZ()) {
+                    saveBlock(x, y, z, world.getBlockAt(x, y, z).getType().toString());
+                    z += (z > to.getZ() ? -1 : 1);
+                }
+                y += (y > to.getY() ? -1 : 1);
+            }
+            x += (x > to.getX() ? -1 : 1);
+        }
+        saveBlock(x, y, z, world.getBlockAt(x, y, z).getType().toString());
+    }
+
+    private static void saveBlock(int x, int y, int z, String block) {
+        try {
+            String content = "This is the content to write into file";
+
+            File file = new File(DEFAULT_FILE);
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(x + "," + y + "," + z + "," + block + "\n");
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static void emptySky(Location location){
         int x = location.getBlockX();

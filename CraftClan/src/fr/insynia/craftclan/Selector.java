@@ -41,6 +41,10 @@ public class Selector {
 
     public static void setSecondPoint(Location secondPoint) {
         Selector.secondPoint = secondPoint;
-        Bukkit.getLogger().info("Points: " + firstPoint + " | " + Selector.secondPoint);
+        saveStructure(); // debug
+    }
+
+    public static void saveStructure() {
+        BlockSpawner.saveStructure(firstPoint, secondPoint);
     }
 }
