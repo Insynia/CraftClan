@@ -50,7 +50,9 @@ public class CommandsCC {
             sender.sendMessage("Point added: " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
             return true;
         } else if (cmd.getName().equalsIgnoreCase("testBeacon")) {
-            Location loc = Bukkit.getPlayer(sender.getName()).getLocation();
+            Player p = Bukkit.getPlayer(sender.getName());
+            Set<Material> mat = null;
+            Location loc = p.getTargetBlock(mat, 10).getLocation();
             BlockSpawner.testBeaconBase(loc);
         }
         return false;

@@ -34,7 +34,7 @@ public class BlockSpawner {
     }
 
     public static void testBeaconBase(Location location) {
-        emptySky(location);
+        // emptySky(location);
 
         String filepath = DEFAULT_FILE;
         BufferedReader br;
@@ -43,7 +43,7 @@ public class BlockSpawner {
             br = new BufferedReader(new FileReader(filepath));
 
             while ((curline = br.readLine()) != null) {
-                handleLine(curline);
+                handleLine(location, curline);
             }
             br.close();
         } catch (IOException e) {
@@ -51,18 +51,15 @@ public class BlockSpawner {
         }
     }
 
-    private static void handleLine(String curline) {
+    private static void handleLine(Location base, String curline) {
         String[] coords = curline.split(DELIMITER);
-        Bukkit.getLogger().info(curline);
-        Bukkit.getLogger().info(coords[0]);
         int x = Integer.parseInt(coords[0]);
         int y = Integer.parseInt(coords[1]);
         int z = Integer.parseInt(coords[2]);
         String mat = coords[3];
 
         World world = Bukkit.getWorld(DEFAULT_WORLD);
-        Bukkit.getLogger().info(world.getBlockAt(x, y - 2, z).getType().toString());
-        world.getBlockAt(x, y, z).setType(Material.getMaterial(mat)); // Debug
+        world.getBlockAt(x + (int) base.getX(), y + (int) base.getY(), z + (int) base.getZ()).setType(Material.getMaterial(mat)); // Debug
     }
 
     public static void saveStructure(Location from, Location to) {
