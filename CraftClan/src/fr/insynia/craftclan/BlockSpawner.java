@@ -66,7 +66,7 @@ public class BlockSpawner {
     }
 
     public static void saveStructure(Location from, Location to) {
-        int x, y, z, yb, zb;
+        int x, y, z, yb, zb, x1, y1, z1;
         World world = Bukkit.getWorld(DEFAULT_WORLD);
         Location delta = new Location(world,
                 Math.min(from.getX(), to.getX()),
@@ -75,22 +75,22 @@ public class BlockSpawner {
         x = (int) from.getX();
         yb = y = (int) from.getY();
         zb = z = (int) from.getZ();
-
-        while (x != to.getX() && y != to.getY() && z != to.getZ()) {
+        x1 = (int) to.getX() + (from.getX() > to.getX() ? -1 : 1);
+        y1 = (int) to.getY() + (from.getY() > to.getY() ? -1 : 1);
+        z1 = (int) to.getZ() + (from.getZ() > to.getZ() ? -1 : 1);
+    
+        while (x != x1 || y != y1 || z != z1) {
             y = yb;
-            while (y != to.getY() && z != to.getZ()) {
+            while (y != y1 || z != z1) {
                 z = zb;
-                while (z != to.getZ()) {
+                while (z != z1) {
                     saveBlock(delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
-                    z += (z > to.getZ() ? -1 : 1);
+                    z += (z > z1 ? -1 : 1);
                 }
-                saveBlock(delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
-                y += (y > to.getY() ? -1 : 1);
+                y += (y > y1 ? -1 : 1);
             }
-            saveBlock(delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
-            x += (x > to.getX() ? -1 : 1);
+            x += (x > x1 ? -1 : 1);
         }
-        saveBlock(delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
     }
 
     private static void saveBlock(Location delta, int x, int y, int z, String block) {
