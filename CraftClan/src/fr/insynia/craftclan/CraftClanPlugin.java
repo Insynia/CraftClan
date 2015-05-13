@@ -51,6 +51,8 @@ public class CraftClanPlugin extends JavaPlugin {
             else
                 sender.sendMessage("A faction named " + args[0] + " already exists");
             return ret;
+        } else if (cmd.getName().equalsIgnoreCase("testBeacon")) {
+            BlockSpawner.testBeaconBase(loc);
         }
         return false;
     }

@@ -8,3 +8,6 @@ commands:
    addfaction:
       description: Add a faction.
       usage: /<command> [name] [color] [level]
+   testBeacon:
+      description: Test point building.
+      usage: /<command>
