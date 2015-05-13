@@ -49,6 +49,9 @@ public class CommandsCC {
             Selector.addPoint(loc.getX(), loc.getY(), loc.getZ());
             sender.sendMessage("Point added: " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
             return true;
+        } else if (cmd.getName().equalsIgnoreCase("testBeacon")) {
+            Location loc = Bukkit.getPlayer(sender.getName()).getLocation();
+            BlockSpawner.testBeaconBase(loc);
         }
         return false;
     }
