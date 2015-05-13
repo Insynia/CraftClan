@@ -14,7 +14,7 @@ import java.io.*;
  */
 public class BlockSpawner {
     private static final String DELIMITER = ",";
-    private static final String DEFAULT_FILE = "structure.css";
+    private static final String DEFAULT_FILE = "structures/";
     private static final String DEFAULT_WORLD = "world";
 
     public static void createBeacon(Location location) {
@@ -26,6 +26,7 @@ public class BlockSpawner {
 
         world.getBlockAt(x, y - 2, z).setType(Material.BEACON);
         world.getBlockAt(x, y - 1, z).setType(Material.GLASS);
+
         for (int xPoint = x-1; xPoint <= x+1 ; xPoint++) {
             for (int zPoint = z-1 ; zPoint <= z+1; zPoint++) {
                 world.getBlockAt(xPoint, y-3, zPoint).setType(Material.IRON_BLOCK);
@@ -33,17 +34,17 @@ public class BlockSpawner {
         }
     }
 
-    public static void testBeaconBase(Location location) {
+    public static void spawnStructure(String filename, Location location) {
         // emptySky(location);
 
-        String filepath = DEFAULT_FILE;
         BufferedReader br;
         String curline;
+
         try {
-            br = new BufferedReader(new FileReader(filepath));
+            br = new BufferedReader(new FileReader(DEFAULT_FILE + filename));
 
             while ((curline = br.readLine()) != null) {
-                handleLine(location, curline);
+                spawnParsedBlock(location, curline);
             }
             br.close();
         } catch (IOException e) {
@@ -51,7 +52,7 @@ public class BlockSpawner {
         }
     }
 
-    private static void handleLine(Location base, String curline) {
+    private static void spawnParsedBlock(Location base, String curline) {
         String[] coords = curline.split(DELIMITER);
         int x = Integer.parseInt(coords[0]);
         int y = Integer.parseInt(coords[1]);
@@ -62,7 +63,7 @@ public class BlockSpawner {
         world.getBlockAt(x + (int) base.getX(), y + (int) base.getY(), z + (int) base.getZ()).setType(Material.getMaterial(mat)); // Debug
     }
 
-    public static void saveStructure(Location from, Location to) {
+    public static void saveStructure(String filename, Location from, Location to) {
         int x, y, z, yb, zb, x1, y1, z1;
         World world = Bukkit.getWorld(DEFAULT_WORLD);
         Location delta = new Location(world,
@@ -81,7 +82,7 @@ public class BlockSpawner {
             while (y != y1 || z != z1) {
                 z = zb;
                 while (z != z1) {
-                    saveBlock(delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
+                    saveBlock(filename, delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
                     z += (z > z1 ? -1 : 1);
                 }
                 y += (y > y1 ? -1 : 1);
@@ -90,11 +91,9 @@ public class BlockSpawner {
         }
     }
 
-    private static void saveBlock(Location delta, int x, int y, int z, String block) {
+    private static void saveBlock(String filename, Location delta, int x, int y, int z, String block) {
         try {
-            String content = "This is the content to write into file";
-
-            File file = new File(DEFAULT_FILE);
+            File file = new File(DEFAULT_FILE + filename);
 
             if (!file.exists()) {
                 file.createNewFile();

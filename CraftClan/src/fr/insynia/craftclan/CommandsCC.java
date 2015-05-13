@@ -49,11 +49,16 @@ public class CommandsCC {
             Selector.addPoint(loc.getX(), loc.getY(), loc.getZ());
             sender.sendMessage("Point added: " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
             return true;
-        } else if (cmd.getName().equalsIgnoreCase("testBeacon")) {
+        } else if (cmd.getName().equalsIgnoreCase("spawnstructure")) {
             Player p = Bukkit.getPlayer(sender.getName());
             Set<Material> mat = null;
             Location loc = p.getTargetBlock(mat, 10).getLocation();
-            BlockSpawner.testBeaconBase(loc);
+            loc.setY(loc.getY() + 1);
+            BlockSpawner.spawnStructure(args[0],loc);
+            return true;
+        } else if (cmd.getName().equalsIgnoreCase("ccsave")) {
+            Selector.saveStructure(args[0]);
+            return true;
         }
         return false;
     }

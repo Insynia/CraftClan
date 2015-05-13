@@ -27,6 +27,7 @@ public class Selector {
         if (secondPoint == null) {
             if (firstPoint == null) {
                 setFirstPoint(loc);
+                secondPoint = null;
             } else {
                 setSecondPoint(loc);
             }
@@ -41,10 +42,9 @@ public class Selector {
 
     public static void setSecondPoint(Location secondPoint) {
         Selector.secondPoint = secondPoint;
-        saveStructure(); // debug
     }
 
-    public static void saveStructure() {
-        BlockSpawner.saveStructure(firstPoint, secondPoint);
+    public static void saveStructure(String filename) {
+        BlockSpawner.saveStructure(filename, firstPoint, secondPoint);
     }
 }

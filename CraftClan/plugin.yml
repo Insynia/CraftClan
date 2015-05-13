@@ -17,6 +17,9 @@ commands:
    ccselect:
       description: Select a zone to save.
       usage: /<command> [x] [y] [z]
-   testBeacon:
-      description: Test point building.
-      usage: /<command>
+   spawnStructure:
+      description: Spawn structures.
+      usage: /<command> [name]
+   ccsave:
+      description: Save structure.
+      usage: /<command> [name]
