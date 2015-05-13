@@ -1,10 +1,12 @@
 package fr.insynia.craftclan;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -48,6 +50,12 @@ public class PlayerCC implements Loadable {
         return uuid;
     }
 
+    public boolean addToFaction(int factionId) {
+        SQLManager sqlm = SQLManager.getInstance();
+        this.factionId = factionId;
+        return (sqlm.execUpdate("UPDATE users SET faction_id = " + factionId + " WHERE uuid = \"" + uuid + "\";"));
+    }
+
     public static void create(Player player) {
         PlayerCC playerCC = new PlayerCC(player.getName(), 0, 0, player.getUniqueId());
         MapState.getInstance().addPlayer(playerCC);
@@ -56,12 +64,21 @@ public class PlayerCC implements Loadable {
     }
 
     private void save() {
-        SQLManager sqlm = new SQLManager();
+        SQLManager sqlm = SQLManager.getInstance();
         sqlm.execUpdate("INSERT INTO users(name, faction_id, level, uuid) " +
                 "VALUES(\"" + name + "\", " + factionId + ", " + level + ", \"" + uuid + "\");");
     }
 
     public String getName() {
         return name;
+    }
+
+    public boolean isAtHome(Location from) {
+        List<Point> points = MapState.getInstance().getFactionPoints(factionId);
+        for (Point p : points) {
+            if (UtilCC.distanceBasic(from, p.getLocation()) <= p.getRadius())
+                return true;
+        }
+        return false;
     }
 }

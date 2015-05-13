@@ -7,13 +7,13 @@ public class InitPlugin {
     }
 
     private void createTables() {
-        SQLManager sqlm = new SQLManager();
+        SQLManager sqlm = SQLManager.getInstance();
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS points (" +
                 " id int NOT NULL AUTO_INCREMENT," +
                 " name VARCHAR(255) UNIQUE, radius INT(12)," +
                 " x INT(32), y INT(32), z INT(32)," +
                 " level INT(12)," +
-                " owner INT(12)," +
+                " faction_id INT(12)," +
                 " PRIMARY KEY (id));");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS factions (" +
                 " id int NOT NULL AUTO_INCREMENT," +
@@ -30,7 +30,7 @@ public class InitPlugin {
                 " PRIMARY KEY (id));");
     }
     private void fetchItems() {
-        SQLManager sqlm = new SQLManager();
+        SQLManager sqlm = SQLManager.getInstance();
         String query = "SELECT * FROM points;";
         sqlm.fetchQuery(query, new PointList());
         query = "SELECT * FROM factions";

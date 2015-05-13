@@ -11,7 +11,7 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event)
     {
-        SQLManager sqlm = new SQLManager();
+        SQLManager sqlm = SQLManager.getInstance();
         Player p = event.getPlayer();
         sqlm.fetchQuery("SELECT * FROM users WHERE uuid = \"" + p.getUniqueId() + "\";", new PlayerCC());
         event.getPlayer().sendMessage("Hello");

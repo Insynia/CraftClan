@@ -19,7 +19,7 @@ public class Faction {
     }
 
     public boolean save() {
-        SQLManager sqlm = new SQLManager();
+        SQLManager sqlm = SQLManager.getInstance();
         boolean ret = sqlm.execUpdate("INSERT INTO factions(name, color, level) " +
                 "VALUES(\"" + name + "\", \"" + color + "\", " + level + ");");
         if (ret)

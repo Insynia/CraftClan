@@ -94,6 +94,15 @@ public class MapState {
         return null;
     }
 
+    public Point findPoint(String name) {
+        for (Point p : points) {
+            if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public void removePlayer(PlayerCC playerCC) {
         String msg = "Players left: ";
         Iterator<PlayerCC> itr = playerCCs.iterator();
@@ -133,5 +142,14 @@ public class MapState {
                 itr.remove();
             }
         }
+    }
+
+    public List<Point> getFactionPoints(int factionId) {
+        List<Point> pointlist = new ArrayList<Point>();
+        for (Point point : points) {
+            if (point.getFactionId() == factionId)
+                pointlist.add(point);
+        }
+        return pointlist;
     }
 }

@@ -1,6 +1,7 @@
 package fr.insynia.craftclan;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import org.bukkit.Bukkit;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -10,16 +11,27 @@ import java.sql.Statement;
 
 public class SQLManager {
     private DataSource ds;
+    private static SQLManager instance;
 
-    public SQLManager() {
+    protected SQLManager() {
         try {
-            ds = getMySQLDataSource();
+            getMySQLDataSource();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private static DataSource getMySQLDataSource() throws SQLException {
+    public static SQLManager getInstance() {
+        if(instance == null) {
+            instance = new SQLManager();
+        }
+        return instance;
+    }
+
+    private DataSource getMySQLDataSource() throws SQLException {
+        if (ds != null)
+            return ds;
+        Bukkit.getLogger().info("SQL Service is launching");
         MysqlDataSource mysqlDS;
         mysqlDS = new MysqlDataSource();
         if (System.getenv("DB_URL") == null || System.getenv("DB_USERNAME") == null || System.getenv("DB_PASSWORD") == null)
@@ -27,7 +39,8 @@ public class SQLManager {
         mysqlDS.setURL("jdbc:mysql://" + System.getenv("DB_URL"));
         mysqlDS.setUser(System.getenv("DB_USERNAME"));
         mysqlDS.setPassword(System.getenv("DB_PASSWORD"));
-        return mysqlDS;
+        ds = mysqlDS;
+        return ds;
     }
 
     public void fetchQuery(String sql, Loadable elem) {

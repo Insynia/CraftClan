@@ -8,3 +8,9 @@ commands:
    addfaction:
       description: Add a faction.
       usage: /<command> [name] [color] [level]
+   gofaction:
+      description: Add a faction.
+      usage: /<command> [name] [color] [level]
+   pointfaction:
+      description: Add a faction.
+      usage: /<command> [name] [color] [level]
