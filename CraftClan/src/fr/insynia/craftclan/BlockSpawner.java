@@ -67,29 +67,33 @@ public class BlockSpawner {
 
     public static void saveStructure(Location from, Location to) {
         int x, y, z, yb, zb;
-
+        World world = Bukkit.getWorld(DEFAULT_WORLD);
+        Location delta = new Location(world,
+                Math.min(from.getX(), to.getX()),
+                Math.min(from.getY(), to.getY()),
+                Math.min(from.getZ(), to.getZ()));
         x = (int) from.getX();
         yb = y = (int) from.getY();
         zb = z = (int) from.getZ();
-
-        World world = Bukkit.getWorld(DEFAULT_WORLD);
 
         while (x != to.getX() && y != to.getY() && z != to.getZ()) {
             y = yb;
             while (y != to.getY() && z != to.getZ()) {
                 z = zb;
                 while (z != to.getZ()) {
-                    saveBlock(x, y, z, world.getBlockAt(x, y, z).getType().toString());
+                    saveBlock(delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
                     z += (z > to.getZ() ? -1 : 1);
                 }
+                saveBlock(delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
                 y += (y > to.getY() ? -1 : 1);
             }
+            saveBlock(delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
             x += (x > to.getX() ? -1 : 1);
         }
-        saveBlock(x, y, z, world.getBlockAt(x, y, z).getType().toString());
+        saveBlock(delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
     }
 
-    private static void saveBlock(int x, int y, int z, String block) {
+    private static void saveBlock(Location delta, int x, int y, int z, String block) {
         try {
             String content = "This is the content to write into file";
 
@@ -101,7 +105,7 @@ public class BlockSpawner {
 
             FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(x + "," + y + "," + z + "," + block + "\n");
+            bw.write(((int) (x - delta.getX())) + "," + ((int) (y - delta.getY())) + "," + ((int) (z - delta.getZ())) + "," + block + "\n");
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
