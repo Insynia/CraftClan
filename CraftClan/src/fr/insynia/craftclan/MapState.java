@@ -103,6 +103,24 @@ public class MapState {
         return null;
     }
 
+    public Faction findFaction(int id) {
+        for (Faction f : factions) {
+            if (f.getId() == id) {
+                return f;
+            }
+        }
+        return null;
+    }
+
+    public Faction findFaction(String name) {
+        for (Faction f : factions) {
+            if (f.getName().equals(name)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
     public void removePlayer(PlayerCC playerCC) {
         String msg = "Players left: ";
         Iterator<PlayerCC> itr = playerCCs.iterator();
