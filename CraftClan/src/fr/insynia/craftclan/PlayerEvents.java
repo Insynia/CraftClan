@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -21,8 +22,13 @@ public class PlayerEvents implements Listener {
         } else {
             MapState.getInstance().addPlayer(player);
         }
-        player = MapState.getInstance().findPlayer(p.getUniqueId());
-        player.loadFaction(p);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player p = event.getPlayer();
+        PlayerCC player = MapState.getInstance().findPlayer(p.getUniqueId());
+        player.loadFaction();
     }
 
     @EventHandler

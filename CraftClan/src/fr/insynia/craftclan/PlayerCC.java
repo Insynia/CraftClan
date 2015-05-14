@@ -54,10 +54,11 @@ public class PlayerCC implements Loadable {
     public boolean addToFaction(String name) {
         SQLManager sqlm = SQLManager.getInstance();
         Faction f = MapState.getInstance().findFaction(name);
-        if (f == null)
-            return false;
+        if (f == null) return false;
         this.faction = f;
-        return (sqlm.execUpdate("UPDATE users SET faction_id = " + f.getId() + " WHERE uuid = \"" + uuid + "\";"));
+        boolean ret = sqlm.execUpdate("UPDATE users SET faction_id = " + f.getId() + " WHERE uuid = \"" + uuid + "\";");
+        if (ret) loadFaction();
+        return ret;
     }
 
     public static void create(Player player) {
@@ -86,9 +87,10 @@ public class PlayerCC implements Loadable {
         return false;
     }
 
-    public void loadFaction(Player p) {
+    public void loadFaction() {
         if (faction == null) return;
-//        Player p = Bukkit.getPlayer(uuid);
+        Player p = Bukkit.getPlayer(uuid);
+
         p.setDisplayName(ChatColor.WHITE + "[" + ChatColor.valueOf(faction.getColor()) + faction.getName() + ChatColor.WHITE + "] " + p.getName());
         p.setPlayerListName(ChatColor.WHITE + "[" + ChatColor.valueOf(faction.getColor()) + faction.getName() + ChatColor.WHITE + "] " + p.getName());
     }
