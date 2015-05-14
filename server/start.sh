@@ -28,4 +28,5 @@ fi
 
 cd -
 
+mkdir -p structures
 screen -AmS $SCREEN_NAME java -Xms512M -Xmx1024M -XX:MaxPermSize=128M -jar spigot.jar
