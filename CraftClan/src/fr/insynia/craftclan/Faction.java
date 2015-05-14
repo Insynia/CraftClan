@@ -3,7 +3,8 @@ package fr.insynia.craftclan;
 import org.bukkit.ChatColor;
 
 /**
- * Created by Doc on 11/05/2015.
+ * For CraftClan
+ * Created by Doc on 11/05/2015 at 19:54.
  */
 public class Faction implements IDable {
     private String name;

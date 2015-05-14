@@ -4,7 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Doc on 11/05/2015.
+ * For CraftClan
+ * Created by Doc on 11/05/2015 at 19:54.
  */
 public class FactionList implements Loadable {
 

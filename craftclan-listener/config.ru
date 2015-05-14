@@ -7,6 +7,6 @@ class Rack::Attack
   end
 end
 
-use Rack::Attack
+# use Rack::Attack
 
-run Sinatra::Application
+run Listener
