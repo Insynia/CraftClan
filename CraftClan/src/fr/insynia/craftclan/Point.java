@@ -10,14 +10,14 @@ public class Point {
     private String name;
     private int radius;
     private int factionId;
-    private int pointLevel;
+    private int level;
 
-    public Point(String name, int radius, Location loc, int factionId) {
+    public Point(String name, int radius, Location loc, int level, int factionId) {
         this.name = name;
         this.loc = loc;
         this.radius = radius;
+        this.level = level;
         this.factionId = factionId;
-        this.pointLevel = pointLevel;
     }
 
     public String toString() {
@@ -29,8 +29,8 @@ public class Point {
         loc.setX((int) loc.getX());
         loc.setY((int) loc.getY());
         loc.setZ((int) loc.getZ());
-        boolean ret = sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z, faction_id) " +
-                "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", 0);");
+        boolean ret = sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z, faction_id, level) " +
+                "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + level + ", " + factionId + ");");
         this.addToMap();
         return ret;
     }

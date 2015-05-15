@@ -1,6 +1,7 @@
 package fr.insynia.craftclan;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
  */
 public class PlayerCC implements Loadable {
     private String name;
-    private int factionId;
+    private Faction faction;
     private int level;
     private UUID uuid;
 
@@ -22,20 +23,20 @@ public class PlayerCC implements Loadable {
 
     public PlayerCC(String name, int factionId, int level, UUID uuid) {
         this.name = name;
-        this.factionId = factionId;
+        this.faction = MapState.getInstance().findFaction(factionId);
         this.level = level;
         this.uuid = uuid;
     }
 
     public String toString() {
-        return name + ", " + factionId + ", " + level;
+        return name + ", " + faction.getId() + ", " + level;
     }
 
     public void load(ResultSet rs) {
         try {
             if (rs.next()) {
                 name = rs.getString("name");
-                factionId = rs.getInt("faction_id");
+                faction = MapState.getInstance().findFaction(rs.getInt("faction_id"));
                 level = rs.getInt("level");
                 uuid = UUID.fromString(rs.getString("uuid"));
                 MapState.getInstance().addPlayer(this);
@@ -50,10 +51,14 @@ public class PlayerCC implements Loadable {
         return uuid;
     }
 
-    public boolean addToFaction(int factionId) {
+    public boolean addToFaction(String name) {
         SQLManager sqlm = SQLManager.getInstance();
-        this.factionId = factionId;
-        return (sqlm.execUpdate("UPDATE users SET faction_id = " + factionId + " WHERE uuid = \"" + uuid + "\";"));
+        Faction f = MapState.getInstance().findFaction(name);
+        if (f == null) return false;
+        this.faction = f;
+        boolean ret = sqlm.execUpdate("UPDATE users SET faction_id = " + f.getId() + " WHERE uuid = \"" + uuid + "\";");
+        if (ret) loadFaction();
+        return ret;
     }
 
     public static void create(Player player) {
@@ -66,7 +71,7 @@ public class PlayerCC implements Loadable {
     private void save() {
         SQLManager sqlm = SQLManager.getInstance();
         sqlm.execUpdate("INSERT INTO users(name, faction_id, level, uuid) " +
-                "VALUES(\"" + name + "\", " + factionId + ", " + level + ", \"" + uuid + "\");");
+                "VALUES(\"" + name + "\", " + faction.getId() + ", " + level + ", \"" + uuid + "\");");
     }
 
     public String getName() {
@@ -74,11 +79,19 @@ public class PlayerCC implements Loadable {
     }
 
     public boolean isAtHome(Location from) {
-        List<Point> points = MapState.getInstance().getFactionPoints(factionId);
+        List<Point> points = MapState.getInstance().getFactionPoints(faction.getId());
         for (Point p : points) {
             if (UtilCC.distanceBasic(from, p.getLocation()) <= p.getRadius())
                 return true;
         }
         return false;
+    }
+
+    public void loadFaction() {
+        if (faction == null) return;
+        Player p = Bukkit.getPlayer(uuid);
+
+        p.setDisplayName(ChatColor.WHITE + "[" + ChatColor.valueOf(faction.getColor()) + faction.getName() + ChatColor.WHITE + "] " + p.getName());
+        p.setPlayerListName(ChatColor.WHITE + "[" + ChatColor.valueOf(faction.getColor()) + faction.getName() + ChatColor.WHITE + "] " + p.getName());
     }
 }

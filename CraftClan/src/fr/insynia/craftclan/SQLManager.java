@@ -87,4 +87,38 @@ public class SQLManager {
         }
         return ret;
     }
+
+
+    public boolean execUpdate(String sql, IDable elem) {
+        Connection con = null;
+        Statement stmt = null;
+        boolean ret;
+        try {
+            con = ds.getConnection();
+            stmt = con.createStatement();
+            stmt.executeUpdate(sql);
+            ret = true;
+            if (elem != null) {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        elem.setId(generatedKeys.getInt(1));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    ret = false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ret = false;
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return ret;
+    }
 }

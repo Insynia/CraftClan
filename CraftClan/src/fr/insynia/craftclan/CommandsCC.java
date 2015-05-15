@@ -1,6 +1,5 @@
 package fr.insynia.craftclan;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -14,11 +13,17 @@ import java.util.Set;
  */
 public class CommandsCC {
     public static boolean execCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        Location loc;
+        if (sender instanceof Player) {
+            loc = ((Player) sender).getLocation();
+        } else {
+            sender.sendMessage("You must be a player");
+            return false;
+        }
         if (cmd.getName().equalsIgnoreCase("addpoint")) { //debug
             if (!sender.isOp())
                 return mustBeOp(sender);
-            Location loc = Bukkit.getPlayer(sender.getName()).getLocation();
-            Point p = new Point(args[0], Integer.parseInt(args[1]), loc, -1);
+            Point p = new Point(args[0], Integer.parseInt(args[1]), loc, Integer.parseInt(args[2]), -1);
             boolean ret = p.save();
             if (ret)
                 sender.sendMessage("Point saved at " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
@@ -28,7 +33,7 @@ public class CommandsCC {
         } else if (cmd.getName().equalsIgnoreCase("addfaction")) { //debug
             if (!sender.isOp())
                 return mustBeOp(sender);
-            Faction f = new Faction(args[0], args[1], Integer.parseInt(args[2]));
+            Faction f = new Faction(0, args[0], args[1], Integer.parseInt(args[2]));
             boolean ret = f.save();
             if (ret)
                 sender.sendMessage("Faction saved : " + args[0] + ", " + args[1] + ", " + args[2]);
@@ -36,25 +41,25 @@ public class CommandsCC {
                 sender.sendMessage("A faction named " + args[0] + " already exists");
             return ret;
         } else if (cmd.getName().equalsIgnoreCase("gofaction")) { //debug
-            Player p = Bukkit.getPlayer(args[0]);
+            Player p = ((Player) sender);
             PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
-            return pcc.addToFaction(Integer.parseInt(args[1]));
+            return pcc.addToFaction(args[0]);
         } else if (cmd.getName().equalsIgnoreCase("pointfaction")) { //debug
             Point point = MapState.getInstance().findPoint(args[0]);
             return point.addToFaction(Integer.parseInt(args[1]));
         } else if (cmd.getName().equalsIgnoreCase("ccselect")) {
-            Player p = Bukkit.getPlayer(sender.getName());
+            Player p = ((Player) sender);
             Set<Material> mat = null;
-            Location loc = p.getTargetBlock(mat, 10).getLocation();
-            Selector.addPoint(loc.getX(), loc.getY(), loc.getZ());
-            sender.sendMessage("Point added: " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
+            Location tloc = p.getTargetBlock(mat, 10).getLocation();
+            Selector.addPoint(tloc.getX(), tloc.getY(), tloc.getZ());
+            sender.sendMessage("Point added: " + tloc.getX() + ", " + tloc.getY() + ", " + tloc.getZ());
             return true;
         } else if (cmd.getName().equalsIgnoreCase("spawnstructure")) {
-            Player p = Bukkit.getPlayer(sender.getName());
+            Player p = ((Player) sender);
             Set<Material> mat = null;
-            Location loc = p.getTargetBlock(mat, 10).getLocation();
-            loc.setY(loc.getY() + 1);
-            BlockSpawner.spawnStructure(args[0],loc);
+            Location tloc = p.getTargetBlock(mat, 10).getLocation();
+            tloc.setY(tloc.getY() + 1);
+            BlockSpawner.spawnStructure(args[0], tloc);
             return true;
         } else if (cmd.getName().equalsIgnoreCase("ccsave")) {
             Selector.saveStructure(args[0]);

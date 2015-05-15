@@ -22,23 +22,23 @@ public class InitPlugin {
         SQLManager sqlm = SQLManager.getInstance();
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS points (" +
                 " id int NOT NULL AUTO_INCREMENT," +
-                " name VARCHAR(255) UNIQUE, radius INT(12)," +
-                " x INT(32), y INT(32), z INT(32)," +
-                " level INT(12)," +
-                " faction_id INT(12)," +
+                " name VARCHAR(255) UNIQUE NOT NULL, radius INT(12) NOT NULL," +
+                " x INT(32) NOT NULL, y INT(32) NOT NULL, z INT(32) NOT NULL," +
+                " level INT(12) NOT NULL," +
+                " faction_id INT(12) NOT NULL," +
                 " PRIMARY KEY (id));");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS factions (" +
                 " id int NOT NULL AUTO_INCREMENT," +
-                " name VARCHAR(255) UNIQUE," +
-                " color VARCHAR(255)," +
-                " level INT(12)," +
+                " name VARCHAR(255) NOT NULL UNIQUE," +
+                " color VARCHAR(255) NOT NULL," +
+                " level INT(12) NOT NULL," +
                 " PRIMARY KEY (id));");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS users (" +
                 " id int NOT NULL AUTO_INCREMENT," +
-                " name VARCHAR(255)," +
-                " faction_id INT(12)," +
-                " level INT(12)," +
-                " uuid VARCHAR(255) UNIQUE," +
+                " name VARCHAR(255) NOT NULL," +
+                " faction_id INT(12) NOT NULL," +
+                " level INT(12) NOT NULL," +
+                " uuid VARCHAR(255) NOT NULL UNIQUE," +
                 " PRIMARY KEY (id));");
     }
     private void fetchItems() {

@@ -1,0 +1,5 @@
+source rubygems_source
+
+gem 'sinatra'
+gem 'rack-attack'
+gem 'thin'

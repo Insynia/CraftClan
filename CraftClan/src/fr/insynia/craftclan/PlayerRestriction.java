@@ -9,9 +9,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class PlayerRestriction implements Listener {
+    private static final String DEFAULT_WORLD = "world";
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event)
     {
+        if (!event.getBlock().getLocation().getWorld().getName().equals(DEFAULT_WORLD))
+            return;
         Player player = event.getPlayer();
         PlayerCC playercc = MapState.getInstance().findPlayer(player.getUniqueId());
         Location locBlock = event.getBlock().getLocation();
@@ -22,6 +26,8 @@ public class PlayerRestriction implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event)
     {
+        if (!event.getBlock().getLocation().getWorld().getName().equals(DEFAULT_WORLD))
+            return;
         Player player = event.getPlayer();
         PlayerCC playercc = MapState.getInstance().findPlayer(player.getUniqueId());
         Location locBlock = event.getBlock().getLocation();
