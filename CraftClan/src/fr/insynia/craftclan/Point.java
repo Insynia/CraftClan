@@ -10,12 +10,14 @@ public class Point {
     private String name;
     private int radius;
     private int factionId;
+    private int pointLevel;
 
     public Point(String name, int radius, Location loc, int factionId) {
         this.name = name;
         this.loc = loc;
         this.radius = radius;
         this.factionId = factionId;
+        this.pointLevel = pointLevel;
     }
 
     public String toString() {
@@ -62,5 +64,11 @@ public class Point {
 
     public int getRadius() {
         return radius;
+    }
+
+    public void materialize(){
+        // Récupération du niveau du point.
+        // Envoi selon le niveau de la table, du path pour le bâtiment.
+
     }
 }
