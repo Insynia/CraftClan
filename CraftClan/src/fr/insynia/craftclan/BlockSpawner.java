@@ -35,13 +35,13 @@ public class BlockSpawner {
 
     public static void spawnStructure(String filename, Location location) {
         // emptySky(location);
-        List<String> Blocks;
+        List<String> blocks;
         List<Object> parsed;
 
-        Blocks = FilesManagerCC.fileReadtoListCC(DEFAULT_FILE, filename);
+        blocks = FilesManagerCC.fileReadtoListCC(DEFAULT_FILE, filename);
         int i = 0;
-        while (i < Blocks.size()) {
-            parsed = FilesManagerCC.fileParse(i, Blocks);
+        while (i < blocks.size()) {
+            parsed = FilesManagerCC.fileParse(i, blocks);
             i += 1;
             spawnParsedBlock(location, parsed);
         }
