@@ -36,22 +36,22 @@ public class BlockSpawner {
     public static void spawnStructure(String filename, Location location) {
         // emptySky(location);
         List<String> blocks;
-        List<Object> parsed;
+        List<String> parsed;
 
-        blocks = FilesManagerCC.fileReadtoListCC(DEFAULT_FILE, filename);
+        blocks = FileManager.fileReadtoListCC(DEFAULT_FILE, filename);
         int i = 0;
         while (i < blocks.size()) {
-            parsed = FilesManagerCC.fileParse(i, blocks);
+            parsed = FileManager.parseLine(blocks.get(i));
             i += 1;
             spawnParsedBlock(location, parsed);
         }
     }
 
-    private static void spawnParsedBlock(Location base, List<Object> coords) {
-        int x = Integer.parseInt(coords.get(0).toString());
-        int y = Integer.parseInt(coords.get(1).toString());
-        int z = Integer.parseInt(coords.get(2).toString());
-        String mat = coords.get(3).toString();
+    private static void spawnParsedBlock(Location base, List<String> coords) {
+        int x = Integer.parseInt(coords.get(0));
+        int y = Integer.parseInt(coords.get(1));
+        int z = Integer.parseInt(coords.get(2));
+        String mat = coords.get(3);
 
         World world = Bukkit.getWorld(DEFAULT_WORLD);
         world.getBlockAt(x + (int) base.getX(), y + (int) base.getY(), z + (int) base.getZ()).setType(Material.getMaterial(mat));
@@ -86,8 +86,8 @@ public class BlockSpawner {
     }
 
     private static void saveBlock(String filename, Location delta, int x, int y, int z, String block) {
-        String line = new String(((int)(x - delta.getX())) + "," + ((int) (y - delta.getY())) + "," + ((int) (z - delta.getZ())) + "," + block);
-        FilesManagerCC.fileWriteFromLineCC(DEFAULT_FILE, filename, line);
+        String line = ((int)(x - delta.getX())) + "," + ((int) (y - delta.getY())) + "," + ((int) (z - delta.getZ())) + "," + block;
+        FileManager.writeLineToFile(DEFAULT_FILE, filename, line);
     }
 
     private static void emptySky(Location location){

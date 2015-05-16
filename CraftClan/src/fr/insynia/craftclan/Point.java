@@ -68,7 +68,8 @@ public class Point {
 
     public void materialize(){
         // Récupération du niveau du point.
-        // Envoi selon le niveau de la table, du path pour le bâtiment.
+        // Envoi selon le niveau de la table, du path pour le bâtiment.`
+        // Va appeler les fonctions existantes avec les bons parametres pour spawn les batiments des differents points selon leur niveau
 
     }
 }

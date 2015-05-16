@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 
-public class FilesManagerCC {
+public class FileManager {
     private static final String DELIMITER = ",";
 
     public static List fileReadtoListCC(String folder, String filename) {
@@ -30,17 +30,17 @@ public class FilesManagerCC {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        for (String bit : lines) {
-            Bukkit.getLogger().info(bit);
-        }
         return lines;
     }
-    public static void fileWriteFromLineCC(String folder, String filename, String line) {
+    public static void writeLineToFile(String folder, String filename, String line) {
 
         try {
             File file = new File(folder + "/" + filename);
+            File cFolder = new File(folder);
 
+            if (!cFolder.exists()) {
+                cFolder.mkdir();
+            }
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -53,10 +53,10 @@ public class FilesManagerCC {
             e.printStackTrace();
         }
     }
-    public static List<Object> fileParse(int nbLine, List<String> listToParse) {
-        List<Object> parsedLine = new ArrayList<Object>();
+    public static List<String> parseLine(String lineToParse) {
+        List<String> parsedLine = new ArrayList<String> ();
         int i = 0;
-        String[] tokens = listToParse.get(nbLine).split(DELIMITER);
+        String[] tokens = lineToParse.split(DELIMITER);
         while (i < tokens.length) {
             parsedLine.add(tokens[i]);
             i += 1;
