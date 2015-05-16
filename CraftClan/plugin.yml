@@ -23,3 +23,7 @@ commands:
    ccsave:
       description: Save structure.
       usage: /<command> [name]
+   ccread:
+      description: Read a file.
+      usage: /<command> [folder] [filename]
+

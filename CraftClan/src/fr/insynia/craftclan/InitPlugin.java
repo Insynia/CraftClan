@@ -1,11 +1,23 @@
 package fr.insynia.craftclan;
 
+import java.util.ArrayList;
+
 public class InitPlugin {
     public void init() {
         createTables();
         fetchItems();
+        spawnTowers();
     }
 
+    private void spawnTowers() {
+        // Récupération des points.
+
+        // Lancement de la fonction materialize.
+    }
+    //private ArrayList loadStructuresConfig() {
+//
+  //      return
+  //  }
     private void createTables() {
         SQLManager sqlm = SQLManager.getInstance();
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS points (" +

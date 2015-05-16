@@ -99,9 +99,14 @@ public class SQLManager {
             stmt.executeUpdate(sql);
             ret = true;
             if (elem != null) {
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        elem.setId(generatedKeys.getInt(1));
+                try {
+                    ResultSet generatedKeys = stmt.getGeneratedKeys();
+                    try {
+                        if (generatedKeys.next()) {
+                            elem.setId(generatedKeys.getInt(1));
+                        }
+                    } finally {
+                        generatedKeys.close();
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();

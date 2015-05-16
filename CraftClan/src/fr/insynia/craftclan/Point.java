@@ -65,4 +65,10 @@ public class Point {
     public int getRadius() {
         return radius;
     }
+
+    public void materialize(){
+        // Récupération du niveau du point.
+        // Envoi selon le niveau de la table, du path pour le bâtiment.
+
+    }
 }

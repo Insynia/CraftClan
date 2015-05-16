@@ -64,6 +64,9 @@ public class CommandsCC {
         } else if (cmd.getName().equalsIgnoreCase("ccsave")) {
             Selector.saveStructure(args[0]);
             return true;
+        } else if (cmd.getName().equalsIgnoreCase("ccread")) {
+            FilesManagerCC.fileReadtoListCC(args[0], args[1]);
+            return true;
         }
         return false;
     }
