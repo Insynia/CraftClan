@@ -1,5 +1,6 @@
 package fr.insynia.craftclan;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -65,6 +66,12 @@ public class CommandsCC {
             Selector.saveStructure(args[0]);
             return true;
         }
+        return false;
+    }
+
+    private static boolean checkColor(String color) {
+        for (ChatColor c : ChatColor.values())
+            if (c.toString().equals(color)) return true;
         return false;
     }
 
