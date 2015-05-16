@@ -27,12 +27,12 @@ public class Selector {
         if (secondPoint == null) {
             if (firstPoint == null) {
                 setFirstPoint(loc);
-                secondPoint = null;
             } else {
                 setSecondPoint(loc);
             }
         } else {
             setFirstPoint(loc);
+            secondPoint = null;
         }
     }
 
