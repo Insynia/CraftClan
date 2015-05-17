@@ -5,15 +5,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 
-import java.io.*;
+import java.util.List;
 
 
 /**
  * Created by Doc on 12/05/2015.
- * Last modified by Sharowin on 13/05/2015_6:00
  */
 public class BlockSpawner {
-    private static final String DELIMITER = ",";
+
     private static final String DEFAULT_FILE = "structures/";
     private static final String DEFAULT_WORLD = "world";
 
@@ -36,31 +35,26 @@ public class BlockSpawner {
 
     public static void spawnStructure(String filename, Location location) {
         // emptySky(location);
+        List<String> blocks;
+        List<String> parsed;
 
-        BufferedReader br;
-        String curline;
-
-        try {
-            br = new BufferedReader(new FileReader(DEFAULT_FILE + filename));
-
-            while ((curline = br.readLine()) != null) {
-                spawnParsedBlock(location, curline);
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        blocks = FileManager.fileReadtoListCC(DEFAULT_FILE, filename);
+        int i = 0;
+        while (i < blocks.size()) {
+            parsed = FileManager.parseLine(blocks.get(i));
+            i += 1;
+            spawnParsedBlock(location, parsed);
         }
     }
 
-    private static void spawnParsedBlock(Location base, String curline) {
-        String[] coords = curline.split(DELIMITER);
-        int x = Integer.parseInt(coords[0]);
-        int y = Integer.parseInt(coords[1]);
-        int z = Integer.parseInt(coords[2]);
-        String mat = coords[3];
+    private static void spawnParsedBlock(Location base, List<String> coords) {
+        int x = Integer.parseInt(coords.get(0));
+        int y = Integer.parseInt(coords.get(1));
+        int z = Integer.parseInt(coords.get(2));
+        String mat = coords.get(3);
 
         World world = Bukkit.getWorld(DEFAULT_WORLD);
-        world.getBlockAt(x + (int) base.getX(), y + (int) base.getY(), z + (int) base.getZ()).setType(Material.getMaterial(mat)); // Debug
+        world.getBlockAt(x + (int) base.getX(), y + (int) base.getY(), z + (int) base.getZ()).setType(Material.getMaterial(mat));
     }
 
     public static void saveStructure(String filename, Location from, Location to) {
@@ -76,7 +70,7 @@ public class BlockSpawner {
         x1 = (int) to.getX() + (from.getX() > to.getX() ? -1 : 1);
         y1 = (int) to.getY() + (from.getY() > to.getY() ? -1 : 1);
         z1 = (int) to.getZ() + (from.getZ() > to.getZ() ? -1 : 1);
-    
+
         while (x != x1 || y != y1 || z != z1) {
             y = yb;
             while (y != y1 || z != z1) {
@@ -92,20 +86,8 @@ public class BlockSpawner {
     }
 
     private static void saveBlock(String filename, Location delta, int x, int y, int z, String block) {
-        try {
-            File file = new File(DEFAULT_FILE + filename);
-
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(((int) (x - delta.getX())) + "," + ((int) (y - delta.getY())) + "," + ((int) (z - delta.getZ())) + "," + block + "\n");
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String line = ((int)(x - delta.getX())) + "," + ((int) (y - delta.getY())) + "," + ((int) (z - delta.getZ())) + "," + block;
+        FileManager.writeLineToFile(DEFAULT_FILE, filename, line);
     }
 
     private static void emptySky(Location location){

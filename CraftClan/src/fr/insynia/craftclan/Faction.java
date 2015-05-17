@@ -34,7 +34,7 @@ public class Faction implements IDable {
         }
         if (!colorOk) return false;
         boolean ret = sqlm.execUpdate("INSERT INTO factions(name, color, level) " +
-                "VALUES(\"" + name + "\", \"" + color + "\", " + level + ");");
+                "VALUES(\"" + name + "\", \"" + color + "\", " + level + ");", this);
         if (ret)
             this.addToMap();
         return ret;
