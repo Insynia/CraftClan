@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.util.List;
 
@@ -52,9 +53,12 @@ public class BlockSpawner {
         int y = Integer.parseInt(coords.get(1));
         int z = Integer.parseInt(coords.get(2));
         String mat = coords.get(3);
+        byte data = (byte) Integer.parseInt(coords.get(4));
 
         World world = Bukkit.getWorld(DEFAULT_WORLD);
-        world.getBlockAt(x + (int) base.getX(), y + (int) base.getY(), z + (int) base.getZ()).setType(Material.getMaterial(mat));
+        Block block = world.getBlockAt(x + (int) base.getX(), y + (int) base.getY(), z + (int) base.getZ());
+        block.setType(Material.getMaterial(mat));
+        block.setData(data);
     }
 
     public static void saveStructure(String filename, Location from, Location to) {
@@ -76,7 +80,7 @@ public class BlockSpawner {
             while (y != y1 || z != z1) {
                 z = zb;
                 while (z != z1) {
-                    saveBlock(filename, delta, x, y, z, world.getBlockAt(x, y, z).getType().toString());
+                    saveBlock(filename, delta, x, y, z, world.getBlockAt(x, y, z));
                     z += (z > z1 ? -1 : 1);
                 }
                 y += (y > y1 ? -1 : 1);
@@ -85,8 +89,12 @@ public class BlockSpawner {
         }
     }
 
-    private static void saveBlock(String filename, Location delta, int x, int y, int z, String block) {
-        String line = ((int)(x - delta.getX())) + "," + ((int) (y - delta.getY())) + "," + ((int) (z - delta.getZ())) + "," + block;
+    private static void saveBlock(String filename, Location delta, int x, int y, int z, Block block) {
+        String line = ((int)(x - delta.getX())) + "," +
+                ((int) (y - delta.getY())) + "," +
+                ((int) (z - delta.getZ())) + "," +
+                block.getType().toString() + "," +
+                ((int) block.getData());
         FileManager.writeLineToFile(DEFAULT_FILE, filename, line);
     }
 

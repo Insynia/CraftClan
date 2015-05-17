@@ -79,6 +79,7 @@ public class PlayerCC implements Loadable {
     }
 
     public boolean isAtHome(Location from) {
+        if (faction == null) return false;
         List<Point> points = MapState.getInstance().getFactionPoints(faction.getId());
         for (Point p : points) {
             if (UtilCC.distanceBasic(from, p.getLocation()) <= p.getRadius())
