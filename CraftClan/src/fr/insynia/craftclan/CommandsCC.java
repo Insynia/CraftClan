@@ -21,6 +21,77 @@ public class CommandsCC {
             sender.sendMessage("You must be a player");
             return false;
         }
+        if(cmd.getName().equalsIgnoreCase("cc")) {
+
+        } else if (cmd.getName().equalsIgnoreCase("cca")) {
+            if (!sender.isOp()){
+                return mustBeOp(sender);
+            }
+            // Ajout d'un point.
+            if (args[0].equalsIgnoreCase("addpoint")) {
+                Point p = new Point(args[1], Integer.parseInt(args[2]), loc, Integer.parseInt(args[3]), -1);
+                boolean ret = p.save();
+                if (ret)
+                    sender.sendMessage("Point " + args[1] + " saved at " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
+                else
+                    sender.sendMessage("A point named " + args[1] + " already exists");
+                return ret;
+            }
+            // Ajout d'une faction.
+            else if (args[0].equalsIgnoreCase("addfaction")) {
+                Faction f = new Faction(0, args[1], args[2], Integer.parseInt(args[3]));
+                boolean ret = f.save();
+                if (ret)
+                    sender.sendMessage("Faction " + args[1] + " saved : " + args[1] + ", " + args[2] + ", level: " + args[3]);
+                else
+                    sender.sendMessage("A faction named " + args[1] + " already exists");
+                return ret;
+            }
+            // Changement de sa propre faction.
+            else if (args[0].equalsIgnoreCase("setownfaction")) {
+                Player p = ((Player) sender);
+                PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
+                return pcc.addToFaction(args[1]);
+            }
+            // Assigner un point à une faction.
+            else if (args[0].equalsIgnoreCase("setpointfaction")) {
+                Point point = MapState.getInstance().findPoint(args[1]);
+                return point.addToFaction(Integer.parseInt(args[2]));
+            }
+            // Selection via Selector.
+            else if (args[0].equalsIgnoreCase("ccselect")) {
+                Player p = ((Player) sender);
+                Set<Material> mat = null;
+                Location tloc = p.getTargetBlock(mat, 10).getLocation();
+                Selector.addPoint(tloc.getX(), tloc.getY(), tloc.getZ());
+                sender.sendMessage("Point added: " + tloc.getX() + ", " + tloc.getY() + ", " + tloc.getZ());
+                return true;
+            }
+            // Sauvegarde de la selection.
+            else if (args[0].equalsIgnoreCase("ccsave")) {
+                Selector.saveStructure(args[1]);
+                return true;
+            }
+            // Faire apparaître une structure sauvegadée.
+            else if (args[0].equalsIgnoreCase("spawnstructure")) {
+                Player p = ((Player) sender);
+                Set<Material> mat = null;
+                Location tloc = p.getTargetBlock(mat, 10).getLocation();
+                tloc.setY(tloc.getY() + 1);
+                BlockSpawner.spawnStructure(args[1], tloc);
+                return true;
+            }
+       // } else if (cmd.getName().equalsIgnoreCase("help")) {
+           // if (args[0].equalsIgnoreCase("addpoint")) {
+       //     }
+        } else {
+            sender.sendMessage("Invalid command.");
+            sender.sendMessage("Try /cc before your command.");
+        }
+
+
+
+        /*
         if (cmd.getName().equalsIgnoreCase("addpoint")) { //debug
             if (!sender.isOp())
                 return mustBeOp(sender);
@@ -66,6 +137,7 @@ public class CommandsCC {
             Selector.saveStructure(args[0]);
             return true;
         }
+        */
         return false;
     }
 
