@@ -1,6 +1,5 @@
 package fr.insynia.craftclan;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,7 +25,15 @@ public class CommandsCC {
             return false;
         }
         if(cmd.getName().equalsIgnoreCase("cc")) {
-            return false;
+            switch (args[0].toLowerCase()) {
+                case "capture":
+                    int captureReqArgs = 1;
+                    String help = "\"capture\": Vous devez être à proximité d'un point ennemi pour pouvoir le capturer.";
+                    if (!checkArgs(args, captureReqArgs)) return die(help, sender);
+                    return (cmdCapture(sender, loc) || die(help, sender));
+                default:
+                    sender.sendMessage("This command does not exist.");
+            }
         } else if (cmd.getName().equalsIgnoreCase("cca")) {
             if (!sender.isOp()){
                 return mustBeOp(sender);
@@ -96,8 +103,6 @@ public class CommandsCC {
                     return (cmdSpawnStructure(sender, args) || die(help, sender));
                 default:
                     sender.sendMessage("This command does not exist.");
-
-
             }
             return true;
         } else {
@@ -124,9 +129,8 @@ public class CommandsCC {
 
     // Add a Faction.
     private static boolean cmdAddFaction(CommandSender sender, String[] args) {
-        Bukkit.getLogger().info("And through this path i shall never find  ...");
         if(!checkColor(args[2])) {
-            String msg = "Couleur invalide: ";
+            String msg = "Invalid Color: ";
             for (ChatColor c : ChatColor.values())
                 msg += c.name() + " ";
             sender.sendMessage(msg);
@@ -139,7 +143,6 @@ public class CommandsCC {
             sender.sendMessage("Faction \"" + args[1] + "\" saved : " + args[2] + ", level: " + args[3] + ".");
         else
             sender.sendMessage("A faction named \"" + args[1] + "\" already exists.");
-        Bukkit.getLogger().info("valeur de retour: " + ret);
         return ret;
     }
 
@@ -182,6 +185,26 @@ public class CommandsCC {
         BlockSpawner.spawnStructure(args[1], tloc);
         sender.sendMessage("Spawned structure: \"" + args[1] + "\".");
         return true;
+    }
+
+   private static boolean cmdCapture(CommandSender sender, Location loc) {
+      /*  if(!checkColor(args[2])) {
+            String msg = "Invalid Color: ";
+            for (ChatColor c : ChatColor.values())
+                msg += c.name() + " ";
+            sender.sendMessage(msg);
+            return false;
+        }
+        Faction f = new Faction(0, args[1], args[2], Integer.parseInt(args[3]));
+        boolean ret = f.save();
+
+        if (ret)
+            sender.sendMessage("Faction \"" + args[1] + "\" saved : " + args[2] + ", level: " + args[3] + ".");
+        else
+            sender.sendMessage("A faction named \"" + args[1] + "\" already exists.");
+        return ret;
+       */
+       return false;
     }
 
     // Checking args count.
