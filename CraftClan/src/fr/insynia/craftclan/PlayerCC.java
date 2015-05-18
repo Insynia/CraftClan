@@ -28,7 +28,7 @@ public class PlayerCC implements Loadable {
         this.uuid = uuid;
     }
 
-    public String toString() {
+    public String toString() { // Debug
         return name + ", " + faction.getId() + ", " + level;
     }
 
@@ -69,9 +69,14 @@ public class PlayerCC implements Loadable {
     }
 
     private void save() {
+        int faction_id = 0;
         SQLManager sqlm = SQLManager.getInstance();
+
+        if (faction != null)
+            faction_id = faction.getId();
+
         sqlm.execUpdate("INSERT INTO users(name, faction_id, level, uuid) " +
-                "VALUES(\"" + name + "\", " + faction.getId() + ", " + level + ", \"" + uuid + "\");");
+                "VALUES(\"" + name + "\", " + faction_id + ", " + level + ", \"" + uuid + "\");");
     }
 
     public String getName() {
@@ -79,6 +84,7 @@ public class PlayerCC implements Loadable {
     }
 
     public boolean isAtHome(Location from) {
+        if (faction == null) return false;
         List<Point> points = MapState.getInstance().getFactionPoints(faction.getId());
         for (Point p : points) {
             if (UtilCC.distanceBasic(from, p.getLocation()) <= p.getRadius())
