@@ -4,6 +4,7 @@ import org.bukkit.Location;
 
 /**
  * Created by Doc on 11/05/2015.
+ * Modified by Sharowin on 18/05/2015.
  */
 public class Point {
     private Location loc;
@@ -30,13 +31,14 @@ public class Point {
         loc.setY((int) loc.getY());
         loc.setZ((int) loc.getZ());
         boolean ret = sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z, faction_id, level) " +
-                "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + level + ", " + factionId + ");");
-        this.addToMap();
+                "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + factionId + ", " + level + ");");
+        if (ret){this.addToMap();}
         return ret;
     }
 
     private void addToMap() {
         MapState.getInstance().addPoint(this);
+        BlockSpawner.emptySky(loc);
         BlockSpawner.createBeacon(loc);
     }
 

@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Created by Doc on 12/05/2015.
+ * Modified by Sharowin on 18/05/2015
  */
 public class BlockSpawner {
 
@@ -98,7 +99,7 @@ public class BlockSpawner {
         FileManager.writeLineToFile(DEFAULT_FILE, filename, line);
     }
 
-    private static void emptySky(Location location){
+    public static void emptySky(Location location){
         int x = location.getBlockX();
         int y = location.getBlockY();
         int z = location.getBlockZ();

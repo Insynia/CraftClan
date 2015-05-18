@@ -96,7 +96,7 @@ public class SQLManager {
         try {
             con = ds.getConnection();
             stmt = con.createStatement();
-            stmt.executeUpdate(sql);
+            stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
             ret = true;
             if (elem != null) {
                 try {

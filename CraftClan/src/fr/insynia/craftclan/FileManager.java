@@ -1,21 +1,20 @@
 package fr.insynia.craftclan;
 
-import org.bukkit.Bukkit;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Sharowin on 14/05/15.
+ * Modified by Sharowin on 18/05/15.
  */
 
 
 public class FileManager {
     private static final String DELIMITER = ",";
 
-    public static List fileReadtoListCC(String folder, String filename) {
-        List<String> lines = new ArrayList<String>();
+    public static List<String> fileReadtoListCC(String folder, String filename) {
+        List<String> lines = new ArrayList<>();
 
         BufferedReader br;
         String curline;
@@ -41,9 +40,7 @@ public class FileManager {
             if (!cFolder.exists()) {
                 cFolder.mkdir();
             }
-            if (!file.exists()) {
-                file.createNewFile();
-            }
+            if (!file.exists()) file.createNewFile();
 
             FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -54,7 +51,7 @@ public class FileManager {
         }
     }
     public static List<String> parseLine(String lineToParse) {
-        List<String> parsedLine = new ArrayList<String> ();
+        List<String> parsedLine = new ArrayList<>();
         int i = 0;
         String[] tokens = lineToParse.split(DELIMITER);
         while (i < tokens.length) {
