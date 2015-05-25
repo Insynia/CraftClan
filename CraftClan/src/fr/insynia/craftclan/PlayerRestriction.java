@@ -42,6 +42,5 @@ public class PlayerRestriction implements Listener {
     private boolean placeAndBreakRestriction(BlockEvent event, PlayerCC playercc) {
         Location locBlock = event.getBlock().getLocation();
         return !playercc.isAtHome(locBlock) || playercc.isOnPointArea(locBlock);
-
     }
 }
