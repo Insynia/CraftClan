@@ -4,7 +4,7 @@ ___
 ###### Par Doc Cobra et Sharowin.
 ___
 
-**[TRIEZ MOI](#triez-moi)
+**[TRIEZ MOI](#triez-moi)**
 
 **[Installation](#installation)**
 * [Serveur minecraft](#serveur-minecraft)
