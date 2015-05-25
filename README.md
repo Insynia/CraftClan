@@ -9,7 +9,6 @@ ___
 **[Installation](#installation)**
 * [Serveur minecraft](#serveur-minecraft)
 * [Plugin](#plugin)
-* [Web listener](#web-listener)
 * [Web server](#web-server)
 
 **[Concept](#concept)**
@@ -43,7 +42,7 @@ ___
 Les exemples de commandes ne sont pas compatibles avec toutes les OS
 La plupart des commandes est effectuée sous ubuntu et MacOS
 
-Le dépôt git sera initialisé, pull et sur la branche master
+Le dépôt git correspondant sera initialisé, pull et sur la branche master
 Le pwd est celui du depot git local
 
 ### Serveur minecraft
@@ -74,13 +73,32 @@ cd server
 
 Copier le fichier JAR dans `./plugins/`
 
-### Web listener
-
 ### Web server
+
+La commande `./install.sh` crée les fichiers nécessaires
+Il faut cependant vérifier les dépendances nécessaires comme `nginx`
+
+Générer les assets en static
+
+```bash
+bundle exec rake assets:precompile
+```
+
+Lancer le service de nginx ou le reload
+
+```bash
+sudo service nginx restart
+```
+
+Lancer le serveur applicatif
+
+```bash
+DB_URL=mysql://user:password@url:port/craftclan unicorn -E production -c config/unicorn.rb
+```
 
 ## Concept
 
-Le concept du mod se reunut en 4 efpoksdgfj...
+Le concept du mod se reunit en 4 efpoksdgfj...
 
 ### Gameplay
 
