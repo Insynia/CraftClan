@@ -23,15 +23,19 @@ ___
 
 #### Mode attaque limité a un try, respawn desactive(mute) attaque pour le player only
 * Fix le tryhard de se planquer en mode attaque pour avoir des vagues attaque infinies
+
 #### Bloc or pour la construciton sur base ennemi en mode attaque
 * Cout d'attaque
 * Eviter le cheat du style skybridge
+
 #### Zone de farming exterieure et aleatoire accessible au spawn
 * Fix des first player coincés
 * Permet de regenerer la map sur une parcelle automatiquement donc no grief
+
 #### Les points proches du spawn doivent etre plus petit dans l'ensemble
 * Permet une grande competitivité autour du spawn (dur de garder plusieurs points)
 * Facilite l'integration des nouveaux joueurs
+
 ___
 
 ## Installation
