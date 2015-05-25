@@ -158,7 +158,7 @@ public class CommandsCC {
     private static boolean cmdSetPointFaction(CommandSender sender, String[] args) {
         Point point = MapState.getInstance().findPoint(args[1]);
         sender.sendMessage("Changed point's \"" + args[1] + "\" faction.");
-        return point.addToFaction(Integer.parseInt(args[2]));
+        return point.addToFaction(args[2]);
     }
 
     // Select via Selector.

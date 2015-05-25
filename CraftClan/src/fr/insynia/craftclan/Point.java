@@ -2,6 +2,8 @@ package fr.insynia.craftclan;
 
 import org.bukkit.Location;
 
+import java.util.List;
+
 /**
  * Created by Doc on 11/05/2015.
  * Modified by Sharowin on 18/05/2015.
@@ -48,6 +50,18 @@ public class Point {
         return (sqlm.execUpdate("UPDATE points SET faction_id = " + factionId + " WHERE name = \"" + name + "\";"));
     }
 
+    public boolean addToFaction(String name) {
+        SQLManager sqlm = SQLManager.getInstance();
+        List<Faction> factions = MapState.getInstance().getFactions();
+        for (Faction f : factions) {
+            if (f.getName().equals(name)) {
+                this.factionId = f.getId();
+                return (sqlm.execUpdate("UPDATE points SET faction_id = " + factionId + " WHERE name = \"" + name + "\";"));
+            }
+        }
+        return false;
+    }
+
     public static Point fromSQL() {
         return null;
     }
@@ -66,6 +80,10 @@ public class Point {
 
     public int getRadius() {
         return radius;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     public void materialize(){
