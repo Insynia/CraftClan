@@ -23,7 +23,7 @@ ___
 #### Mode attaque limité a un try, respawn desactive(mute) attaque pour le player only
 * Fix le tryhard de se planquer en mode attaque pour avoir des vagues attaque infinies
 
-#### Bloc or pour la construciton sur base ennemi en mode attaque
+#### Bloc or pour la construction sur base ennemi en mode attaque
 * Cout d'attaque
 * Eviter le cheat du style skybridge
 
@@ -65,6 +65,7 @@ export [VAR]=[VALEUR]
 ```
 
 La commande `./start.sh` lancera le serveur et le web listener sur la base de donnée définie par les variables définies ci dessus
+
 Un terminal indépendant sera créé avec `screen`, ce qui permettra de rattacher le terminal aec la commande `screen -r minecraft`
 
 ### Plugin
