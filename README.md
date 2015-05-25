@@ -6,13 +6,13 @@ ___
 
 **[TRIEZ MOI](#triez-moi)**
 
+**[Concept](#concept)**
+* [Gameplay](#gameplay)
+
 **[Installation](#installation)**
 * [Serveur minecraft](#serveur-minecraft)
 * [Plugin](#plugin)
 * [Web server](#web-server)
-
-**[Concept](#concept)**
-* [Gameplay](#gameplay)
 
 **[To-do list](#to-do-list)**
 * [Phase 1](#phase-1)
@@ -36,6 +36,10 @@ ___
 * Facilite l'integration des nouveaux joueurs
 
 ___
+
+## Concept
+
+Le concept du mod se reunit en 4 efpoksdgfj...
 
 ## Installation
 
@@ -95,10 +99,6 @@ Lancer le serveur applicatif
 ```bash
 DB_URL=mysql://user:password@url:port/craftclan unicorn -E production -c config/unicorn.rb
 ```
-
-## Concept
-
-Le concept du mod se reunit en 4 efpoksdgfj...
 
 ### Gameplay
 
