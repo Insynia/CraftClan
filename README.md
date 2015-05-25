@@ -40,6 +40,44 @@ ___
 
 ## Installation
 
+Les exemples de commandes ne sont pas compatibles avec toutes les OS
+La plupart des commandes est effectuée sous ubuntu et MacOS
+
+Le dépôt git sera initialisé, pull et sur la branche master
+Le pwd est celui du depot git local
+
+### Serveur minecraft
+
+```bash
+cd server
+````
+
+3 variables d'envirronnement doivent être définies:
+- DB_USERNAME
+- DB_URL
+- DB_PASSWORD
+
+```bash
+export [VAR]=[VALEUR]
+```
+
+La commande `./start.sh` lancera le serveur et le web listener sur la base de donnée définie par les variables définies ci dessus
+Un terminal indépendant sera créé avec `screen`, ce qui permettra de rattacher le terminal aec la commande `screen -r minecraft`
+
+### Plugin
+
+Le plugin doit être compilé à chaque modification en fichier JAR
+
+```bash
+cd server
+```
+
+Copier le fichier JAR dans `./plugins/`
+
+### Web listener
+
+### Web server
+
 ## Concept
 
 Le concept du mod se reunut en 4 efpoksdgfj...
