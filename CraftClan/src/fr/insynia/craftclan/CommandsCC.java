@@ -187,24 +187,14 @@ public class CommandsCC {
         return true;
     }
 
-   private static boolean cmdCapture(CommandSender sender, Location loc) {
-      /*  if(!checkColor(args[2])) {
-            String msg = "Invalid Color: ";
-            for (ChatColor c : ChatColor.values())
-                msg += c.name() + " ";
-            sender.sendMessage(msg);
-            return false;
-        }
-        Faction f = new Faction(0, args[1], args[2], Integer.parseInt(args[3]));
-        boolean ret = f.save();
-
-        if (ret)
-            sender.sendMessage("Faction \"" + args[1] + "\" saved : " + args[2] + ", level: " + args[3] + ".");
-        else
-            sender.sendMessage("A faction named \"" + args[1] + "\" already exists.");
-        return ret;
-       */
-       return false;
+    private static boolean cmdCapture(CommandSender sender, Location loc) {
+        Player p = (Player) sender;
+        PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
+        if (pcc == null) return false;
+        Point point = pcc.canCapture(loc);
+        if (point == null) return false;
+        pcc.startCapture(point, p);
+        return true;
     }
 
     // Checking args count.

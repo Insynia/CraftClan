@@ -8,16 +8,20 @@ import org.bukkit.entity.Player;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 /**
  * Created by Doc on 12/05/2015.
  */
 public class PlayerCC implements Loadable {
+    private static final int CAPTURE_DISTANCE = 2;
     private String name;
     private Faction faction;
     private int level;
     private UUID uuid;
+    private int timeToCapture = 10;
 
     public PlayerCC(){}
 
@@ -99,5 +103,28 @@ public class PlayerCC implements Loadable {
 
         p.setDisplayName(ChatColor.WHITE + "[" + ChatColor.valueOf(faction.getColor()) + faction.getName() + ChatColor.WHITE + "] " + p.getName());
         p.setPlayerListName(ChatColor.WHITE + "[" + ChatColor.valueOf(faction.getColor()) + faction.getName() + ChatColor.WHITE + "] " + p.getName());
+    }
+
+    public Point canCapture(Location from) {
+        if (faction == null) return null;
+        List<Point> points = MapState.getInstance().getPoints();
+        for (Point p : points) {
+            if (p.getFactionId() != faction.getId() && UtilCC.distanceBasic(from, p.getLocation()) <= CAPTURE_DISTANCE)
+                return p;
+        }
+        return null;
+    }
+
+    public void startCapture(Point point, final Player p) {
+        timeToCapture = 10; // TODO
+        Timer captureLoop = new Timer(true);
+        captureLoop.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (timeToCapture == 0) this.cancel(); // TODO
+                p.sendMessage("Il vous reste " + timeToCapture + " secondes pour capturer le point !");
+                timeToCapture -= 1;
+            }
+        }, 0, 1000);
     }
 }
