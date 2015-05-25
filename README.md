@@ -1,7 +1,50 @@
 # Projet CraftClan @Insynia
-# Dernière modification: 12/05/2015
-# Par Doc Cobra et Sharowin.
-Phase I:
+___
+###### Dernière modification: 25/05/2015
+###### Par Doc Cobra et Sharowin.
+___
+
+**[TRIEZ MOI](#triez-moi)
+
+**[Installation](#installation)**
+* [Serveur minecraft](#serveur-minecraft)
+* [Plugin](#plugin)
+* [Web listener](#web-listener)
+* [Web server](#web-server)
+
+**[Concept](#concept)**
+* [Gameplay](#gameplay)
+
+**[To-do list](#to-do-list)**
+* [Phase 1](#phase-1)
+
+___
+# TRIEZ MOI
+
+#### Mode attaque limité a un try, respawn desactive(mute) attaque pour le player only
+* Fix le tryhard de se planquer en mode attaque pour avoir des vagues attaque infinies
+#### Bloc or pour la construciton sur base ennemi en mode attaque
+* Cout d'attaque
+* Eviter le cheat du style skybridge
+#### Zone de farming exterieure et aleatoire accessible au spawn
+* Fix des first player coincés
+* Permet de regenerer la map sur une parcelle automatiquement donc no grief
+#### Les points proches du spawn doivent etre plus petit dans l'ensemble
+* Permet une grande competitivité autour du spawn (dur de garder plusieurs points)
+* Facilite l'integration des nouveaux joueurs
+___
+
+## Installation
+
+## Concept
+
+Le concept du mod se reunut en 4 efpoksdgfj...
+
+### Gameplay
+
+## To-do list
+
+** Phase I:
       Gameplay:
 		Faction:
 			- Générée par les joueurs.
