@@ -1,5 +1,6 @@
 package fr.insynia.craftclan;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -47,8 +48,60 @@ public class UtilCC {
         else if (time > 60 && time % 10 == 0) p.sendMessage("Il vous reste " + time + " secondes pour capturer le point !");
     }
 
+    public static boolean checkArgIsInteger(String arg) {
+        try {
+            Integer.parseInt(arg);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean checkColor(String color) {
+        for (ChatColor c : ChatColor.values())
+            if (c.name().equals(color)) return true;
+        return false;
+    }
+
     // Récupère la partie entière, du nombre divisé par 2
     public static int halfRound(int toHalfRound) {
         return Math.round(toHalfRound / 2);
+    }
+
+    public static int getGlassMetadataColor(String gcolor) {
+        switch (gcolor.toLowerCase()) {
+            case "white":
+                return 0;
+            case "gold":
+                return 1;
+            case "dark_purple":
+                return 2;
+            case "aqua":
+                return 3;
+            case "yellow":
+                return 4;
+            case "green":
+                return 5;
+            case "red":
+                return 6;
+            case "dark_gray":
+                return 7;
+            case "gray":
+                return 8;
+            case "dark_aqua":
+                return 9;
+            case "light_purple":
+                return 10;
+            case "dark_blue":
+                return 11;
+            case "dark_green":
+                return 13;
+            case "dark_red":
+                return 14;
+            case "black":
+                return 15;
+            default:
+                return -1;
+        }
     }
 }

@@ -128,7 +128,7 @@ public class CommandsCC {
 
     // Add a Point.
     private static boolean cmdAddPoint(CommandSender sender, Location loc, String[] args) {
-        if (!checkArgIsInteger(args[2]) || !checkArgIsInteger(args[3])) {
+        if (!UtilCC.checkArgIsInteger(args[2]) || !UtilCC.checkArgIsInteger(args[3])) {
             return false;
         } else {
             Point p = new Point(args[1], Integer.parseInt(args[2]), loc, Integer.parseInt(args[3]), -1);
@@ -144,14 +144,14 @@ public class CommandsCC {
 
     // Add a Faction.
     private static boolean cmdAddFaction(CommandSender sender, String[] args) {
-        if (!checkColor(args[2])) {
+        if (!UtilCC.checkColor(args[2])) {
             String msg = "Invalid Color: ";
             for (ChatColor c : ChatColor.values())
                 msg += c.name() + " ";
             sender.sendMessage(msg);
             return false;
         }
-        if (!checkArgIsInteger(args[3])) return false;
+        if (!UtilCC.checkArgIsInteger(args[3])) return false;
         Faction f = new Faction(0, args[1], args[2], Integer.parseInt(args[3]));
         boolean ret = f.save();
 
@@ -212,7 +212,6 @@ public class CommandsCC {
         } else {
             BlockSpawner.spawnStructure(args[1], tloc);
             sender.sendMessage("Spawned structure: \"" + args[1] + "\"");
-
         }
         return true;
     }
@@ -229,7 +228,7 @@ public class CommandsCC {
     }
     // Set a Point's level
     private static boolean cmdSetPointLevel(CommandSender sender, String[] args) {
-        if (!checkArgIsInteger(args[2])) return false;
+        if (!UtilCC.checkArgIsInteger(args[2])) return false;
         Point point = MapState.getInstance().findPoint(args[1]);
 
         if (checkPointExists(args[1])) {
@@ -244,12 +243,6 @@ public class CommandsCC {
     // Checking args count.
     private static boolean checkArgs(String[] args, int estimatedArgs) {
         return args.length == estimatedArgs;
-    }
-
-    private static boolean checkColor(String color) {   // To test.
-        for (ChatColor c : ChatColor.values())
-            if (c.name().equals(color)) return true;
-        return false;
     }
 
     private static boolean mustBeOp(CommandSender s) {
@@ -274,12 +267,5 @@ public class CommandsCC {
         return false;
     }
 
-    private static boolean checkArgIsInteger(String arg) {
-        try {
-            Integer.parseInt(arg);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+
 }

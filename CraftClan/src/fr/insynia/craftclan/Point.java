@@ -53,6 +53,7 @@ public class Point {
     public boolean addToFaction(int factionId) {
         SQLManager sqlm = SQLManager.getInstance();
         this.factionId = factionId;
+        changePointFaction(this.factionId);
         return (sqlm.execUpdate("UPDATE points SET faction_id = " + factionId + " WHERE name = \"" + this.name + "\";"));
     }
 
@@ -63,6 +64,7 @@ public class Point {
         for (Faction f : factions) {
             if (f.getName().equals(name)) {
                 this.factionId = f.getId();
+                changePointFaction(this.factionId);
                 return (sqlm.execUpdate("UPDATE points SET faction_id = " + factionId + " WHERE name = \"" + this.name + "\";"));
             }
         }
@@ -101,6 +103,8 @@ public class Point {
         if (FileManager.checkFileAndFolderExist(DEFAULT_POINT_STRUCTURE_FOLDER, DEFAULT_POINT_STRUCTURE + level)) {
             BlockSpawner.emptySky(this.loc);
             BlockSpawner.spawnStructure(DEFAULT_POINT_STRUCTURE + level, newloc);
+            setPointBeam();
+
         }
     }
 
@@ -125,10 +129,25 @@ public class Point {
         return (sqlm.execUpdate("UPDATE points SET level = " + newLevel + " WHERE name = \"" + this.name + "\";"));
     }
 
-    public void materialize(){
-        // Récupération du niveau du point.
-        // Envoi selon le niveau de la table, du path pour le bâtiment.`
-        // Va appeler les fonctions existantes avec les bons parametres pour spawn les batiments des differents points selon leur niveau
+    // Modify glass block color to match with point faction
+    private void setPointBeam() {
+        int faction_id = this.factionId;
+        byte gMeta = 0;
+        String blockType;
 
+        Faction faction = MapState.getInstance().findFaction(faction_id);
+        if (faction == null) gMeta = -1;
+        else gMeta = (byte)(UtilCC.getGlassMetadataColor(faction.getColor()));
+        if (gMeta == -1) {
+            blockType = "GLASS";
+            gMeta = 0;
+        } else blockType = "STAINED_GLASS";
+        BlockSpawner.spawnBlock(this.loc, 0, -1, 0, blockType, gMeta);
+    }
+
+    //
+    public void changePointFaction(int faction_id) {
+        this.factionId = faction_id;
+        setPointBeam();
     }
 }
