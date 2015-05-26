@@ -49,6 +49,6 @@ public class UtilCC {
 
     // Récupère la partie entière, du nombre divisé par 2
     public static int halfRound(int toHalfRound) {
-        return Math.round(toHalfRound/2);
+        return Math.round(toHalfRound / 2);
     }
 }
