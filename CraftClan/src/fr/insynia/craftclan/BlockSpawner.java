@@ -25,12 +25,12 @@ public class BlockSpawner {
 
         World world = location.getWorld();
 
-        world.getBlockAt(x, y - 2, z).setType(Material.BEACON);
-        world.getBlockAt(x, y - 1, z).setType(Material.GLASS);
+            world.getBlockAt(x, y - 2, z).setType(Material.BEACON);
+            world.getBlockAt(x, y - 1, z).setType(Material.GLASS);
 
-        for (int xPoint = x-1; xPoint <= x+1 ; xPoint++) {
-            for (int zPoint = z-1 ; zPoint <= z+1; zPoint++) {
-                world.getBlockAt(xPoint, y-3, zPoint).setType(Material.IRON_BLOCK);
+        for (int xPoint = x - 2 ; xPoint <= x + 2 ; xPoint++) {
+            for (int zPoint = z - 2; zPoint <= z + 2; zPoint++) {
+                world.getBlockAt(xPoint, y - 3, zPoint).setType(Material.IRON_BLOCK);
             }
         }
     }
@@ -39,13 +39,12 @@ public class BlockSpawner {
         // emptySky(location);
         List<String> blocks;
         List<String> parsed;
-
-        blocks = FileManager.fileReadtoListCC(DEFAULT_FILE, filename);
-        int i = 0;
-        while (i < blocks.size()) {
-            parsed = FileManager.parseLine(blocks.get(i));
-            i += 1;
-            spawnParsedBlock(location, parsed);
+            blocks = FileManager.fileReadtoListCC(DEFAULT_FILE, filename);
+            int i = 0;
+            while (i < blocks.size()) {
+                parsed = FileManager.parseLine(blocks.get(i));
+                i += 1;
+                spawnParsedBlock(location, parsed);
         }
     }
 
