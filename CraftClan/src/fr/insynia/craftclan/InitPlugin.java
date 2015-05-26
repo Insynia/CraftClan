@@ -1,7 +1,5 @@
 package fr.insynia.craftclan;
 
-import java.util.ArrayList;
-
 public class InitPlugin {
     public void init() {
         createTables();
@@ -10,14 +8,9 @@ public class InitPlugin {
     }
 
     private void spawnTowers() {
-        // Récupération des points.
-
-        // Lancement de la fonction materialize.
+        // To code
     }
-    //private ArrayList loadStructuresConfig() {
-//
-  //      return
-  //  }
+
     private void createTables() {
         SQLManager sqlm = SQLManager.getInstance();
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS points (" +
@@ -26,19 +19,40 @@ public class InitPlugin {
                 " x INT(32) NOT NULL, y INT(32) NOT NULL, z INT(32) NOT NULL," +
                 " level INT(12) NOT NULL," +
                 " faction_id INT(12) NOT NULL," +
-                " PRIMARY KEY (id));");
+                " PRIMARY KEY (id)," +
+                " INDEX (name));");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS factions (" +
                 " id int NOT NULL AUTO_INCREMENT," +
                 " name VARCHAR(255) NOT NULL UNIQUE," +
                 " color VARCHAR(255) NOT NULL," +
                 " level INT(12) NOT NULL," +
-                " PRIMARY KEY (id));");
+                " PRIMARY KEY (id)," +
+                " INDEX (name));");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS users (" +
                 " id int NOT NULL AUTO_INCREMENT," +
                 " name VARCHAR(255) NOT NULL," +
                 " faction_id INT(12) NOT NULL," +
                 " level INT(12) NOT NULL," +
                 " uuid VARCHAR(255) NOT NULL UNIQUE," +
+                " PRIMARY KEY (id)," +
+                " INDEX (name));");
+        sqlm.execUpdate("CREATE TABLE IF NOT EXISTS attacks (" +
+                " id int NOT NULL AUTO_INCREMENT," +
+                " faction_id INT(12) NOT NULL," +
+                " target_id INT(12) NOT NULL," +
+                " active tinyint NOT NULL," +
+                " point_id INT(12) NOT NULL," +
+                " win tinyint NOT NULL," +
+                " start_time INT(12) NOT NULL," +
+                " end_time INT(12)," +
+                " PRIMARY KEY (id));");
+        sqlm.execUpdate("CREATE TABLE IF NOT EXISTS attack_logs (" +
+                " id int NOT NULL AUTO_INCREMENT," +
+                " attack_id INT(12) NOT NULL," +
+                " x INT(32) NOT NULL, y INT(32) NOT NULL, z INT(32) NOT NULL," +
+                " block VARCHAR(255) NOT NULL," +
+                " action ENUM('PLACE', 'BREAK') NOT NULL," +
+                " meta tinyint NOT NULL," +
                 " PRIMARY KEY (id));");
     }
     private void fetchItems() {
