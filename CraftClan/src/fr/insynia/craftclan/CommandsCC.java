@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,6 +17,7 @@ import java.util.Set;
 
 
 public class CommandsCC {
+    private static final String DEFAULT_FILE_STRUCTURE = "structures/";
     public static boolean execCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Location loc;
         if (sender instanceof Player) {
@@ -24,7 +26,7 @@ public class CommandsCC {
             sender.sendMessage("You must be a player");
             return false;
         }
-        if(cmd.getName().equalsIgnoreCase("cc")) {
+        if (cmd.getName().equalsIgnoreCase("cc")) {
             switch (args[0].toLowerCase()) {
                 case "capture":
                     int captureReqArgs = 1;
@@ -32,22 +34,22 @@ public class CommandsCC {
                     if (!checkArgs(args, captureReqArgs)) return die(help, sender);
                     return (cmdCapture(sender, loc) || die(help, sender));
                 default:
-                    sender.sendMessage("This command does not exist.");
+                    sender.sendMessage("Cette commande n'existe pas");
             }
         } else if (cmd.getName().equalsIgnoreCase("cca")) {
-            if (!sender.isOp()){
+            if (!sender.isOp()) {
                 return mustBeOp(sender);
             }
             // In following lines, cf: "addPointReqArgs" counts addpoint as an argument.
             // That is why there is a - 1 in sent messages, in order to get commands args count minus command name.
-            switch (args[0].toLowerCase()){
+            switch (args[0].toLowerCase()) {
                 case "addpoint":
                     int addPointReqArgs = 4;
                     String help = "\"addpoint\" command needs " + (addPointReqArgs - 1) + " parameters:\n" +
                             "[PointName] [PointRadius]   [PointLevel]\n" +
                             "<String>    <Integer>       <Integer>";
 
-                    if(!checkArgs(args, addPointReqArgs)) return die(help, sender);
+                    if (!checkArgs(args, addPointReqArgs)) return die(help, sender);
                     return (cmdAddPoint(sender, loc, args) || die(help, sender));
 
                 case "addfaction":
@@ -56,7 +58,7 @@ public class CommandsCC {
                             "[FactionName]   [FactionColor]  [FactionLevel]\n" +
                             "<String>        <Color>         <Integer>";
 
-                    if(!checkArgs(args, addFactionReqArgs)) return die(help, sender);
+                    if (!checkArgs(args, addFactionReqArgs)) return die(help, sender);
                     return (cmdAddFaction(sender, args) || die(help, sender));
 
                 case "setownfaction":
@@ -65,7 +67,7 @@ public class CommandsCC {
                             "[FactionName]\n" +
                             "<String>";
 
-                    if(!checkArgs(args, setOwnFactionReqArgs)) return die(help, sender);
+                    if (!checkArgs(args, setOwnFactionReqArgs)) return die(help, sender);
                     return (cmdSetOwnFaction(sender, args) || die(help, sender));
 
                 case "setpointfaction":
@@ -74,44 +76,49 @@ public class CommandsCC {
                             "[PointName] [FactionName]\n" +
                             "<String>    <String>";
 
-                    if(!checkArgs(args, setPointFactionReqArgs)) return die(help, sender);
+                    if (!checkArgs(args, setPointFactionReqArgs)) return die(help, sender);
                     return (cmdSetPointFaction(sender, args) || die(help, sender));
 
                 case "select":
                     int selectReqArgs = 1;
                     help = "\"select\" command needs " + (selectReqArgs - 1) + " parameters:\n";
 
-                    if(!checkArgs(args, selectReqArgs)) return die(help, sender);
+                    if (!checkArgs(args, selectReqArgs)) return die(help, sender);
                     return (cmdSelection(sender) || die(help, sender));
 
                 case "save":
                     int saveReqArgs = 2;
-                    help = "\"set\" command needs " + (saveReqArgs - 1) + " parameters:\n" +
+                    help = "\"save\" command needs " + (saveReqArgs - 1) + " parameters:\n" +
                             "[SelectionName]\n" +
                             "<String>";
 
-                    if(!checkArgs(args, saveReqArgs)) return die(help, sender);
+                    if (!checkArgs(args, saveReqArgs)) return die(help, sender);
                     return (cmdSaveSelection(sender, args) || die(help, sender));
 
                 case "spawnstructure":
                     int spawnStructureReqArgs = 2;
-                    help = "\"set\" command needs \" + (spawnStructureReqArgs - 1) + \" parameters:\n" +
+                    help = "\"spawnstructure\" command needs \"" + (spawnStructureReqArgs - 1) + "\" parameters:\n" +
                             "[StructureName]\n" +
                             "<String>";
 
-                    if(!checkArgs(args, spawnStructureReqArgs)) return die(help, sender);
+                    if (!checkArgs(args, spawnStructureReqArgs)) return die(help, sender);
                     return (cmdSpawnStructure(sender, args) || die(help, sender));
+
+                case "setpointlevel":
+                    int setPointLevelReqArgs = 3;
+                    help = "\"set\" command needs \"" + (setPointLevelReqArgs - 1) + "\" parameters:\n" +
+                            "[PointName]    [NewLevel]\n" +
+                            "<String>       <Integer>";
+
+                    if (!checkArgs(args, setPointLevelReqArgs)) return die(help, sender);
+                    return (cmdSetPointLevel(sender, args) || die(help, sender));
                 default:
-                    sender.sendMessage("This command does not exist.");
+                    sender.sendMessage("This command does not exist");
             }
             return true;
-        } else {
-            sender.sendMessage("Invalid command.");
-            sender.sendMessage("Try /cc before your command.");
         }
-        sender.sendMessage("Invalid command.");
-        sender.sendMessage("Try /cc or /cca before your command.");
-        sender.sendMessage("Type /cc help or /cca help.");
+        sender.sendMessage("Cette commande n'existe pas");
+        sender.sendMessage("Tapez /cc help");
 
         return false;
     }
@@ -121,9 +128,9 @@ public class CommandsCC {
         Point p = new Point(args[1], Integer.parseInt(args[2]), loc, Integer.parseInt(args[3]), -1);
         boolean ret = p.save();
         if (ret)
-            sender.sendMessage("Point \"" + args[1] + "\" saved at " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ".");
+            sender.sendMessage("Point \"" + args[1] + "\" saved at " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
         else
-            sender.sendMessage("A point named \"" + args[1] + "\" already exists.");
+            sender.sendMessage("A point named \"" + args[1] + "\" already exists");
         return ret;
     }
 
@@ -140,25 +147,36 @@ public class CommandsCC {
         boolean ret = f.save();
 
         if (ret)
-            sender.sendMessage("Faction \"" + args[1] + "\" saved : " + args[2] + ", level: " + args[3] + ".");
+            sender.sendMessage("Faction \"" + args[1] + "\" saved : " + args[2] + ", level: " + args[3]);
         else
-            sender.sendMessage("A faction named \"" + args[1] + "\" already exists.");
+            sender.sendMessage("A faction named \"" + args[1] + "\" already exists");
         return ret;
     }
 
     // Change own Faction.
     private static boolean cmdSetOwnFaction(CommandSender sender, String[] args) {
-        Player p = ((Player) sender);
-        PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
-        sender.sendMessage("Changed faction to: \"" + args[1] + "\""  );
-
-        return pcc.addToFaction(args[1]);
+        if (checkFactionExists(args[1])) {
+            Player p = ((Player) sender);
+            PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
+            sender.sendMessage("Changed faction to: \"" + args[1] + "\"");
+            return pcc.addToFaction(args[1]);
+        } else {
+            sender.sendMessage("This faction does not exist");
+            return false;
+        }
     }
     // Change a Point's Faction.
     private static boolean cmdSetPointFaction(CommandSender sender, String[] args) {
-        Point point = MapState.getInstance().findPoint(args[1]);
-        sender.sendMessage("Changed point's \"" + args[1] + "\" faction.");
-        return point.addToFaction(args[2]);
+        if (checkPointExists(args[1]) && checkFactionExists(args[2])) {
+            Point point = MapState.getInstance().findPoint(args[1]);
+            sender.sendMessage("Changed point's \"" + args[1] + "\" faction");
+            return point.addToFaction(args[2]);
+        }
+        else {
+            sender.sendMessage("Either the point, or the faction, does not exist");
+            return false;
+        }
+
     }
 
     // Select via Selector.
@@ -166,7 +184,7 @@ public class CommandsCC {
         Player p = ((Player) sender);
         Location tloc = p.getTargetBlock((Set<Material>) null, 10).getLocation();
         Selector.addPoint(tloc.getX(), tloc.getY(), tloc.getZ());
-        sender.sendMessage("Selection point added at: " + tloc.getX() + ", " + tloc.getY() + ", " + tloc.getZ() + ".");
+        sender.sendMessage("Selection point added at: " + tloc.getX() + ", " + tloc.getY() + ", " + tloc.getZ());
         return true;
     }
 
@@ -182,11 +200,17 @@ public class CommandsCC {
         Player p = ((Player) sender);
         Location tloc = p.getTargetBlock((Set<Material>) null, 10).getLocation();
         tloc.setY(tloc.getY() + 1);
-        BlockSpawner.spawnStructure(args[1], tloc);
-        sender.sendMessage("Spawned structure: \"" + args[1] + "\".");
+        if (!FileManager.checkFileAndFolderExist(DEFAULT_FILE_STRUCTURE,args[1])) {
+            sender.sendMessage("The file \"" + args[1] + "\" does not exist");
+        } else {
+            BlockSpawner.spawnStructure(args[1], tloc);
+            sender.sendMessage("Spawned structure: \"" + args[1] + "\"");
+
+        }
         return true;
     }
 
+    // Capture a point
     private static boolean cmdCapture(CommandSender sender, Location loc) {
         Player p = (Player) sender;
         PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
@@ -196,9 +220,21 @@ public class CommandsCC {
         pcc.startCapture(point, p);
         return true;
     }
+    // Set a Point's level
+    private static boolean cmdSetPointLevel(CommandSender sender, String[] args) {
+        Point point = MapState.getInstance().findPoint(args[1]);
+
+        if (checkPointExists(args[1])) {
+            boolean ret = point.setPointLevel(Integer.parseInt(args[2]));
+            if (ret) sender.sendMessage("Changed point \"" + args[1] + "\" level to " + Integer.parseInt(args[2]));
+            else sender.sendMessage("This point does not exist");
+            return ret;
+        }
+        return false;
+    }
 
     // Checking args count.
-    private static boolean checkArgs(String[] args,int estimatedArgs ) {
+    private static boolean checkArgs(String[] args, int estimatedArgs) {
         return args.length == estimatedArgs;
     }
 
@@ -210,6 +246,22 @@ public class CommandsCC {
 
     private static boolean mustBeOp(CommandSender s) {
         s.sendMessage("You must be op !");
+        return false;
+    }
+
+    private static boolean checkFactionExists(String factionName) {
+        List<Faction> factions = MapState.getInstance().getFactions();
+        for (Faction f : factions) {
+            if (factionName.equalsIgnoreCase(f.getName())) return true;
+        }
+        return false;
+    }
+
+    private static boolean checkPointExists(String pointName) {
+        List<Point> points = MapState.getInstance().getPoints();
+        for (Point p : points) {
+            if (pointName.equalsIgnoreCase(p.getName())) return true;
+        }
         return false;
     }
 

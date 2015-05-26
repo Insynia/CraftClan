@@ -2,7 +2,6 @@ package fr.insynia.craftclan;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.NumberConversions;
 
 /**
  * Created by Doc on 13/05/2015.
@@ -43,9 +42,13 @@ public class UtilCC {
     }
 
     public static void timeLeftCapture(int time, Player p, PlayerCC pcc) {
-        if (time == 0) p.sendMessage("Le point appartient désormais à la faction: " + pcc.getFaction().getName());
-        else if (time <= 10) p.sendMessage("Il vous reste " + time + " secondes pour capturer le point !");
+        if (time <= 10) p.sendMessage("Il vous reste " + time + " secondes pour capturer le point !");
         else if (time <= 60 && time % 5 == 0) p.sendMessage("Il vous reste " + time + " secondes pour capturer le point !");
         else if (time > 60 && time % 10 == 0) p.sendMessage("Il vous reste " + time + " secondes pour capturer le point !");
+    }
+
+    // Récupère la partie entière, du nombre divisé par 2
+    public static int halfRound(int toHalfRound) {
+        return Math.round(toHalfRound/2);
     }
 }
