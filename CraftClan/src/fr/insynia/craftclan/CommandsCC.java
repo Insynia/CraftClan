@@ -27,6 +27,7 @@ public class CommandsCC {
             return false;
         }
         if (cmd.getName().equalsIgnoreCase("cc")) {
+            if (args.length == 0) return false ;
             switch (args[0].toLowerCase()) {
                 case "capture":
                     int captureReqArgs = 1;
@@ -40,6 +41,7 @@ public class CommandsCC {
             if (!sender.isOp()) {
                 return mustBeOp(sender);
             }
+            if (args.length == 0) return false;
             // In following lines, cf: "addPointReqArgs" counts addpoint as an argument.
             // That is why there is a - 1 in sent messages, in order to get commands args count minus command name.
             switch (args[0].toLowerCase()) {
@@ -54,7 +56,7 @@ public class CommandsCC {
 
                 case "addfaction":
                     int addFactionReqArgs = 4;
-                    help = "\"addfaction\" command needs \" + (addFactionReqArgs - 1) + \" parameters:\n" +
+                    help = "\"addfaction\" command needs " + (addFactionReqArgs - 1) + " parameters:\n" +
                             "[FactionName]   [FactionColor]  [FactionLevel]\n" +
                             "<String>        <Color>         <Integer>";
 
@@ -63,7 +65,7 @@ public class CommandsCC {
 
                 case "setownfaction":
                     int setOwnFactionReqArgs = 2;
-                    help = "\"setownfaction\" command needs \" + (setOwnFactionReqArgs - 1) + \" parameters:\"\n" +
+                    help = "\"setownfaction\" command needs " + (setOwnFactionReqArgs - 1) + " parameters:\"\n" +
                             "[FactionName]\n" +
                             "<String>";
 
@@ -115,6 +117,7 @@ public class CommandsCC {
                 default:
                     sender.sendMessage("This command does not exist");
             }
+
             return true;
         }
         sender.sendMessage("Cette commande n'existe pas");
@@ -125,24 +128,30 @@ public class CommandsCC {
 
     // Add a Point.
     private static boolean cmdAddPoint(CommandSender sender, Location loc, String[] args) {
-        Point p = new Point(args[1], Integer.parseInt(args[2]), loc, Integer.parseInt(args[3]), -1);
-        boolean ret = p.save();
-        if (ret)
-            sender.sendMessage("Point \"" + args[1] + "\" saved at " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
-        else
-            sender.sendMessage("A point named \"" + args[1] + "\" already exists");
-        return ret;
+        if (!checkArgIsInteger(args[2]) || !checkArgIsInteger(args[3])) {
+            return false;
+        } else {
+            Point p = new Point(args[1], Integer.parseInt(args[2]), loc, Integer.parseInt(args[3]), -1);
+
+            boolean ret = p.save();
+            if (ret)
+                sender.sendMessage("Point \"" + args[1] + "\" saved at " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
+            else
+                sender.sendMessage("A point named \"" + args[1] + "\" already exists");
+            return ret;
+        }
     }
 
     // Add a Faction.
     private static boolean cmdAddFaction(CommandSender sender, String[] args) {
-        if(!checkColor(args[2])) {
+        if (!checkColor(args[2])) {
             String msg = "Invalid Color: ";
             for (ChatColor c : ChatColor.values())
                 msg += c.name() + " ";
             sender.sendMessage(msg);
             return false;
         }
+        if (!checkArgIsInteger(args[3])) return false;
         Faction f = new Faction(0, args[1], args[2], Integer.parseInt(args[3]));
         boolean ret = f.save();
 
@@ -169,14 +178,12 @@ public class CommandsCC {
     private static boolean cmdSetPointFaction(CommandSender sender, String[] args) {
         if (checkPointExists(args[1]) && checkFactionExists(args[2])) {
             Point point = MapState.getInstance().findPoint(args[1]);
-            sender.sendMessage("Changed point's \"" + args[1] + "\" faction");
+            sender.sendMessage("Changed point \"" + args[1] + "\" faction");
             return point.addToFaction(args[2]);
-        }
-        else {
+        } else {
             sender.sendMessage("Either the point, or the faction, does not exist");
             return false;
         }
-
     }
 
     // Select via Selector.
@@ -200,7 +207,7 @@ public class CommandsCC {
         Player p = ((Player) sender);
         Location tloc = p.getTargetBlock((Set<Material>) null, 10).getLocation();
         tloc.setY(tloc.getY() + 1);
-        if (!FileManager.checkFileAndFolderExist(DEFAULT_FILE_STRUCTURE,args[1])) {
+        if (!FileManager.checkFileAndFolderExist(DEFAULT_FILE_STRUCTURE, args[1])) {
             sender.sendMessage("The file \"" + args[1] + "\" does not exist");
         } else {
             BlockSpawner.spawnStructure(args[1], tloc);
@@ -222,6 +229,7 @@ public class CommandsCC {
     }
     // Set a Point's level
     private static boolean cmdSetPointLevel(CommandSender sender, String[] args) {
+        if (!checkArgIsInteger(args[2])) return false;
         Point point = MapState.getInstance().findPoint(args[1]);
 
         if (checkPointExists(args[1])) {
@@ -251,22 +259,27 @@ public class CommandsCC {
 
     private static boolean checkFactionExists(String factionName) {
         List<Faction> factions = MapState.getInstance().getFactions();
-        for (Faction f : factions) {
-            if (factionName.equalsIgnoreCase(f.getName())) return true;
-        }
+        for (Faction f : factions) if (factionName.equalsIgnoreCase(f.getName())) return true;
         return false;
     }
 
     private static boolean checkPointExists(String pointName) {
         List<Point> points = MapState.getInstance().getPoints();
-        for (Point p : points) {
-            if (pointName.equalsIgnoreCase(p.getName())) return true;
-        }
+        for (Point p : points) if (pointName.equalsIgnoreCase(p.getName())) return true;
         return false;
     }
 
     private static boolean die(String msg, CommandSender sender) {
         sender.sendMessage(msg);
         return false;
+    }
+
+    private static boolean checkArgIsInteger(String arg) {
+        try {
+            Integer.parseInt(arg);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

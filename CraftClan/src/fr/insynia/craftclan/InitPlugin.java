@@ -1,7 +1,5 @@
 package fr.insynia.craftclan;
 
-import java.util.ArrayList;
-
 public class InitPlugin {
     public void init() {
         createTables();

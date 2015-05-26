@@ -139,7 +139,8 @@ public class PlayerCC implements Loadable {
                 if (timeToCapture == 0) {
                     this.cancel();
                     if (point.addToFaction(pcc.getFaction().getId()))
-                    p.sendMessage("Vous avez capturé le point.");
+                    point.setPointLevel(1);
+                    p.sendMessage("Vous avez capturé le point !");
                 } else if (!checkCapture(point, p)) {
                     this.cancel();
                     p.sendMessage("La capture a échoué");
