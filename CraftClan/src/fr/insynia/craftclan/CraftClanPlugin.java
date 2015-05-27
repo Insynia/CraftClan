@@ -29,6 +29,7 @@ public class CraftClanPlugin extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        return CommandsCC.execCommand(sender, cmd, label, args);
+        CommandsCC.execCommand(sender, cmd, label, args);
+        return true;
     }
 }

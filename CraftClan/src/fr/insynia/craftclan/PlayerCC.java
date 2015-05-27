@@ -59,6 +59,14 @@ public class PlayerCC implements Loadable {
         return uuid;
     }
 
+    public Faction getFaction() {
+        return faction;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public boolean addToFaction(String name) {
         SQLManager sqlm = SQLManager.getInstance();
         Faction f = MapState.getInstance().findFaction(name);
@@ -87,19 +95,21 @@ public class PlayerCC implements Loadable {
                 "VALUES(\"" + name + "\", " + faction_id + ", " + level + ", \"" + uuid + "\");");
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Faction getFaction() {
-        return faction;
-    }
-
     public boolean isAtHome(Location from) {
         if (faction == null) return false;
         List<Point> points = MapState.getInstance().getFactionPoints(faction.getId());
         for (Point p : points) {
             if (UtilCC.distanceBasic(from, p.getLocation()) <= p.getRadius())
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isOnPointArea(Location from) {
+        if (faction == null ) return false;
+        List<Point> points = MapState.getInstance().getFactionPoints(faction.getId());
+        for (Point p : points) {
+            if (UtilCC.distanceBasic(from, p.getLocation()) <= CAPTURE_DISTANCE)
                 return true;
         }
         return false;
@@ -117,21 +127,36 @@ public class PlayerCC implements Loadable {
         if (faction == null) return null;
         List<Point> points = MapState.getInstance().getPoints();
         for (Point p : points) {
-            if (p.getFactionId() != faction.getId() && UtilCC.distanceBasic(from, p.getLocation()) <= CAPTURE_DISTANCE)
+            if (p.getFactionId() != faction.getId() && UtilCC.distanceBasicFull(from, p.getLocation()) <= CAPTURE_DISTANCE)
                 return p;
         }
         return null;
     }
 
-    public void startCapture(Point point, final Player p) {
-        timeToCapture = 10; // TODO
+    public void startCapture(final Point point, final Player p) {
+        timeToCapture = (int)(10 * Math.pow(point.getLevel(), 2)); // TODO
+        final PlayerCC pcc = this;
         Timer captureLoop = new Timer(true);
         captureLoop.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (timeToCapture == 0) this.cancel(); // TODO
-                p.sendMessage("Il vous reste " + timeToCapture + " secondes pour capturer le point !");
-                timeToCapture -= 1;
+                if (timeToCapture == 0) {
+                    this.cancel();
+                    Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClanPlugin"), new Runnable() {
+                        @Override
+                        public void run() {
+                            if (point.addToFaction(pcc.getFaction().getId()))
+                                point.setPointLevel(1);
+                            p.sendMessage("Vous avez capturé le point !");
+                        }
+                    });
+                } else if (!checkCapture(point, p)) {
+                    this.cancel();
+                    p.sendMessage("La capture a échoué");
+                } else {
+                    UtilCC.timeLeftCapture(timeToCapture, p, pcc);
+                    timeToCapture -= 1;
+                }
             }
         }, 0, 1000);
     }
@@ -180,5 +205,11 @@ public class PlayerCC implements Loadable {
             return true;
         }
         return false;
+    }
+
+    public boolean checkCapture(Point point, Player p) {
+        return point.getFactionId() != faction.getId() &&
+                (UtilCC.distanceBasicFull(point.getLocation(), p.getLocation())) <= CAPTURE_DISTANCE &&
+                !p.isDead();
     }
 }

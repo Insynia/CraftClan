@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 public class PlayerRestriction implements Listener {
@@ -18,8 +19,7 @@ public class PlayerRestriction implements Listener {
             return;
         Player player = event.getPlayer();
         PlayerCC playercc = MapState.getInstance().findPlayer(player.getUniqueId());
-        Location locBlock = event.getBlock().getLocation();
-        if (!canBreak(playercc, player, event) && !playercc.isAtHome(locBlock))
+        if (!canBreak(playercc, player, event) && !placeAndBreakRestriction(event, playercc))
             event.setCancelled(true);
         else
             handleBreak(playercc, event);
@@ -32,8 +32,7 @@ public class PlayerRestriction implements Listener {
             return;
         Player player = event.getPlayer();
         PlayerCC playercc = MapState.getInstance().findPlayer(player.getUniqueId());
-        Location locBlock = event.getBlock().getLocation();
-        if (!canPlace(playercc, player, event) && !playercc.isAtHome(locBlock))
+        if (!canPlace(playercc, player, event) && !placeAndBreakRestriction(event, playercc))
             event.setCancelled(true);
         else
             handlePlace(playercc, event);
@@ -43,6 +42,7 @@ public class PlayerRestriction implements Listener {
         Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
         Attack attack = pcc.isOnAttackOn(curPoint);
 
+        if (pcc.isOnPointArea(event.getBlock().getLocation())) return false;
         if (curPoint == null)
             return false;
         return attack != null && event.getBlock().getType().equals(Material.GOLD_BLOCK);
@@ -52,13 +52,12 @@ public class PlayerRestriction implements Listener {
         Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
         Attack attack = pcc.isOnAttackOn(curPoint);
 
+        if (pcc.isOnPointArea(event.getBlock().getLocation())) return false;
         if (curPoint == null)
             return false;
         if (attack != null)
             return true;
-        if (pcc.willAttack(event.getBlock()))
-            return true;
-        return false;
+        return pcc.willAttack(event.getBlock());
     }
 
     private void handleBreak(PlayerCC pcc, BlockBreakEvent event) {
@@ -72,5 +71,10 @@ public class PlayerRestriction implements Listener {
         Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
         Attack attack = pcc.isOnAttackOn(curPoint);
         attack.logBlock(event.getBlock(), "PLACE");
+    }
+
+    private boolean placeAndBreakRestriction(BlockEvent event, PlayerCC playercc) {
+        Location locBlock = event.getBlock().getLocation();
+        return !playercc.isAtHome(locBlock) || playercc.isOnPointArea(locBlock);
     }
 }

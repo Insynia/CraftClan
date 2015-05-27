@@ -31,6 +31,7 @@ public class FileManager {
         }
         return lines;
     }
+
     public static void writeLineToFile(String folder, String filename, String line) {
 
         try {
@@ -50,6 +51,7 @@ public class FileManager {
             e.printStackTrace();
         }
     }
+
     public static List<String> parseLine(String lineToParse) {
         List<String> parsedLine = new ArrayList<>();
         int i = 0;
@@ -59,5 +61,15 @@ public class FileManager {
             i += 1;
         }
         return parsedLine;
+    }
+
+    public static boolean checkFileAndFolderExist(String folder, String filename) {
+        File cFolder = new File(folder);
+        if (!cFolder.exists() || !cFolder.isDirectory()) {
+            return false;
+        } else {
+            File file = new File(folder + "/" + filename);
+            return !(!file.exists() || !file.canRead());
+        }
     }
 }

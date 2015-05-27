@@ -1,7 +1,111 @@
 # Projet CraftClan @Insynia
-# Dernière modification: 12/05/2015
-# Par Doc Cobra et Sharowin.
-Phase I:
+___
+###### Dernière modification: 25/05/2015
+###### Par Doc Cobra et Sharowin.
+___
+
+**[TRIEZ MOI](#triez-moi)**
+
+**[Concept](#concept)**
+* [Gameplay](#gameplay)
+
+**[Installation](#installation)**
+* [Serveur minecraft](#serveur-minecraft)
+* [Plugin](#plugin)
+* [Web server](#web-server)
+
+**[To-do list](#to-do-list)**
+* [Phase 1](#phase-1)
+
+___
+# TRIEZ MOI
+
+#### Mode attaque limité a un try, respawn desactive(mute) attaque pour le player only
+* Fix le tryhard de se planquer en mode attaque pour avoir des vagues attaque infinies
+
+#### Bloc or pour la construction sur base ennemi en mode attaque
+* Cout d'attaque
+* Eviter le cheat du style skybridge
+
+#### Zone de farming exterieure et aleatoire accessible au spawn
+* Fix des first player coincés
+* Permet de regenerer la map sur une parcelle automatiquement donc no grief
+
+#### Les points proches du spawn doivent etre plus petit dans l'ensemble
+* Permet une grande competitivité autour du spawn (dur de garder plusieurs points)
+* Facilite l'integration des nouveaux joueurs
+
+___
+
+## Concept
+
+Le concept du mod se reunit en 4 efpoksdgfj...
+
+## Installation
+
+Les exemples de commandes ne sont pas compatibles avec toutes les OS
+La plupart des commandes est effectuée sous ubuntu et MacOS
+
+Le dépôt git correspondant sera initialisé, pull et sur la branche master
+Le pwd est celui du depot git local
+
+### Serveur minecraft
+
+```bash
+cd server
+````
+
+3 variables d'envirronnement doivent être définies:
+- DB_USERNAME
+- DB_URL
+- DB_PASSWORD
+
+```bash
+export [VAR]=[VALEUR]
+```
+
+La commande `./start.sh` lancera le serveur et le web listener sur la base de donnée définie par les variables définies ci dessus
+
+Un terminal indépendant sera créé avec `screen`, ce qui permettra de rattacher le terminal aec la commande `screen -r minecraft`
+
+### Plugin
+
+Le plugin doit être compilé à chaque modification en fichier JAR
+
+```bash
+cd server
+```
+
+Copier le fichier JAR dans `./plugins/`
+
+### Web server
+
+La commande `./install.sh` crée les fichiers nécessaires
+Il faut cependant vérifier les dépendances nécessaires comme `nginx`
+
+Générer les assets en static
+
+```bash
+bundle exec rake assets:precompile
+```
+
+Lancer le service de nginx ou le reload
+
+```bash
+sudo service nginx restart
+```
+
+Lancer le serveur applicatif
+
+```bash
+DB_URL=mysql://user:password@url:port/craftclan unicorn -E production -c config/unicorn.rb
+```
+
+### Gameplay
+
+## To-do list
+
+** Phase I:
       Gameplay:
 		Faction:
 			- Générée par les joueurs.

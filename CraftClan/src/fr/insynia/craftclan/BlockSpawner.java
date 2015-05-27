@@ -25,12 +25,12 @@ public class BlockSpawner {
 
         World world = location.getWorld();
 
-        world.getBlockAt(x, y - 2, z).setType(Material.BEACON);
-        world.getBlockAt(x, y - 1, z).setType(Material.GLASS);
+            world.getBlockAt(x, y - 2, z).setType(Material.BEACON);
+            world.getBlockAt(x, y - 1, z).setType(Material.GLASS);
 
-        for (int xPoint = x-1; xPoint <= x+1 ; xPoint++) {
-            for (int zPoint = z-1 ; zPoint <= z+1; zPoint++) {
-                world.getBlockAt(xPoint, y-3, zPoint).setType(Material.IRON_BLOCK);
+        for (int xPoint = x - 2 ; xPoint <= x + 2 ; xPoint++) {
+            for (int zPoint = z - 2; zPoint <= z + 2; zPoint++) {
+                world.getBlockAt(xPoint, y - 3, zPoint).setType(Material.IRON_BLOCK);
             }
         }
     }
@@ -39,17 +39,16 @@ public class BlockSpawner {
         // emptySky(location);
         List<String> blocks;
         List<String> parsed;
-
-        blocks = FileManager.fileReadtoListCC(DEFAULT_FILE, filename);
-        int i = 0;
-        while (i < blocks.size()) {
-            parsed = FileManager.parseLine(blocks.get(i));
-            i += 1;
-            spawnParsedBlock(location, parsed);
+            blocks = FileManager.fileReadtoListCC(DEFAULT_FILE, filename);
+            int i = 0;
+            while (i < blocks.size()) {
+                parsed = FileManager.parseLine(blocks.get(i));
+                i += 1;
+                spawnBlock(location, parsed);
         }
     }
 
-    private static void spawnParsedBlock(Location base, List<String> coords) {
+    public static void spawnBlock(Location base, List<String> coords) {
         int x = Integer.parseInt(coords.get(0));
         int y = Integer.parseInt(coords.get(1));
         int z = Integer.parseInt(coords.get(2));
@@ -58,6 +57,13 @@ public class BlockSpawner {
 
         World world = Bukkit.getWorld(DEFAULT_WORLD);
         Block block = world.getBlockAt(x + (int) base.getX(), y + (int) base.getY(), z + (int) base.getZ());
+        block.setType(Material.getMaterial(mat));
+        block.setData(data);
+    }
+
+    public static void spawnBlock(Location base, int nX, int nY, int nZ, String mat, byte data) {
+        World world = Bukkit.getWorld(DEFAULT_WORLD);
+        Block block = world.getBlockAt(nX + (int) base.getX(), nY + (int) base.getY(), nZ + (int) base.getZ());
         block.setType(Material.getMaterial(mat));
         block.setData(data);
     }
