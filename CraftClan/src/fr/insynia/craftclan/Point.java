@@ -104,7 +104,6 @@ public class Point {
             BlockSpawner.emptySky(this.loc);
             BlockSpawner.spawnStructure(DEFAULT_POINT_STRUCTURE + level, newloc);
             setPointBeam();
-
         }
     }
 

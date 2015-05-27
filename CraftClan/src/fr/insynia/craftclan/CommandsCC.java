@@ -266,6 +266,4 @@ public class CommandsCC {
         sender.sendMessage(msg);
         return false;
     }
-
-
 }
