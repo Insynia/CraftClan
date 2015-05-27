@@ -35,6 +35,7 @@ ___
 * Permet une grande competitivité autour du spawn (dur de garder plusieurs points)
 * Facilite l'integration des nouveaux joueurs
 
+#### Gérer le problème de l'eau et de lave que l'on peut placer malgré les restrictions.
 ___
 
 ## Concept
