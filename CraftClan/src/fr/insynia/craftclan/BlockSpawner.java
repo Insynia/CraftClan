@@ -16,7 +16,6 @@ import java.util.List;
 public class BlockSpawner {
 
     private static final String DEFAULT_FILE = "structures/";
-    private static final String DEFAULT_WORLD = "world";
 
     public static void createBeacon(Location location) {
         int x = location.getBlockX();
@@ -55,14 +54,14 @@ public class BlockSpawner {
         String mat = coords.get(3);
         byte data = (byte) Integer.parseInt(coords.get(4));
 
-        World world = Bukkit.getWorld(DEFAULT_WORLD);
+        World world = Bukkit.getWorld(MapState.DEFAULT_WORLD);
         Block block = world.getBlockAt(x + (int) base.getX(), y + (int) base.getY(), z + (int) base.getZ());
         block.setType(Material.getMaterial(mat));
         block.setData(data);
     }
 
     public static void spawnBlock(Location base, int nX, int nY, int nZ, String mat, byte data) {
-        World world = Bukkit.getWorld(DEFAULT_WORLD);
+        World world = Bukkit.getWorld(MapState.DEFAULT_WORLD);
         Block block = world.getBlockAt(nX + (int) base.getX(), nY + (int) base.getY(), nZ + (int) base.getZ());
         block.setType(Material.getMaterial(mat));
         block.setData(data);
@@ -70,7 +69,7 @@ public class BlockSpawner {
 
     public static void saveStructure(String filename, Location from, Location to) {
         int x, y, z, yb, zb, x1, y1, z1;
-        World world = Bukkit.getWorld(DEFAULT_WORLD);
+        World world = Bukkit.getWorld(MapState.DEFAULT_WORLD);
         Location delta = new Location(world,
                 Math.min(from.getX(), to.getX()),
                 Math.min(from.getY(), to.getY()),

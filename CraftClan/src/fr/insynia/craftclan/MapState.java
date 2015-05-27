@@ -11,6 +11,7 @@ import java.util.UUID;
  * Created by Doc on 11/05/2015.
  */
 public class MapState {
+    public static String DEFAULT_WORLD = "world";
     private static MapState instance = null;
     private List<Point> points;
     private List<PlayerCC> playerCCs;

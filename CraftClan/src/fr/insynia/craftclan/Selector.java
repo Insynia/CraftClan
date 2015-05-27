@@ -7,7 +7,6 @@ import org.bukkit.Location;
  * Created by Doc on 13/05/2015.
  */
 public class Selector {
-    private static final String DEFAULT_WORLD = "world";
     private static Selector instance;
     private static Location firstPoint = null;
     private static Location secondPoint = null;
@@ -23,7 +22,7 @@ public class Selector {
     }
 
     public static void addPoint(double x, double y, double z) {
-        Location loc = new Location(Bukkit.getWorld(DEFAULT_WORLD), (int) x, (int) y, (int) z);
+        Location loc = new Location(Bukkit.getWorld(MapState.DEFAULT_WORLD), (int) x, (int) y, (int) z);
         if (secondPoint == null) {
             if (firstPoint == null) {
                 setFirstPoint(loc);

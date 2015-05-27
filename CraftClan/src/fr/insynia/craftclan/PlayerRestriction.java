@@ -2,33 +2,30 @@ package fr.insynia.craftclan;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
 public class PlayerRestriction implements Listener {
-    private static final String DEFAULT_WORLD = "world";
-
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event)
     {
-        if (!event.getBlock().getLocation().getWorld().getName().equals(DEFAULT_WORLD))
+        if (!event.getBlock().getLocation().getWorld().getName().equals(MapState.DEFAULT_WORLD))
             return;
         Player player = event.getPlayer();
         PlayerCC playercc = MapState.getInstance().findPlayer(player.getUniqueId());
-        if (!canBreak(playercc, player, event))
-            event.setCancelled(true);
-        else
-            handleBreak(playercc, event);
+        if (!canBreak(playercc, player, event)) event.setCancelled(true);
+        else handleBreak(playercc, event);
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event)
     {
-        if (!event.getBlock().getLocation().getWorld().getName().equals(DEFAULT_WORLD))
+        if (!event.getBlock().getLocation().getWorld().getName().equals(MapState.DEFAULT_WORLD))
             return;
         Player player = event.getPlayer();
         PlayerCC playercc = MapState.getInstance().findPlayer(player.getUniqueId());
@@ -38,8 +35,13 @@ public class PlayerRestriction implements Listener {
             handlePlace(playercc, event);
     }
 
+    @EventHandler
+    public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
+        event.setCancelled(!isAllowed(event.getBlockClicked(), MapState.getInstance().findPlayer(event.getPlayer().getUniqueId())));
+    }
+
     private boolean canPlace(PlayerCC pcc, Player player, BlockPlaceEvent event) {
-        if (isAllowed(event, pcc)) return true; // When the player is at home and not on a point
+        if (isAllowed(event.getBlock(), pcc)) return true; // When the player is at home and not on a point
         if (pcc.isOnPointArea(event.getBlock().getLocation())) return false;
 
         Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
@@ -50,7 +52,7 @@ public class PlayerRestriction implements Listener {
     }
 
     private boolean canBreak(PlayerCC pcc, Player player, BlockBreakEvent event) {
-        if (isAllowed(event, pcc)) return true;
+        if (isAllowed(event.getBlock(), pcc)) return true;
         if (pcc.isOnPointArea(event.getBlock().getLocation())) return false;
 
         Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
@@ -80,8 +82,8 @@ public class PlayerRestriction implements Listener {
             attack.logBlock(event.getBlock(), "PLACE");
     }
 
-    private boolean isAllowed(BlockEvent event, PlayerCC playercc) {
-        Location locBlock = event.getBlock().getLocation();
+    private boolean isAllowed(Block block, PlayerCC playercc) {
+        Location locBlock = block.getLocation();
         return playercc.isAtHome(locBlock) && !playercc.isOnPointArea(locBlock);
     }
 }

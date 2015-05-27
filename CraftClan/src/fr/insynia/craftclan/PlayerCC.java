@@ -226,7 +226,7 @@ public class PlayerCC implements Loadable {
             new Attack(faction.getId(), point.getFactionId(), point.getName());
             return true;
         } else {
-            Bukkit.getPlayer(uuid).sendMessage("Vous n'avez pas assez de diamant pour attaquer ce point");
+            Bukkit.getPlayer(uuid).sendMessage("Vous n'avez pas assez de diamants pour attaquer ce point");
         }
         return false;
     }

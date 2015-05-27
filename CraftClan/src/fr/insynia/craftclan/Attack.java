@@ -33,6 +33,9 @@ public class Attack implements IDable {
         if (initAttackers())
             if (!save())
                 Bukkit.getLogger().warning("CANNOT CREATE ATTACK: Save failed");
+            else
+                Bukkit.broadcastMessage("La faction " + MapState.getInstance().findFaction(faction_id).getFancyName() +
+                        " à lancer une attaque sur le point \"" + point_name + "\" de la faction " +  MapState.getInstance().findFaction(target_id).getFancyName());
     }
 
     private boolean initAttackers() {
