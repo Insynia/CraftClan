@@ -138,9 +138,14 @@ public class PlayerCC implements Loadable {
             public void run() {
                 if (timeToCapture == 0) {
                     this.cancel();
-                    if (point.addToFaction(pcc.getFaction().getId()))
-                    point.setPointLevel(1);
-                    p.sendMessage("Vous avez capturé le point !");
+                    Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClanPlugin"), new Runnable() {
+                        @Override
+                        public void run() {
+                            if (point.addToFaction(pcc.getFaction().getId()))
+                                point.setPointLevel(1);
+                            p.sendMessage("Vous avez capturé le point !");
+                        }
+                    });
                 } else if (!checkCapture(point, p)) {
                     this.cancel();
                     p.sendMessage("La capture a échoué");
