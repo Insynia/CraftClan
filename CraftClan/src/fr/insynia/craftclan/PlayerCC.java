@@ -3,20 +3,24 @@ package fr.insynia.craftclan;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Doc on 12/05/2015.
  */
 public class PlayerCC implements Loadable {
-    private static final int CAPTURE_DISTANCE = 2;
+    private final int CAPTURE_DISTANCE = 2;
+    private final Material ITEM_FOR_ATTACK = Material.DIAMOND;
+    private final int NB_ITEMS_FOR_ATTACK = 10;
+
     private String name;
     private Faction faction;
     private int level;
@@ -87,6 +91,10 @@ public class PlayerCC implements Loadable {
         return name;
     }
 
+    public Faction getFaction() {
+        return faction;
+    }
+
     public boolean isAtHome(Location from) {
         if (faction == null) return false;
         List<Point> points = MapState.getInstance().getFactionPoints(faction.getId());
@@ -126,5 +134,51 @@ public class PlayerCC implements Loadable {
                 timeToCapture -= 1;
             }
         }, 0, 1000);
+    }
+
+    public boolean hasEnough(Material type, int count) {
+        ItemStack stack = new ItemStack(type);
+        Player p = Bukkit.getPlayer(uuid);
+
+        return p.getInventory().containsAtLeast(stack, count);
+    }
+
+    public void decreaseItem(Material type, int count) {
+        Player p = Bukkit.getPlayer(uuid);
+        PlayerInventory inventory = p.getInventory();
+        HashMap<Integer, ? extends ItemStack> items = inventory.all(type);
+        int nb = 0;
+
+        for (Map.Entry<Integer, ? extends ItemStack> entry : items.entrySet()) {
+            Integer key = entry.getKey();
+            ItemStack stack = entry.getValue();
+
+            nb += stack.getAmount();
+            inventory.remove(stack);
+        }
+        nb -= count;
+        inventory.addItem(new ItemStack(type, nb));
+    }
+
+    public Attack isOnAttackOn(Point point) {
+        if (point == null) return null;
+        List<Attack> attacks = MapState.getInstance().getAttacks();
+
+        for (Attack a : attacks)
+            if (a.getPointName().equals(point.getName()))
+                return a;
+        return null;
+    }
+
+    public boolean willAttack(Block block) {
+        Point point = MapUtils.getLocationPoint(block.getLocation());
+        if (faction == null)
+            return false;
+        if (point != null && hasEnough(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK)) {
+            decreaseItem(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK);
+            new Attack(faction.getId(), point.getFactionId(), point.getName());
+            return true;
+        }
+        return false;
     }
 }

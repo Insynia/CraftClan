@@ -15,11 +15,13 @@ public class MapState {
     private List<Point> points;
     private List<PlayerCC> playerCCs;
     private List<Faction> factions;
+    private List<Attack> attacks;
 
     protected MapState() {
         points = new ArrayList<Point>();
         playerCCs = new ArrayList<PlayerCC>();
         factions = new ArrayList<Faction>();
+        attacks = new ArrayList<Attack>();
     }
     public static MapState getInstance() {
         if(instance == null) {
@@ -29,7 +31,6 @@ public class MapState {
     }
 
     public String stringPoints() {
-        //Bukkit.getLogger().info();
         if (points == null) return "No point";
         String test = "";
         Point[] arr = points.toArray(new Point[points.size()]);
@@ -40,7 +41,6 @@ public class MapState {
     }
 
     public String stringFactions() {
-        //Bukkit.getLogger().info();
         if (points == null) return "No faction";
         String test = "";
         Faction[] arr = factions.toArray(new Faction[factions.size()]);
@@ -51,7 +51,6 @@ public class MapState {
     }
 
     public String stringPlayers() {
-        //Bukkit.getLogger().info();
         if (points == null) return "No player";
         String test = "";
         PlayerCC[] arr = playerCCs.toArray(new PlayerCC[playerCCs.size()]);
@@ -67,6 +66,10 @@ public class MapState {
 
     public List<Faction> getFactions() {
         return factions;
+    }
+
+    public List<PlayerCC> getPlayerCCs() {
+        return playerCCs;
     }
 
     public void setPoints(List<Point> ps) {
@@ -169,5 +172,17 @@ public class MapState {
                 pointlist.add(point);
         }
         return pointlist;
+    }
+
+    public void addAttack(Attack attack) {
+        attacks.add(attack);
+    }
+
+    public void removeAttack(Attack attack) {
+        attacks.remove(attack);
+    }
+
+    public List<Attack> getAttacks() {
+        return attacks;
     }
 }

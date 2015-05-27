@@ -4,11 +4,6 @@ public class InitPlugin {
     public void init() {
         createTables();
         fetchItems();
-        spawnTowers();
-    }
-
-    private void spawnTowers() {
-        // To code
     }
 
     private void createTables() {
@@ -41,10 +36,10 @@ public class InitPlugin {
                 " faction_id INT(12) NOT NULL," +
                 " target_id INT(12) NOT NULL," +
                 " active tinyint NOT NULL," +
-                " point_id INT(12) NOT NULL," +
+                " point_name VARCHAR(255) NOT NULL," +
                 " win tinyint NOT NULL," +
-                " start_time INT(12) NOT NULL," +
-                " end_time INT(12)," +
+                " start_time DATETIME NOT NULL," +
+                " end_time DATETIME DEFAULT NULL," +
                 " PRIMARY KEY (id));");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS attack_logs (" +
                 " id int NOT NULL AUTO_INCREMENT," +
@@ -55,6 +50,7 @@ public class InitPlugin {
                 " meta tinyint NOT NULL," +
                 " PRIMARY KEY (id));");
     }
+
     private void fetchItems() {
         SQLManager sqlm = SQLManager.getInstance();
         String query = "SELECT * FROM points;";
