@@ -1,6 +1,5 @@
 package fr.insynia.craftclan;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -46,9 +45,8 @@ public class PlayerRestriction implements Listener {
         Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
         if (curPoint == null) // Is there a point here ?
             return false;
-        Bukkit.getLogger().info("curPoint exists evyrthing ok");
         Attack attack = pcc.isOnAttackOn(curPoint); // Player is Attacking the point ? If yes return the attack
-        return (attack != null && event.getBlock().getType().equals(Material.GOLD_BLOCK)); // Checks the attack and the block type to be placed
+        return (attack != null && event.getBlock().getType().equals(Material.GOLD_BLOCK));  // Checks the attack and the block type to be placed
     }
 
     private boolean canBreak(PlayerCC pcc, Player player, BlockBreakEvent event) {
@@ -68,8 +66,11 @@ public class PlayerRestriction implements Listener {
     private void handleBreak(PlayerCC pcc, BlockBreakEvent event) {
         Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
         Attack attack = pcc.isOnAttackOn(curPoint);
-        if (attack != null)
+        if (attack != null) {
             attack.logBlock(event.getBlock(), "BREAK");
+            event.getBlock().setType(Material.AIR);
+            event.setCancelled(true);
+        }
     }
 
     private void handlePlace(PlayerCC pcc, BlockPlaceEvent event) {

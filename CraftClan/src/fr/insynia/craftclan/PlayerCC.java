@@ -144,14 +144,15 @@ public class PlayerCC implements Loadable {
         return null;
     }
 
-    ////////////////
-    ////////////////
-    //////////////// REVOKE WHEN NOT ATTACKING !!!!! VVVVV
-    //////////////// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-
     public void startCapture(final Point point, final Player p) {
         timeToCapture = (int)(10 * Math.pow(point.getLevel(), 2));
         final PlayerCC pcc = this;
+
+        if (isOnAttackOn(point) == null) {
+            p.sendMessage("Vous ne pouvez pas capturer ce point car vous n'êtes pas en mode attaque sur ce point");
+            p.sendMessage("Vous devez avoir 10 diamants et casser un bloc sur ce point pour activer le mode attaque");
+            return;
+        }
         Timer captureLoop = new Timer(true);
         captureLoop.schedule(new TimerTask() {
             @Override
@@ -161,10 +162,11 @@ public class PlayerCC implements Loadable {
                     Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClanPlugin"), new Runnable() {
                         @Override
                         public void run() {
-                            if (point.addToFaction(pcc.getFaction().getId()))
+                            if (point.addToFaction(pcc.getFaction().getId())) {
                                 point.setPointLevel(1);
-                            isOnAttackOn(point).endAttack(true);
-                            p.sendMessage("Vous avez capturé le point !");
+                                pcc.isOnAttackOn(point).endAttack(true);
+                                p.sendMessage("Vous avez capturé le point !");
+                            }
                         }
                     });
                 } else if (!checkCapture(point, p)) {
@@ -222,6 +224,8 @@ public class PlayerCC implements Loadable {
             decreaseItem(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK);
             new Attack(faction.getId(), point.getFactionId(), point.getName());
             return true;
+        } else {
+            Bukkit.getPlayer(uuid).sendMessage("Vous n'avez pas assez de diamant pour attaquer ce point");
         }
         return false;
     }
