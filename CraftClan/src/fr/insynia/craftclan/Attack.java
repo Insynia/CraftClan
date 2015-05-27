@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -38,16 +39,18 @@ public class Attack implements IDable {
         boolean hasAttackers = false;
         List<PlayerCC> playerCCs = MapState.getInstance().getPlayerCCs();
 
-        for (PlayerCC p : playerCCs)
+        for (PlayerCC p : playerCCs) {
             if (p.getFaction().getId() == faction_id) {
                 hasAttackers = true;
                 addAttacker(p);
             }
+            Bukkit.getLogger().info("Player : " + p.getName());
+        }
 
         return hasAttackers;
     }
 
-    private boolean playerFailed(PlayerCC p) {
+    public boolean playerFailed(PlayerCC p) {
         return failers.contains(p);
     }
 
@@ -56,8 +59,6 @@ public class Attack implements IDable {
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         String startTime = format.format(start_time);
-        String endTime = (end_time != null ? format.format(end_time) : "NULL");
-
 
         boolean ret = sqlm.execUpdate("INSERT INTO attacks(faction_id, target_id, active, point_name, win, start_time) VALUES("
                 + faction_id + ", "
@@ -65,43 +66,64 @@ public class Attack implements IDable {
                 + (active ? 1 : 0) + ", \""
                 + point_name + "\", "
                 + (win ? 1 : 0) + ", "
-                + "\"" + startTime + "\"" + ");", this); // UPDATE ENDTIME IN ENDATTACK
+                + "\"" + startTime + "\"" + ");", this);
         if (ret) addToMap();
         return ret;
     }
 
+    private boolean update() {
+        SQLManager sqlm = SQLManager.getInstance();
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String endTime = format.format(end_time);
+
+        return sqlm.execUpdate("UPDATE attacks SET " +
+                "active = " + (active ? 1 : 0) + ", " +
+                "win = " + (win ? 1 : 0) + ", " +
+                "end_time = \"" + endTime + "\" " +
+                "WHERE id = " + id + ";", this);
+    }
+
     public void addAttacker(PlayerCC pcc) {
-        if (!playerFailed(pcc)) {
+        if (!playerFailed(pcc) && !attackers.contains(pcc)) {
             attackers.add(pcc);
-            Faction target = MapState.getInstance().findFaction(faction_id);
+            Faction target = MapState.getInstance().findFaction(target_id);
             Point tarpoint = MapState.getInstance().findPoint(point_name);
-            Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous êtes en mode attaque ! Votre faction contre la faction " + target.getName());
-            Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous devez capturer le point \"" + point_name + "\", il se situe à ces coordonnées :" +
-                            "x: " + tarpoint.getLocation().getX() +
-                            "y: " + tarpoint.getLocation().getY() +
-                            "z: " + tarpoint.getLocation().getZ());
+            Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous êtes en mode attaque contre la faction " + target.getFancyName());
+            Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous devez capturer le point \"" + point_name + "\" aux coordonnées :" +
+                            " x: " + tarpoint.getLocation().getX() +
+                            " y: " + tarpoint.getLocation().getY() +
+                            " z: " + tarpoint.getLocation().getZ());
         }
     }
 
     public void addFailer(PlayerCC pcc) {
-        attackers.remove(pcc);
+        removeAttacker(pcc);
         failers.add(pcc);
         Bukkit.getPlayer(pcc.getUUID()).sendMessage("Looser, votre attaque a échoué !");
+        if (attackers.size() == 0)
+            endAttack(false);
+    }
+
+    private void removeAttacker(PlayerCC pcc) {
+        Iterator<PlayerCC> itr = attackers.iterator();
+        while (itr.hasNext()) {
+            PlayerCC p = itr.next();
+            if (p.getUUID() == pcc.getUUID()) {
+                itr.remove();
+            }
+        }
     }
 
     private void addToMap() {
         MapState.getInstance().addAttack(this);
     }
 
-    private void removeFromMap() {
-        MapState.getInstance().removeAttack(this);
-    }
-
-    private void endAttack() { // HERE BITCH
+    public void endAttack(boolean isWon) {
         active = false;
+        win = isWon;
         end_time = new Date();
-        save();
-        removeFromMap();
+        update();
     }
 
     public boolean logBlock(Block block, String action) {
@@ -133,5 +155,13 @@ public class Attack implements IDable {
 
     public String getPointName() {
         return point_name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public List<PlayerCC> getFailers() {
+        return failers;
     }
 }

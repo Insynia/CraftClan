@@ -1,5 +1,6 @@
 package fr.insynia.craftclan;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,7 +20,7 @@ public class PlayerRestriction implements Listener {
             return;
         Player player = event.getPlayer();
         PlayerCC playercc = MapState.getInstance().findPlayer(player.getUniqueId());
-        if (!canBreak(playercc, player, event) && !placeAndBreakRestriction(event, playercc))
+        if (!canBreak(playercc, player, event))
             event.setCancelled(true);
         else
             handleBreak(playercc, event);
@@ -32,32 +33,36 @@ public class PlayerRestriction implements Listener {
             return;
         Player player = event.getPlayer();
         PlayerCC playercc = MapState.getInstance().findPlayer(player.getUniqueId());
-        if (!canPlace(playercc, player, event) && !placeAndBreakRestriction(event, playercc))
+        if (!canPlace(playercc, player, event))
             event.setCancelled(true);
         else
             handlePlace(playercc, event);
     }
 
     private boolean canPlace(PlayerCC pcc, Player player, BlockPlaceEvent event) {
-        Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
-        Attack attack = pcc.isOnAttackOn(curPoint);
-
+        if (isAllowed(event, pcc)) return true; // When the player is at home and not on a point
         if (pcc.isOnPointArea(event.getBlock().getLocation())) return false;
-        if (curPoint == null)
+
+        Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
+        if (curPoint == null) // Is there a point here ?
             return false;
-        return attack != null && event.getBlock().getType().equals(Material.GOLD_BLOCK);
+        Bukkit.getLogger().info("curPoint exists evyrthing ok");
+        Attack attack = pcc.isOnAttackOn(curPoint); // Player is Attacking the point ? If yes return the attack
+        return (attack != null && event.getBlock().getType().equals(Material.GOLD_BLOCK)); // Checks the attack and the block type to be placed
     }
 
     private boolean canBreak(PlayerCC pcc, Player player, BlockBreakEvent event) {
-        Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
-        Attack attack = pcc.isOnAttackOn(curPoint);
-
+        if (isAllowed(event, pcc)) return true;
         if (pcc.isOnPointArea(event.getBlock().getLocation())) return false;
+
+        Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
         if (curPoint == null)
             return false;
-        if (attack != null)
+
+        Attack attack = pcc.isOnAttackOn(curPoint);
+        if (attack != null || pcc.willAttack(event.getBlock())) // When player is attacking the point OR the attacks is well created
             return true;
-        return pcc.willAttack(event.getBlock());
+        return false;
     }
 
     private void handleBreak(PlayerCC pcc, BlockBreakEvent event) {
@@ -73,8 +78,8 @@ public class PlayerRestriction implements Listener {
         attack.logBlock(event.getBlock(), "PLACE");
     }
 
-    private boolean placeAndBreakRestriction(BlockEvent event, PlayerCC playercc) {
+    private boolean isAllowed(BlockEvent event, PlayerCC playercc) {
         Location locBlock = event.getBlock().getLocation();
-        return !playercc.isAtHome(locBlock) || playercc.isOnPointArea(locBlock);
+        return playercc.isAtHome(locBlock) && !playercc.isOnPointArea(locBlock);
     }
 }

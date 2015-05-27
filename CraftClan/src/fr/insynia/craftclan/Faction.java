@@ -64,4 +64,8 @@ public class Faction implements IDable {
     public void setId(int id) {
         this.factionId = id;
     }
+
+    public String getFancyName() {
+        return ChatColor.WHITE + "[" + ChatColor.valueOf(getColor()) + getName() + ChatColor.WHITE + "]";
+    }
 }

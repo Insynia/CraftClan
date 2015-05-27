@@ -40,6 +40,16 @@ public class MapState {
         return test;
     }
 
+    public String stringAttacks() {
+        if (attacks == null) return "No attack";
+        String test = "";
+        Attack[] arr = attacks.toArray(new Attack[attacks.size()]);
+        for (Attack anArr : arr) {
+            test = test + "| Attack: " + anArr.toString() + " ";
+        }
+        return test;
+    }
+
     public String stringFactions() {
         if (points == null) return "No faction";
         String test = "";
@@ -176,13 +186,33 @@ public class MapState {
 
     public void addAttack(Attack attack) {
         attacks.add(attack);
+        Bukkit.getLogger().info("---------- Attacks -----------");
+        Bukkit.getLogger().info(stringAttacks());
+        Bukkit.getLogger().info("---------- ------- -----------");
     }
 
     public void removeAttack(Attack attack) {
-        attacks.remove(attack);
+        Iterator<Attack> itr = attacks.iterator();
+        while (itr.hasNext()) {
+            Attack a = itr.next();
+            if (a.getId() == attack.getId())
+                itr.remove();
+        }
+        Bukkit.getLogger().info("---------- rmAttacks -----------");
+        Bukkit.getLogger().info(stringAttacks());
+        Bukkit.getLogger().info("---------- ------- -----------");
     }
 
     public List<Attack> getAttacks() {
         return attacks;
+    }
+
+    public void purgeAttacks() {
+        Iterator<Attack> itr = attacks.iterator();
+        while (itr.hasNext()) {
+            Attack a = itr.next();
+            if (a.getFailers().size() == 0)
+                itr.remove();
+        }
     }
 }

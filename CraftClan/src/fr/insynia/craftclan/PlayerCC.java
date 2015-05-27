@@ -107,7 +107,7 @@ public class PlayerCC implements Loadable {
 
     public boolean isOnPointArea(Location from) {
         if (faction == null ) return false;
-        List<Point> points = MapState.getInstance().getFactionPoints(faction.getId());
+        List<Point> points = MapState.getInstance().getPoints();
         for (Point p : points) {
             if (UtilCC.distanceBasic(from, p.getLocation()) <= CAPTURE_DISTANCE)
                 return true;
@@ -121,6 +121,17 @@ public class PlayerCC implements Loadable {
 
         p.setDisplayName(ChatColor.WHITE + "[" + ChatColor.valueOf(faction.getColor()) + faction.getName() + ChatColor.WHITE + "] " + p.getName());
         p.setPlayerListName(ChatColor.WHITE + "[" + ChatColor.valueOf(faction.getColor()) + faction.getName() + ChatColor.WHITE + "] " + p.getName());
+
+        checkAttackStatus();
+    }
+
+    private void checkAttackStatus() {
+        List<Attack> attacks = MapState.getInstance().getAttacks();
+
+        for (Attack a : attacks) {
+            if (a.getFactionId() == faction.getId())
+                a.addAttacker(this);
+        }
     }
 
     public Point canCapture(Location from) {
@@ -133,8 +144,13 @@ public class PlayerCC implements Loadable {
         return null;
     }
 
+    ////////////////
+    ////////////////
+    //////////////// REVOKE WHEN NOT ATTACKING !!!!! VVVVV
+    //////////////// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+
     public void startCapture(final Point point, final Player p) {
-        timeToCapture = (int)(10 * Math.pow(point.getLevel(), 2)); // TODO
+        timeToCapture = (int)(10 * Math.pow(point.getLevel(), 2));
         final PlayerCC pcc = this;
         Timer captureLoop = new Timer(true);
         captureLoop.schedule(new TimerTask() {
@@ -147,6 +163,7 @@ public class PlayerCC implements Loadable {
                         public void run() {
                             if (point.addToFaction(pcc.getFaction().getId()))
                                 point.setPointLevel(1);
+                            isOnAttackOn(point).endAttack(true);
                             p.sendMessage("Vous avez capturé le point !");
                         }
                     });
@@ -190,16 +207,18 @@ public class PlayerCC implements Loadable {
         List<Attack> attacks = MapState.getInstance().getAttacks();
 
         for (Attack a : attacks)
-            if (a.getPointName().equals(point.getName()))
+            if (a.getFactionId() == faction.getId() && a.getPointName().equals(point.getName()) && !a.playerFailed(this))
                 return a;
         return null;
     }
 
     public boolean willAttack(Block block) {
         Point point = MapUtils.getLocationPoint(block.getLocation());
-        if (faction == null)
+        if (point == null)
             return false;
-        if (point != null && hasEnough(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK)) {
+        if (faction == null || faction.getId() == point.getFactionId())
+            return false;
+        if (hasEnough(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK)) {
             decreaseItem(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK);
             new Attack(faction.getId(), point.getFactionId(), point.getName());
             return true;
@@ -211,5 +230,14 @@ public class PlayerCC implements Loadable {
         return point.getFactionId() != faction.getId() &&
                 (UtilCC.distanceBasicFull(point.getLocation(), p.getLocation())) <= CAPTURE_DISTANCE &&
                 !p.isDead();
+    }
+
+    public void failAttacks() {
+        List<Attack> attacks = MapState.getInstance().getAttacks();
+
+        for (Attack a : attacks)
+            if (a.getFactionId() == faction.getId())
+                a.addFailer(this);
+        MapState.getInstance().purgeAttacks();
     }
 }

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -32,13 +33,20 @@ public class PlayerEvents implements Listener {
     }
 
     @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        PlayerCC pcc = MapState.getInstance().findPlayer(event.getEntity().getUniqueId());
+        pcc.failAttacks();
+    }
+
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        PlayerCC player = MapState.getInstance().findPlayer(event.getPlayer().getUniqueId());
-        if (player == null) {
+        PlayerCC pcc = MapState.getInstance().findPlayer(event.getPlayer().getUniqueId());
+        if (pcc == null) {
             Bukkit.getLogger().warning("TRIED TO REMOVE A NON EXISTENT PLAYER FROM MAPSTATE");
         } else {
-            MapState.getInstance().removePlayer(player);
+            pcc.failAttacks();
+            MapState.getInstance().removePlayer(pcc);
         }
     }
 }
