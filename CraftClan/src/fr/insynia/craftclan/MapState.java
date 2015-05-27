@@ -95,7 +95,8 @@ public class MapState {
     }
 
     public void addPlayer(PlayerCC playerCC) {
-        playerCCs.add(playerCC);
+        if (findPlayer(playerCC.getUUID()) == null)
+            playerCCs.add(playerCC);
     }
 
     public PlayerCC findPlayer(UUID uuid) {
@@ -211,7 +212,7 @@ public class MapState {
         Iterator<Attack> itr = attacks.iterator();
         while (itr.hasNext()) {
             Attack a = itr.next();
-            if (a.getFailers().size() == 0)
+            if (a.getAttackers().size() == 0)
                 itr.remove();
         }
     }

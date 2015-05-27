@@ -76,7 +76,8 @@ public class PlayerRestriction implements Listener {
     private void handlePlace(PlayerCC pcc, BlockPlaceEvent event) {
         Point curPoint = MapUtils.getLocationPoint(event.getBlock().getLocation());
         Attack attack = pcc.isOnAttackOn(curPoint);
-        attack.logBlock(event.getBlock(), "PLACE");
+        if (attack != null)
+            attack.logBlock(event.getBlock(), "PLACE");
     }
 
     private boolean isAllowed(BlockEvent event, PlayerCC playercc) {

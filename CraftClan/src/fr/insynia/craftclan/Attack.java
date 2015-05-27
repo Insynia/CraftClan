@@ -44,9 +44,7 @@ public class Attack implements IDable {
                 hasAttackers = true;
                 addAttacker(p);
             }
-            Bukkit.getLogger().info("Player : " + p.getName());
         }
-
         return hasAttackers;
     }
 
@@ -91,18 +89,23 @@ public class Attack implements IDable {
             Point tarpoint = MapState.getInstance().findPoint(point_name);
             Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous êtes en mode attaque contre la faction " + target.getFancyName());
             Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous devez capturer le point \"" + point_name + "\" aux coordonnées :" +
-                            " x: " + tarpoint.getLocation().getX() +
-                            " y: " + tarpoint.getLocation().getY() +
-                            " z: " + tarpoint.getLocation().getZ());
+                    " x: " + tarpoint.getLocation().getX() +
+                    " y: " + tarpoint.getLocation().getY() +
+                    " z: " + tarpoint.getLocation().getZ());
         }
     }
 
     public void addFailer(PlayerCC pcc) {
         removeAttacker(pcc);
         failers.add(pcc);
-        Bukkit.getPlayer(pcc.getUUID()).sendMessage("Looser, votre attaque a échoué !");
-        if (attackers.size() == 0)
+        Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous ne participez plus à l'attaque du point " + point_name + " !");
+        if (attackers.size() == 0) {
             endAttack(false);
+            Bukkit.getLogger().info("Ending attack in addFailer");
+        }
+        else
+            for (PlayerCC p : attackers)
+                Bukkit.getLogger().info("Player still attacking: " + p.getName() + "\n");
     }
 
     private void removeAttacker(PlayerCC pcc) {
@@ -124,6 +127,12 @@ public class Attack implements IDable {
         win = isWon;
         end_time = new Date();
         update();
+        if (!isWon)
+            Bukkit.broadcastMessage("La faction " + MapState.getInstance().findFaction(faction_id).getFancyName() +
+                    " a raté son attaque contre la faction " +  MapState.getInstance().findFaction(target_id).getFancyName());
+        else
+            Bukkit.broadcastMessage("La faction " + MapState.getInstance().findFaction(faction_id).getFancyName() +
+                    " a capturé le point \"" + point_name + "\" à la faction " +  MapState.getInstance().findFaction(target_id).getFancyName());
     }
 
     public boolean logBlock(Block block, String action) {
@@ -138,7 +147,7 @@ public class Attack implements IDable {
                 + block.getData() + ");");
     }
 
-    private void restoreAttack() {
+    private void restoreBlocks() {
         // ---------------------------------
         // TODO !!!!!
         // ---------------------------------
@@ -163,5 +172,9 @@ public class Attack implements IDable {
 
     public List<PlayerCC> getFailers() {
         return failers;
+    }
+
+    public List<PlayerCC> getAttackers() {
+        return attackers;
     }
 }

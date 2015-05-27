@@ -165,6 +165,7 @@ public class PlayerCC implements Loadable {
                             if (point.addToFaction(pcc.getFaction().getId())) {
                                 point.setPointLevel(1);
                                 pcc.isOnAttackOn(point).endAttack(true);
+                                Bukkit.getLogger().info("Ending attack in capture");
                                 p.sendMessage("Vous avez capturé le point !");
                             }
                         }
