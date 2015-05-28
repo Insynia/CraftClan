@@ -20,11 +20,13 @@ public class Attack implements IDable {
     private boolean active, win;
     private List<PlayerCC> attackers;
     private List<PlayerCC> failers;
+    private BlockList blockLog;
 
     public Attack(int faction_id, int target_id, String point_name) {
         this.faction_id = faction_id;
         this.target_id = target_id;
         this.point_name = point_name;
+        blockLog = new BlockList();
         attackers = new ArrayList<>();
         failers = new ArrayList<>();
         active = true;
@@ -136,6 +138,7 @@ public class Attack implements IDable {
         else
             Bukkit.broadcastMessage("La faction " + MapState.getInstance().findFaction(faction_id).getFancyName() +
                     " a capturé le point \"" + point_name + "\" à la faction " +  MapState.getInstance().findFaction(target_id).getFancyName());
+        restoreBlocks();
     }
 
     public boolean logBlock(Block block, String action) {
@@ -151,9 +154,9 @@ public class Attack implements IDable {
     }
 
     private void restoreBlocks() {
-        // ---------------------------------
-        // TODO !!!!!
-        // ---------------------------------
+        SQLManager sqlm = SQLManager.getInstance();
+        sqlm.fetchQuery("SELECT * FROM attack_logs WHERE attack_id = " + id + " ORDER BY id DESC;", blockLog);
+        blockLog.restore();
     }
 
     @Override

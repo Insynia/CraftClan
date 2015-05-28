@@ -60,9 +60,17 @@ public class BlockSpawner {
         block.setData(data);
     }
 
+    @Deprecated
     public static void spawnBlock(Location base, int nX, int nY, int nZ, String mat, byte data) {
         World world = Bukkit.getWorld(MapState.DEFAULT_WORLD);
         Block block = world.getBlockAt(nX + (int) base.getX(), nY + (int) base.getY(), nZ + (int) base.getZ());
+        block.setType(Material.getMaterial(mat));
+        block.setData(data);
+    }
+
+    public static void spawnBlock(Location loc, String mat, byte data) {
+        World world = Bukkit.getWorld(MapState.DEFAULT_WORLD);
+        Block block = world.getBlockAt((int) loc.getX(), (int) loc.getY(), (int) loc.getZ());
         block.setType(Material.getMaterial(mat));
         block.setData(data);
     }
