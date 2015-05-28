@@ -44,7 +44,12 @@ public class Selector {
         Selector.secondPoint = secondPoint;
     }
 
-    public static void saveStructure(String filename) {
-        BlockSpawner.saveStructure(filename, firstPoint, secondPoint);
+    public static boolean saveStructure(String filename) {
+        if(!FileManager.checkFileAndFolderExist(BlockSpawner.DEFAULT_FILE,filename)) {
+            BlockSpawner.saveStructure(filename, firstPoint, secondPoint);
+            return true;
+        } else {
+        return false;
+        }
     }
 }
