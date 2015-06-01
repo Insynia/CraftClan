@@ -1,13 +1,37 @@
 package fr.insynia.craftclan;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
  * Created by Doc on 13/05/2015.
  */
 public class UtilCC {
+
+    public static int getFloorY(int x, int z) {
+        Location loc = new Location(Bukkit.getWorld(MapState.DEFAULT_WORLD), x, 0, z);
+        int y = loc.getWorld().getMaxHeight();
+
+        while (y >= loc.getWorld().getSeaLevel()) {
+            if (checkFloorBlock(loc.getWorld().getBlockAt(x, y, z).getType()))
+                return y;
+            y--;
+        }
+        return y;
+    }
+
+    private static boolean checkFloorBlock(Material type) {
+        if (type != Material.AIR && type != Material.SNOW &&
+                type != Material.LEAVES && type != Material.LEAVES_2 &&
+                type != Material.LONG_GRASS && type != Material.RED_MUSHROOM &&
+                type != Material.BROWN_MUSHROOM && type != Material.YELLOW_FLOWER &&
+                type != Material.LEAVES && type != Material.LOG && type != Material.LOG_2)
+            return true;
+        return false;
+    }
 
     public static int distanceBasicFull(Location from, Location to) {
         if (to == null) {

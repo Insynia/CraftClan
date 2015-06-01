@@ -12,7 +12,7 @@ public class Point {
 
     private static final String DEFAULT_POINT_STRUCTURE_FOLDER = "structures";
     private static final String DEFAULT_POINT_STRUCTURE = "pointLevel_";
-    private static final int DEFAULT_POINT_AREA = 5;
+    private static final int DEFAULT_POINT_AREA = 7;
 
     private Location loc;
     private String name;

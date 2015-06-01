@@ -226,6 +226,7 @@ public class CommandsCC {
         pcc.startCapture(point, p);
         return true;
     }
+
     // Set a Point's level
     private static boolean cmdSetPointLevel(CommandSender sender, String[] args) {
         if (!UtilCC.checkArgIsInteger(args[2])) return false;
@@ -238,6 +239,13 @@ public class CommandsCC {
             return ret;
         }
         return false;
+    }
+
+    // Generate points
+    private static boolean cmdGeneratePoints(CommandSender sender, String[] args) {
+        int pointsCreated = Generator.generatePoints(3);
+        sender.sendMessage(pointsCreated + " points created !");
+        return true;
     }
 
     // Checking args count.
