@@ -132,4 +132,8 @@ public class UtilCC {
                 return -1;
         }
     }
+
+    public static int getInt(double toInt) {
+        return (toInt < 0 ? (int)toInt - 1 : (int)toInt);
+    }
 }

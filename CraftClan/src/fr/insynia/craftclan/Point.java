@@ -34,9 +34,9 @@ public class Point {
 
     public boolean save() {
         SQLManager sqlm = SQLManager.getInstance();
-        loc.setX((int) loc.getX());
+        loc.setX(UtilCC.getInt(loc.getX()));
         loc.setY((int) loc.getY());
-        loc.setZ((int) loc.getZ());
+        loc.setZ(UtilCC.getInt(loc.getZ()));
         boolean ret = sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z, faction_id, level) " +
                 "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + factionId + ", " + level + ");");
         if (ret){this.addToMap();}
@@ -95,10 +95,10 @@ public class Point {
         return level;
     }
 
-    private void spawnPointStructure(int level){
+    private void spawnPointStructure(int level) { // NIQUE (décalage)
         Location newloc = this.loc.clone();
-        newloc.setX(newloc.getX() - UtilCC.halfRound(DEFAULT_POINT_AREA));
-        newloc.setZ(newloc.getZ() - UtilCC.halfRound(DEFAULT_POINT_AREA));
+        newloc.setX(newloc.getX() - 2);
+        newloc.setZ(newloc.getZ() - 2);
         newloc.setY(newloc.getY() - 1);
         if (FileManager.checkFileAndFolderExist(DEFAULT_POINT_STRUCTURE_FOLDER, DEFAULT_POINT_STRUCTURE + level)) {
             BlockSpawner.emptySky(this.loc);

@@ -19,4 +19,9 @@ public class PlayerCommands {
         pcc.startCapture(point, p);
         return true;
     }
+
+    private static boolean die(String msg, CommandSender sender) {
+        sender.sendMessage(msg);
+        return false;
+    }
 }

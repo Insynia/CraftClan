@@ -108,6 +108,15 @@ public class MapState {
         return null;
     }
 
+    public PlayerCC findPlayer(String name) {
+        for (PlayerCC p : playerCCs) {
+            if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public Point findPoint(String name) {
         for (Point p : points) {
             if (p.getName().equals(name)) {

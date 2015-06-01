@@ -24,9 +24,7 @@ public class CommandsCC {
             if (args.length == 0) return false ;
             switch (args[0].toLowerCase()) {
                 case "capture":
-                    int captureReqArgs = 1;
                     String help = "\"capture\": Vous devez être à proximité d'un point ennemi pour pouvoir le capturer.";
-                    if (!UtilCC.checkArgsChatCommand(args, captureReqArgs)) return die(help, sender);
                     return (PlayerCommands.cmdCapture(sender, loc) || die(help, sender));
                 default:
                     sender.sendMessage("Cette commande n'existe pas");
@@ -76,11 +74,7 @@ public class CommandsCC {
                     return (AdminCommands.cmdSetPointFaction(sender, args) || die(help, sender));
 
                 case "select":
-                    int selectReqArgs = 0;
-                    help = "\"select\" command needs " + (selectReqArgs) + " parameters:\n";
-
-                    if (!UtilCC.checkArgsChatCommand(args, selectReqArgs)) return die(help, sender);
-                    return (AdminCommands.cmdSelection(sender) || die(help, sender));
+                    return AdminCommands.cmdSelection(sender);
 
                 case "save":
                     int saveReqArgs = 1;
@@ -102,12 +96,29 @@ public class CommandsCC {
 
                 case "setpointlevel":
                     int setPointLevelReqArgs = 2;
-                    help = "\"set\" command needs \"" + (setPointLevelReqArgs) + "\" parameters:\n" +
+                    help = "\"setpointlevel\" command needs \"" + (setPointLevelReqArgs) + "\" parameters:\n" +
                             "[PointName]    [NewLevel]\n" +
                             "<String>       <Integer>";
 
                     if (!UtilCC.checkArgsChatCommand(args, setPointLevelReqArgs)) return die(help, sender);
                     return (AdminCommands.cmdSetPointLevel(sender, args) || die(help, sender));
+
+                case "setplayerfaction":
+                    int setPlayerFactionReqArgs = 2;
+                    help = "\"setplayerfaction\" command needs \"" + (setPlayerFactionReqArgs) + "\" parameters:\n" +
+                            "[PlayerName]    [FactionName]\n" +
+                            "<String>       <String>";
+
+                    if (!UtilCC.checkArgsChatCommand(args, setPlayerFactionReqArgs)) return die(help, sender);
+                    return (AdminCommands.cmdSetPlayerFaction(sender, args) || die(help, sender));
+                case "tptopoint":
+                    int tpToPointReqArgs = 1;
+                    help = "\"tptopoint\" command needs \"" + (tpToPointReqArgs) + "\" parameters:\n" +
+                            "[PointName]\n" +
+                            "<String>";
+
+                    if (!UtilCC.checkArgsChatCommand(args, tpToPointReqArgs)) return die(help, sender);
+                    return (AdminCommands.cmdTPToPoint(sender, args) || die(help, sender));
                 default:
                     sender.sendMessage("This command does not exist");
             }
