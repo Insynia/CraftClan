@@ -95,7 +95,7 @@ public class Point {
         return level;
     }
 
-    private void spawnPointStructure(int level) { // NIQUE (décalage)
+    private void spawnPointStructure(int level) {
         Location newloc = this.loc.clone();
         newloc.setX(newloc.getX() - 2);
         newloc.setZ(newloc.getZ() - 2);

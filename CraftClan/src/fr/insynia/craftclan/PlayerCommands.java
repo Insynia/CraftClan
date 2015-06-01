@@ -14,8 +14,10 @@ public class PlayerCommands {
         Player p = (Player) sender;
         PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
         if (pcc == null) return false;
+
         Point point = pcc.canCapture(loc);
         if (point == null) return false;
+
         pcc.startCapture(point, p);
         return true;
     }
