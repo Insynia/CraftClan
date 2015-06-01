@@ -141,7 +141,9 @@ public class Point {
             blockType = "GLASS";
             gMeta = 0;
         } else blockType = "STAINED_GLASS";
-        BlockSpawner.spawnBlock(this.loc, 0, -1, 0, blockType, gMeta);
+        Location newLoc = this.loc.clone();
+        newLoc.setY(newLoc.getY() - 1);
+        BlockSpawner.spawnBlock(newLoc, blockType, gMeta);
     }
 
     //
