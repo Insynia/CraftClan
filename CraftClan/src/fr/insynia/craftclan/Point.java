@@ -1,5 +1,6 @@
 package fr.insynia.craftclan;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class Point {
 
     private static final String DEFAULT_POINT_STRUCTURE_FOLDER = "structures";
     private static final String DEFAULT_POINT_STRUCTURE = "pointLevel_";
-    private static final int DEFAULT_POINT_AREA = 7;
+    public static final int DEFAULT_AREA = 3; // Area radius
 
     private Location loc;
     private String name;
@@ -33,6 +34,10 @@ public class Point {
     }
 
     public boolean save() {
+        if (MapUtils.getLocationPoint(loc) != null) {
+            Bukkit.getLogger().warning("----- Cannot create an overlapping point !!! -----");
+            return false;
+        }
         SQLManager sqlm = SQLManager.getInstance();
         loc.setX(UtilCC.getInt(loc.getX()));
         loc.setY((int) loc.getY());
@@ -97,8 +102,8 @@ public class Point {
 
     private void spawnPointStructure(int level) {
         Location newloc = this.loc.clone();
-        newloc.setX(newloc.getX() - 2);
-        newloc.setZ(newloc.getZ() - 2);
+        newloc.setX(newloc.getX() - DEFAULT_AREA);
+        newloc.setZ(newloc.getZ() - DEFAULT_AREA);
         newloc.setY(newloc.getY() - 1);
         if (FileManager.checkFileAndFolderExist(DEFAULT_POINT_STRUCTURE_FOLDER, DEFAULT_POINT_STRUCTURE + level)) {
             BlockSpawner.emptySky(this.loc);

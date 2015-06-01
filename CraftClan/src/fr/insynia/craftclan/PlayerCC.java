@@ -17,7 +17,6 @@ import java.util.*;
  * Created by Doc on 12/05/2015.
  */
 public class PlayerCC implements Loadable {
-    private final int CAPTURE_DISTANCE = 2;
     private final Material ITEM_FOR_ATTACK = Material.DIAMOND;
     private final int NB_ITEMS_FOR_ATTACK = 10;
 
@@ -109,7 +108,7 @@ public class PlayerCC implements Loadable {
         if (faction == null ) return false;
         List<Point> points = MapState.getInstance().getPoints();
         for (Point p : points) {
-            if (UtilCC.distanceBasic(from, p.getLocation()) <= CAPTURE_DISTANCE)
+            if (UtilCC.distanceBasic(from, p.getLocation()) <= Point.DEFAULT_AREA)
                 return true;
         }
         return false;
@@ -138,7 +137,7 @@ public class PlayerCC implements Loadable {
         if (faction == null) return null;
         List<Point> points = MapState.getInstance().getPoints();
         for (Point p : points) {
-            if (p.getFactionId() != faction.getId() && UtilCC.distanceBasicFull(from, p.getLocation()) <= CAPTURE_DISTANCE)
+            if (p.getFactionId() != faction.getId() && UtilCC.distanceBasicFull(from, p.getLocation()) <= Point.DEFAULT_AREA)
                 return p;
         }
         return null;
@@ -233,7 +232,7 @@ public class PlayerCC implements Loadable {
 
     public boolean checkCapture(Point point, Player p) {
         return point.getFactionId() != faction.getId() &&
-                (UtilCC.distanceBasicFull(point.getLocation(), p.getLocation())) <= CAPTURE_DISTANCE &&
+                (UtilCC.distanceBasicFull(point.getLocation(), p.getLocation())) <= Point.DEFAULT_AREA &&
                 !p.isDead();
     }
 
