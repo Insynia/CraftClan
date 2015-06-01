@@ -47,8 +47,6 @@ public class Selector {
         if(!FileManager.checkFileAndFolderExist(BlockSpawner.DEFAULT_FILE,filename)) {
             BlockSpawner.saveStructure(filename, firstPoint, secondPoint);
             return true;
-        } else {
-        return false;
-        }
+        } else return false;
     }
 }

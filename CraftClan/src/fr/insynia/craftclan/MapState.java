@@ -102,47 +102,27 @@ public class MapState {
     }
 
     public PlayerCC findPlayer(UUID uuid) {
-        for (PlayerCC p : playerCCs) {
-            if (p.getUUID().equals(uuid)) {
-                return p;
-            }
-        }
+        for (PlayerCC p : playerCCs) if (p.getUUID().equals(uuid)) return p;
         return null;
     }
 
     public PlayerCC findPlayer(String name) {
-        for (PlayerCC p : playerCCs) {
-            if (p.getName().equals(name)) {
-                return p;
-            }
-        }
+        for (PlayerCC p : playerCCs) if (p.getName().equals(name)) return p;
         return null;
     }
 
     public Point findPoint(String name) {
-        for (Point p : points) {
-            if (p.getName().equals(name)) {
-                return p;
-            }
-        }
+        for (Point p : points) if (p.getName().equals(name)) return p;
         return null;
     }
 
     public Faction findFaction(int id) {
-        for (Faction f : factions) {
-            if (f.getId() == id) {
-                return f;
-            }
-        }
+        for (Faction f : factions) if (f.getId() == id) return f;
         return null;
     }
 
     public Faction findFaction(String name) {
-        for (Faction f : factions) {
-            if (f.getName().equals(name)) {
-                return f;
-            }
-        }
+        for (Faction f : factions) if (f.getName().equals(name)) return f;
         return null;
     }
 
