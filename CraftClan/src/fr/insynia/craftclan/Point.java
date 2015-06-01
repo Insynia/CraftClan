@@ -97,9 +97,8 @@ public class Point {
 
     private void spawnPointStructure(int level) {
         Location newloc = this.loc.clone();
-        newloc.setX(newloc.getX() - 2);
-        newloc.setZ(newloc.getZ() - 2);
-        newloc.setY(newloc.getY() - 1);
+        newloc.setX(newloc.getX() - UtilCC.halfRound(DEFAULT_POINT_AREA));
+        newloc.setZ(newloc.getZ() - UtilCC.halfRound(DEFAULT_POINT_AREA));
         if (FileManager.checkFileAndFolderExist(DEFAULT_POINT_STRUCTURE_FOLDER, DEFAULT_POINT_STRUCTURE + level)) {
             BlockSpawner.emptySky(this.loc);
             BlockSpawner.spawnStructure(DEFAULT_POINT_STRUCTURE + level, newloc);
