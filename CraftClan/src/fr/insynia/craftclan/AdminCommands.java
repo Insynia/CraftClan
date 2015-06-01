@@ -134,6 +134,13 @@ public class AdminCommands {
         return true;
     }
 
+    public static boolean cmdGeneratePoints(CommandSender sender, String[] args) {
+        if (!UtilCC.checkArgIsInteger(args[1])) return die("Arg 1 is supposed to be an integer", sender);
+
+        Generator.generatePoints(Integer.parseInt(args[1]));
+        return true;
+    }
+
     private static boolean die(String msg, CommandSender sender) {
         sender.sendMessage(msg);
         return false;

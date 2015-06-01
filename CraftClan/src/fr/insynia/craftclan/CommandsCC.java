@@ -119,6 +119,14 @@ public class CommandsCC {
 
                     if (!UtilCC.checkArgsChatCommand(args, tpToPointReqArgs)) return die(help, sender);
                     return (AdminCommands.cmdTPToPoint(sender, args) || die(help, sender));
+                case "genpoints":
+                    int genPointsReqArgs = 1;
+                    help = "\"genpoints\" command needs \"" + (genPointsReqArgs) + "\" parameters:\n" +
+                            "[LayersCount]\n" +
+                            "<Integer>";
+
+                    if (!UtilCC.checkArgsChatCommand(args, genPointsReqArgs)) return die(help, sender);
+                    return (AdminCommands.cmdGeneratePoints(sender, args) || die(help, sender));
                 default:
                     sender.sendMessage("This command does not exist");
             }
