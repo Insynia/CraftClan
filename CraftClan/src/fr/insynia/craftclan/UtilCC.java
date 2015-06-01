@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 /**
  * Created by Doc on 13/05/2015.
  */
@@ -33,6 +35,7 @@ public class UtilCC {
         return false;
     }
 
+    // Distance with Y axis
     public static int distanceBasicFull(Location from, Location to) {
         if (to == null) {
             throw new IllegalArgumentException("Cannot measure distance to a null location");
@@ -50,6 +53,7 @@ public class UtilCC {
         }
     }
 
+    // Distance without Y axis
     public static int distanceBasic(Location from, Location to) {
         if (to == null) {
             throw new IllegalArgumentException("Cannot measure distance to a null location");
@@ -66,12 +70,14 @@ public class UtilCC {
         }
     }
 
+    // Check capture time
     public static void timeLeftCapture(int time, Player p, PlayerCC pcc) {
         if (time <= 10) p.sendMessage("Il vous reste " + time + " secondes pour capturer le point !");
         else if (time <= 60 && time % 5 == 0) p.sendMessage("Il vous reste " + time + " secondes pour capturer le point !");
         else if (time > 60 && time % 10 == 0) p.sendMessage("Il vous reste " + time + " secondes pour capturer le point !");
     }
 
+    // Check if an string arg is an integer
     public static boolean checkArgIsInteger(String arg) {
         try {
             Integer.parseInt(arg);
@@ -81,10 +87,30 @@ public class UtilCC {
         }
     }
 
+    // Check if a color exists
     public static boolean checkColor(String color) {
         for (ChatColor c : ChatColor.values())
             if (c.name().equals(color)) return true;
         return false;
+    }
+
+    // Check if a faction exists
+    public static boolean checkFactionExists(String factionName) {
+        List<Faction> factions = MapState.getInstance().getFactions();
+        for (Faction f : factions) if (factionName.equalsIgnoreCase(f.getName())) return true;
+        return false;
+    }
+
+    // Check if a point exists
+    public static boolean checkPointExists(String pointName) {
+        List<Point> points = MapState.getInstance().getPoints();
+        for (Point p : points) if (pointName.equalsIgnoreCase(p.getName())) return true;
+        return false;
+    }
+
+    // Check args count
+    public static boolean checkArgsChatCommand(String[] args, int estimatedArgs) {
+        return args.length == estimatedArgs + 1;
     }
 
     // Récupère la partie entière, du nombre divisé par 2
@@ -124,8 +150,14 @@ public class UtilCC {
                 return 14;
             case "black":
                 return 15;
+            case "blue":
+                return 11;
             default:
                 return -1;
         }
+    }
+
+    public static int getInt(double toInt) {
+        return (toInt < 0 ? (int)toInt - 1 : (int)toInt);
     }
 }

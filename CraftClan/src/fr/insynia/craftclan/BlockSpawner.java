@@ -11,11 +11,11 @@ import java.util.List;
 
 /**
  * Created by Doc on 12/05/2015.
- * Modified by Sharowin on 18/05/2015
+ * Modified by Sharowin on 26/05/2015
  */
 public class BlockSpawner {
-
-    private static final String DEFAULT_FILE = "structures/";
+    public static final String DEFAULT_FILE = "structures/";
+    private static final String DEFAULT_WORLD = "world";
 
     public static void createBeacon(Location location) {
         int x = location.getBlockX();
