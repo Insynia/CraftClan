@@ -160,4 +160,21 @@ public class UtilCC {
     public static int getInt(double toInt) {
         return (toInt < 0 ? (int)toInt - 1 : (int)toInt);
     }
+
+    public static void debugPoint(Location loc, int radius) {
+        int x, z;
+
+        x = getInt(loc.getX()) - radius + 1;
+
+        while (x <= loc.getX() + radius) {
+            z = getInt(loc.getZ()) - radius;
+
+            while (z <= loc.getZ() + radius) {
+                Bukkit.getWorld(MapState.DEFAULT_WORLD).getBlockAt(x, getInt(loc.getY()), z).setType(Material.BRICK);
+                z++;
+            }
+            x++;
+        }
+
+    }
 }

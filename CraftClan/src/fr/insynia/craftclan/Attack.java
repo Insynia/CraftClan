@@ -106,6 +106,7 @@ public class Attack implements IDable {
         Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous ne participez plus à l'attaque du point " + point_name + " !");
         if (attackers.size() == 0) {
             endAttack(false);
+            MapState.getInstance().purgeAttacks();
             Bukkit.getLogger().info("Ending attack in addFailer");
         }
         else
@@ -182,5 +183,9 @@ public class Attack implements IDable {
 
     public List<PlayerCC> getAttackers() {
         return attackers;
+    }
+
+    public boolean isWon() {
+        return win;
     }
 }

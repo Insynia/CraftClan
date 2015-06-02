@@ -164,6 +164,7 @@ public class PlayerCC implements Loadable {
                             if (point.addToFaction(pcc.getFaction().getId())) {
                                 point.setPointLevel(1);
                                 pcc.isOnAttackOn(point).endAttack(true);
+                                MapState.getInstance().purgeAttacks();
                                 Bukkit.getLogger().info("Ending attack in capture");
                                 p.sendMessage("Vous avez capturé le point !");
                             }
@@ -201,7 +202,8 @@ public class PlayerCC implements Loadable {
             inventory.remove(stack);
         }
         nb -= count;
-        inventory.addItem(new ItemStack(type, nb));
+        if (nb > 0)
+            inventory.addItem(new ItemStack(type, nb));
     }
 
     public Attack isOnAttackOn(Point point) {
@@ -242,6 +244,5 @@ public class PlayerCC implements Loadable {
         for (Attack a : attacks)
             if (a.getFactionId() == faction.getId())
                 a.addFailer(this);
-        MapState.getInstance().purgeAttacks();
     }
 }

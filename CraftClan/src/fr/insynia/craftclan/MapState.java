@@ -11,7 +11,7 @@ import java.util.UUID;
  * Created by Doc on 11/05/2015.
  */
 public class MapState {
-    public static final int SPAWN_RADIUS = 60;
+    public static final int SPAWN_RADIUS = 61;
     public static String DEFAULT_WORLD = "world";
     private static MapState instance = null;
     private List<Point> points;
@@ -203,7 +203,7 @@ public class MapState {
         Iterator<Attack> itr = attacks.iterator();
         while (itr.hasNext()) {
             Attack a = itr.next();
-            if (a.getAttackers().size() == 0)
+            if (a.getAttackers().size() == 0 || a.isWon())
                 itr.remove();
         }
     }
