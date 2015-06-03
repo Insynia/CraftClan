@@ -52,7 +52,7 @@ public class Point {
         MapState.getInstance().addPoint(this);
         BlockSpawner.emptySky(loc);
         BlockSpawner.createBeacon(loc);
-        UtilCC.debugPoint(loc, radius);
+        // UtilCC.debugPoint(loc, radius); // Debug function
         spawnPointStructure(level);
     }
 
