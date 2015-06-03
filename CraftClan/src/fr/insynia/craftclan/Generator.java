@@ -53,10 +53,11 @@ public class Generator {
         int insetRadius = (diameter / 2);
         int x = xCenter - insetRadius - pointRadius - 1;
         int z = zCenter - insetRadius - pointRadius - 1;
+        int neutralFactionId = MapState.getInstance().findFaction("Neutre").getId();
         World world = Bukkit.getWorld(MapState.DEFAULT_WORLD);
 
         while (x <= xCenter + insetRadius + pointRadius + 1) {
-            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, 1).save();
+            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, neutralFactionId).save();
             x += pointRadius * 2 + 1;
             nb++;
         }
@@ -64,7 +65,7 @@ public class Generator {
         x = xCenter - insetRadius - pointRadius - 1;
         z = zCenter + insetRadius + pointRadius - 1;
         while (x <= xCenter + insetRadius + pointRadius + 1) {
-            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, 1).save();
+            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, neutralFactionId).save();
             x += pointRadius * 2 + 1;
             nb++;
         }
@@ -72,7 +73,7 @@ public class Generator {
         x = xCenter + insetRadius + pointRadius - 1;
         z = zCenter - insetRadius + pointRadius;
         while (z <= zCenter + insetRadius + 1) {
-            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, 1).save();
+            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, neutralFactionId).save();
             z += pointRadius * 2 + 1;
             nb++;
         }
@@ -80,7 +81,7 @@ public class Generator {
         x = xCenter - insetRadius - pointRadius - 1;
         z = zCenter - insetRadius + pointRadius;
         while (z <= zCenter + insetRadius + 1) {
-            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, 1).save();
+            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, neutralFactionId).save();
             z += pointRadius * 2 + 1;
             nb++;
         }

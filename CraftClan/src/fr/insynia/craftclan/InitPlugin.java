@@ -24,6 +24,7 @@ public class InitPlugin {
                 " PRIMARY KEY (id)," +
                 " INDEX (name));");
         sqlm.execUpdate("INSERT INTO factions(name, color, level) VALUES(\"Newbie\", \"GRAY\", 1)");
+        sqlm.execUpdate("INSERT INTO factions(name, color, level) VALUES(\"Neutre\", \"GRAY\", 1)");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS users (" +
                 " id int NOT NULL AUTO_INCREMENT," +
                 " name VARCHAR(255) NOT NULL," +
