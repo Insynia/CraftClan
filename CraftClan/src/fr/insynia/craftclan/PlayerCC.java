@@ -77,7 +77,7 @@ public class PlayerCC implements Loadable {
     }
 
     public static void create(Player player) {
-        PlayerCC playerCC = new PlayerCC(player.getName(), 0, 0, player.getUniqueId());
+        PlayerCC playerCC = new PlayerCC(player.getName(), MapState.getInstance().findFaction("Newbie").getId(), 0, player.getUniqueId());
         MapState.getInstance().addPlayer(playerCC);
         playerCC.save();
         Bukkit.getLogger().info("Created player: " + playerCC.name);
