@@ -9,34 +9,52 @@ import org.bukkit.World;
  * Created by Doc on 01/06/2015 at 15:49.
  */
 public class Generator {
-    private static final int BASE_POINT_RADIUS = 20;
-    // private static final int POINT_RADIUS_MODIFIER = 20;
-
     public static int generatePoints(int layers) {
         int x, z, nb = 0;
         int curLayer = 1;
-        int curInset = MapState.SPAWN_RADIUS; //<- A modifier selon la formule x = 3y + 1 avec y BASE_POINT_RADIUS et x SPAWN_RADIUS
-        int pointRadius = BASE_POINT_RADIUS; // <- A modifier selon la formule x = 3y + 1 avec y BASE_POINT_RADIUS et x SPAWN_RADIUS
+        int diameter = 92;
+        int pointRadius = choseRadius(diameter);; // <- A modifier selon la formule x = 3y + 1 avec y BASE_POINT_RADIUS et x SPAWN_RADIUS
         Location spawnLoc = Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation();
 
         x = (int) spawnLoc.getX();
         z = (int) spawnLoc.getZ();
 
         while (layers != 0) {
-            nb += genSquarePoints(pointRadius, x, z, curInset, curLayer);
-            pointRadius *= 2;
+            Bukkit.getLogger().info("Point radius: " + pointRadius + ", diameter: " + diameter + ", layer: " + curLayer + ", center x: " + x + ", z: " + z);
+            nb += genSquarePoints(pointRadius, x, z, diameter, curLayer);
+            diameter += 2 * (pointRadius * 2 + 1);
+            pointRadius = choseRadius(diameter);
             layers--;
-            curInset += pointRadius;
             curLayer++;
         }
         return nb;
     }
 
-    private static int genSquarePoints(int pointRadius, int xCenter, int zCenter, int insetRadius, int layer) {
+    private static int choseRadius(int diameter) {
+        int nbPoints = 2;
+        int radius;
+
+        diameter--;
+
+        while (nbPoints <= 50) {
+            nbPoints++;
+            if ((diameter - nbPoints) % nbPoints == 0) {
+                radius = ((diameter - nbPoints) / nbPoints) / 2;
+                if (radius > 5) return radius;
+            }
+        }
+
+        return 0;
+    }
+
+    private static int genSquarePoints(int pointRadius, int xCenter, int zCenter, int diameter, int layer) {
         int nb = 0;
+        int insetRadius = (diameter / 2);
         int x = xCenter - insetRadius - pointRadius - 1;
         int z = zCenter - insetRadius - pointRadius - 1;
         World world = Bukkit.getWorld(MapState.DEFAULT_WORLD);
+
+        Bukkit.getLogger().info("Point radius: " + pointRadius + ", insetRadius: " + insetRadius + ", start point x: " + x + ", z: " + z);
 
         while (x <= xCenter + insetRadius + pointRadius + 1) {
             new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, 1).save();
@@ -52,21 +70,21 @@ public class Generator {
             nb++;
         }
 
-        x = xCenter + insetRadius + pointRadius + 1;
-        z = zCenter - insetRadius + pointRadius;
-        while (z <= zCenter + insetRadius + 1) {
-            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, 1).save();
-            z += pointRadius * 2 + 1;
-            nb++;
-        }
-
-        x = xCenter - insetRadius - pointRadius - 1;
-        z = zCenter - insetRadius - pointRadius;
-        while (z <= zCenter + insetRadius + 1) {
-            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, 1).save();
-            z += pointRadius * 2 + 1;
-            nb++;
-        }
+//        x = xCenter + insetRadius + pointRadius + 1;
+//        z = zCenter - insetRadius + pointRadius;
+//        while (z <= zCenter + insetRadius + 1) {
+//            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, 1).save();
+//            z += pointRadius * 2 + 1;
+//            nb++;
+//        }
+//
+//        x = xCenter - insetRadius - pointRadius - 1;
+//        z = zCenter - insetRadius + pointRadius;
+//        while (z <= zCenter + insetRadius + 1) {
+//            new Point(layer + "_" + nb, pointRadius, new Location(world, x, UtilCC.getFloorY(x, z), z), 1, 1).save();
+//            z += pointRadius * 2 + 1;
+//            nb++;
+//        }
         return nb;
     }
 }

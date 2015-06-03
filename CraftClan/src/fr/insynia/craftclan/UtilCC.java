@@ -164,7 +164,7 @@ public class UtilCC {
     public static void debugPoint(Location loc, int radius) {
         int x, z;
 
-        x = getInt(loc.getX()) - radius + 1;
+        x = getInt(loc.getX()) - radius;
 
         while (x <= loc.getX() + radius) {
             z = getInt(loc.getZ()) - radius;
@@ -175,6 +175,10 @@ public class UtilCC {
             }
             x++;
         }
+        Bukkit.getWorld(MapState.DEFAULT_WORLD).getBlockAt(getInt(loc.getX()) + radius, getInt(loc.getY()), getInt(loc.getZ()) + radius).setType(Material.DIAMOND_BLOCK);
+        Bukkit.getWorld(MapState.DEFAULT_WORLD).getBlockAt(getInt(loc.getX()) - radius, getInt(loc.getY()), getInt(loc.getZ()) + radius).setType(Material.DIAMOND_BLOCK);
+        Bukkit.getWorld(MapState.DEFAULT_WORLD).getBlockAt(getInt(loc.getX()) + radius, getInt(loc.getY()), getInt(loc.getZ()) - radius).setType(Material.DIAMOND_BLOCK);
+        Bukkit.getWorld(MapState.DEFAULT_WORLD).getBlockAt(getInt(loc.getX()) - radius, getInt(loc.getY()), getInt(loc.getZ()) - radius).setType(Material.DIAMOND_BLOCK);
 
     }
 }
