@@ -14,32 +14,40 @@ import org.bukkit.entity.Player;
 public class CommandsCC {
     public static boolean execCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Location loc;
+        String help;
+
         if (sender instanceof Player) {
             loc = ((Player) sender).getLocation();
         } else {
             sender.sendMessage("You must be a player");
             return false;
         }
+
         if (cmd.getName().equalsIgnoreCase("cc")) {
-            if (args.length == 0) return false ;
+            if (args.length == 0) return false;
             switch (args[0].toLowerCase()) {
                 case "capture":
-                    String help = "\"capture\": Vous devez être à proximité d'un point ennemi pour pouvoir le capturer.";
+                    help = "\"capture\": Vous devez être à proximité d'un point ennemi pour pouvoir le capturer";
                     return (PlayerCommands.cmdCapture(sender, loc) || die(help, sender));
+                case "farm":
+                    help = "\"farm\": Vous êtes trop loin du spawn";
+                    return (PlayerCommands.cmdGoFarm(sender, loc) || die(help, sender));
+                case "stopfarm":
+                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
+                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
                 default:
                     sender.sendMessage("Cette commande n'existe pas");
             }
         } else if (cmd.getName().equalsIgnoreCase("cca")) {
-            if (!sender.isOp()) {
-                return checkOp(sender);
-            }
+            if (!sender.isOp()) return checkOp(sender);
             if (args.length == 0) return false;
+
             // In following lines, cf: "addPointReqArgs" counts addpoint as an argument.
             // That is why there is a - 1 in sent messages, in order to get commands args count minus command name.
             switch (args[0].toLowerCase()) {
                 case "addpoint":
                     int addPointReqArgs = 3;
-                    String help = "\"addpoint\" command needs " + (addPointReqArgs) + " parameters:\n" +
+                    help = "\"addpoint\" command needs " + (addPointReqArgs) + " parameters:\n" +
                             "[PointName] [PointRadius]   [PointLevel]\n" +
                             "<String>    <Integer>       <Integer>";
 

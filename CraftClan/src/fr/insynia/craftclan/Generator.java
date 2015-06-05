@@ -1,19 +1,40 @@
 package fr.insynia.craftclan;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
+
+import java.io.File;
+import java.util.Random;
 
 /**
  * For CraftClan
  * Created by Doc on 01/06/2015 at 15:49.
  */
 public class Generator {
+
+    public static void resetFarmingZone() {
+        Bukkit.getLogger().info("The farming zone is being reset !");
+        World farmingZone = Bukkit.getWorld(MapState.FARM_WORLD);
+        if (farmingZone != null) {
+            File folder = farmingZone.getWorldFolder();
+            UtilCC.kickPlayersFromWorld(MapState.FARM_WORLD);
+            if (Bukkit.getServer().unloadWorld(MapState.FARM_WORLD, true))
+                FileManager.deleteFileOrFolder(folder);
+        }
+        createFarmWorld();
+    }
+
+    private static void createFarmWorld() {
+        WorldCreator wc = new WorldCreator(MapState.FARM_WORLD);
+        wc.seed((new Random()).nextLong());
+        wc.type(WorldType.AMPLIFIED);
+        wc.createWorld();
+    }
+
     public static int generatePoints(int layers) {
         int x, z, nb = 0;
         int curLayer = 1;
-        int diameter = 118;
-        int pointRadius = choseRadius(diameter);; // <- A modifier selon la formule x = 3y + 1 avec y BASE_POINT_RADIUS et x SPAWN_RADIUS
+        int diameter = 118; // Can't touch this. Well, calculate this. Your go (cf line 25/26), ONLY INCREASE THIS (Base value 118) <- do not remove this
+        int pointRadius = choseRadius(diameter); // Hammer time
         Location spawnLoc = Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation();
 
         x = (int) spawnLoc.getX();

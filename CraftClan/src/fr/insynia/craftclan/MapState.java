@@ -13,6 +13,7 @@ import java.util.UUID;
 public class MapState {
     public static final int SPAWN_RADIUS = 61;
     public static String DEFAULT_WORLD = "world";
+    public static String FARM_WORLD = "world_farm";
     private static MapState instance = null;
     private List<Point> points;
     private List<PlayerCC> playerCCs;
@@ -26,7 +27,7 @@ public class MapState {
         attacks = new ArrayList<Attack>();
     }
     public static MapState getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new MapState();
         }
         return instance;
@@ -183,18 +184,6 @@ public class MapState {
         Bukkit.getLogger().info("---------- ------- -----------");
     }
 
-    public void removeAttack(Attack attack) {
-        Iterator<Attack> itr = attacks.iterator();
-        while (itr.hasNext()) {
-            Attack a = itr.next();
-            if (a.getId() == attack.getId())
-                itr.remove();
-        }
-        Bukkit.getLogger().info("---------- rmAttacks -----------");
-        Bukkit.getLogger().info(stringAttacks());
-        Bukkit.getLogger().info("---------- ------- -----------");
-    }
-
     public List<Attack> getAttacks() {
         return attacks;
     }
@@ -207,4 +196,5 @@ public class MapState {
                 itr.remove();
         }
     }
+
 }

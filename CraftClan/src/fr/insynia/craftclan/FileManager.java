@@ -72,4 +72,24 @@ public class FileManager {
             return !(!file.exists() || !file.canRead());
         }
     }
+
+    public static boolean deleteFileOrFolder(File file) {
+
+        if (file.exists()) {
+            if (file.isFile())
+                return(file.delete());
+
+            File files[] = file.listFiles();
+
+            for (File f : files) {
+                if (f.isDirectory()) {
+                    deleteFileOrFolder(f);
+                } else {
+                    f.delete();
+                }
+            }
+            return (file.delete());
+        }
+        return false;
+    }
 }

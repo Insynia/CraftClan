@@ -245,4 +245,8 @@ public class PlayerCC implements Loadable {
             if (a.getFactionId() == faction.getId())
                 a.addFailer(this);
     }
+
+    public boolean isOnWorld(String world) {
+        return Bukkit.getPlayer(uuid).getLocation().getWorld().getName().equals(world);
+    }
 }

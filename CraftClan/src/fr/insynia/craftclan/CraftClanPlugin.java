@@ -16,7 +16,7 @@ public class CraftClanPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         InitPlugin initializer = new InitPlugin();
-        initializer.init();
+        initializer.init(this);
         server.getPluginManager().registerEvents(new PlayerRestriction(), this);
         server.getPluginManager().registerEvents(new PlayerEvents(), this);
         server.getPluginManager().registerEvents(new PvPRestriction(), this);

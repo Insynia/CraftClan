@@ -1,9 +1,35 @@
 package fr.insynia.craftclan;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
 public class InitPlugin {
-    public void init() {
+    static Plugin p = null;
+
+    public void init(Plugin plugin) {
         createTables();
         fetchItems();
+        Generator.resetFarmingZone();
+        prepareFarmTimer(plugin);
+    }
+
+    private void prepareFarmTimer(Plugin plugin) {
+        p = plugin;
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(p,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getServer().broadcastMessage("La zone de farm va être réinitialisée dans 5 minutes !!! Hop hop hop, on sort !");
+
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(p,
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Generator.resetFarmingZone();
+                                    }
+                                }, 60 * 5 * 20); // 5 minutes
+                    }
+                }, 60 * 60 * 20, 60 * 60 * 20); // 1 hour
     }
 
     private void createTables() {
@@ -31,6 +57,7 @@ public class InitPlugin {
                 " faction_id INT(12) NOT NULL," +
                 " level INT(12) NOT NULL," +
                 " uuid VARCHAR(255) NOT NULL UNIQUE," +
+                " started_farm_at DATETIME DEFAULT NULL," +
                 " PRIMARY KEY (id)," +
                 " INDEX (name));");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS attacks (" +

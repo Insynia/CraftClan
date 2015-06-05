@@ -1,9 +1,6 @@
 package fr.insynia.craftclan;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -180,5 +177,14 @@ public class UtilCC {
         Bukkit.getWorld(MapState.DEFAULT_WORLD).getBlockAt(getInt(loc.getX()) + radius, getInt(loc.getY()), getInt(loc.getZ()) - radius).setType(Material.DIAMOND_BLOCK);
         Bukkit.getWorld(MapState.DEFAULT_WORLD).getBlockAt(getInt(loc.getX()) - radius, getInt(loc.getY()), getInt(loc.getZ()) - radius).setType(Material.DIAMOND_BLOCK);
 
+    }
+
+    public static void kickPlayersFromWorld(String world) {
+        World byeWorld = Bukkit.getWorld(world);
+        Location to = Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation();
+        if (byeWorld == null) return;
+        List<Player> players = byeWorld.getPlayers();
+        for (Player p : players)
+            p.teleport(to);
     }
 }
