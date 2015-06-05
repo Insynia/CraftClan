@@ -18,16 +18,10 @@ ___
 * [Phase 1](#phase-1)
 
 ___
-# TRIEZ MOI
-
-#### Mode attaque limité a un try, respawn desactive(mute) attaque pour le player only
-* Fix le tryhard de se planquer en mode attaque pour avoir des vagues attaque infinies
-
-#### Bloc or pour la construction sur base ennemi en mode attaque
-* Cout d'attaque
-* Eviter le cheat du style skybridge
+# Mémo
 
 #### Zone de farming exterieure et aleatoire accessible au spawn
+### En sortie de spawn, indisponible si le player a un point, indisponible si le player y a déja été
 * Fix des first player coincés
 * Permet de regenerer la map sur une parcelle automatiquement donc no grief
 
