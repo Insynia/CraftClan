@@ -19,7 +19,28 @@ ___
 ___
 # Mémo
 
-#### Clean le README
+
+#### Coder les commandes player:
+
+## New faction
+
+## Request faction
+
+## Accept member
+
+## Leave faction
+
+## Kick member
+
+## Set faction status: open/restricted/closed
+
+## Seek member: broadcast announce (only if status = open)
+
+## Search faction
+
+
+#### Coder le site et la map
+
 
 #### Configurer Essentials et créer une zone de vente
 ___
@@ -171,5 +192,3 @@ DB_URL=mysql://user:password@url:port/craftclan unicorn -E production -c config/
 
 
 		%HardCurrency:
-		
-		
