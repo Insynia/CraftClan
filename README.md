@@ -20,26 +20,26 @@ ___
 # Mémo
 
 
-#### Coder les commandes player:
+### Coder les commandes player:
 
-## New faction
+##### New faction
 
-## Request faction
+##### Request faction
 
-## Accept member
+##### Accept member
 
-## Leave faction
+##### Leave faction
 
-## Kick member
+##### Kick member
 
-## Set faction status: open/restricted/closed
+##### Set faction status: open/restricted/closed
 
-## Seek member: broadcast announce (only if status = open)
+##### Seek member: broadcast announce (only if status = open)
 
-## Search faction
+##### Search faction
 
 
-#### Coder le site et la map
+### Coder le site et la map
 
 
 #### Configurer Essentials et créer une zone de vente
