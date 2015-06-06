@@ -6,8 +6,9 @@ ___
 
 **[TRIEZ MOI](#triez-moi)**
 
+**[Tuto](#tuto)**
+
 **[Concept](#concept)**
-* [Gameplay](#gameplay)
 
 **[Installation](#installation)**
 * [Serveur minecraft](#serveur-minecraft)
@@ -20,21 +21,29 @@ ___
 ___
 # Mémo
 
-#### Zone de farming exterieure et aleatoire accessible au spawn
-### En sortie de spawn, indisponible si le player a un point, indisponible si le player y a déja été
-* Fix des first player coincés
-* Permet de regenerer la map sur une parcelle automatiquement donc no grief
+#### Clean le README
 
-#### Les points proches du spawn doivent etre plus petit dans l'ensemble
-* Permet une grande competitivité autour du spawn (dur de garder plusieurs points)
-* Facilite l'integration des nouveaux joueurs
-
-#### Gérer le problème de l'eau et de lave que l'on peut placer malgré les restrictions.
+#### Configurer Essentials et créer une zone de vente
 ___
+
+## Tuto
+
+### --- TODO ---
+
+La zone de farming
+Rejoindre une faction
+Capturer un point
+
 
 ## Concept
 
-Le concept du mod se reunit en 4 efpoksdgfj...
+Craft Clan est un mod de minecraft qui allie le survival / build et la compétitivité.
+Un système de factions et de territoires permet aux joueurs de capturer des points stratégiques aux ennemis et les oblige à défendre les leurs.
+Le monde est auto-suffisant avec un monde dédié au farming qui est régénéré en boucle, les joueurs les plus mal intentionnés ne peuvent pas causer de tort aux autres joueurs.
+En effet tant que le joueur n'a pas créé ou rejoint une faction ainsi que capturé un point, il ne peux pas détruire ou construire sur le monde principal.
+
+
+D'autres éléments seront apportés au mod au fur et à mesure, comme l'ajout d'évenement du type arène ou parcours.
 
 ## Installation
 
