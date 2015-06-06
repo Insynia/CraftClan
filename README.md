@@ -1,10 +1,8 @@
 # Projet CraftClan @Insynia
 ___
-###### Dernière modification: 25/05/2015
+###### Dernière modification: 06/06/2015
 ###### Par Doc Cobra et Sharowin.
 ___
-
-**[TRIEZ MOI](#triez-moi)**
 
 **[Tuto](#tuto)**
 
@@ -28,11 +26,13 @@ ___
 
 ## Tuto
 
-### --- TODO ---
+### A faire
 
-La zone de farming
-Rejoindre une faction
-Capturer un point
+* La zone de farming
+
+* Rejoindre une faction
+
+* Capturer un point
 
 
 ## Concept
@@ -109,28 +109,35 @@ DB_URL=mysql://user:password@url:port/craftclan unicorn -E production -c config/
 
 ## To-do list
 
-#### Compte rendu de l'alpha du 01/05/15
-##### [F] Problèmes liés au mode attaque:
-        - [x] Certains points neutres ne sont pas capturables.
-        - [ ] Problèmes liés au PVP des failers.
-##### Idées
-        - Mettre un bloc de GLASS en haut des tours pour éviter la capture par le haut des points.
-        - Skin de faction (au moins une couleur).
-        - Protection des points:
-            - Coût: (20.diamants * niveau) ou (20.diamants * niveau^2)
-        - Mise en place d'un PVP off au sein d'une même faction.
-        - Mise en place de reminders d'attaque pour les attaquant et les défenseurs.
-            - Ex: Vous devez capturer le point "point" sinon tappez /cc surrend
-        - Changer le mode de capture: Le /cc capture est trop long
-            - Idées: /cap /ccap ou lorsque le joueur tape sur le glass au dessus du beacon.
-##### Constructions:
-        - [x] Spawn débuté.
-        - [x] Refonte des structures des points de niveaux 1 à 10.
-            // Mettre à nouveau le -1 sur la génération des structures pour la génération des points.
-            
-        - [ ] Création d'une "île" en dessous des points pour protéger le pe beacon.
-##### Points trop grands avec overlap sur la couche supérieure.
+### Compte rendu de l'alpha du 01/05/15
 
+##### [F] Problèmes liés au mode attaque:
+
+- [x] Certains points neutres ne sont pas capturables.
+- [ ] Problèmes liés au PVP des failers.
+
+
+##### Idées
+- Mettre un bloc de GLASS en haut des tours pour éviter la capture par le haut des points.
+- Skin de faction (au moins une couleur).
+- Protection des points:
+    - Coût: (20.diamants * niveau) ou (20.diamants * niveau^2)
+    - Mise en place d'un PVP off au sein d'une même faction.
+    - Mise en place de reminders d'attaque pour les attaquant et les défenseurs.
+        - Ex: Vous devez capturer le point "point" sinon tappez /cc surrend
+    - Changer le mode de capture: Le /cc capture est trop long
+        - Idées: /cap /ccap ou lorsque le joueur tape sur le glass au dessus du beacon.
+
+
+##### Constructions:
+- [x] Spawn débuté.
+- [x] Refonte des structures des points de niveaux 1 à 10.
+    - [x] Mettre à nouveau le -1 sur la génération des structures pour la génération des points.
+            
+- [ ] Création d'une "île" en dessous des points pour protéger le pe beacon.
+
+
+##### Points trop grands avec overlap sur la couche supérieure.
 
 ** Phase I:
       Gameplay:
