@@ -51,6 +51,7 @@ public class Point {
     private void addToMap() {
         MapState.getInstance().addPoint(this);
         BlockSpawner.emptySky(loc);
+        BlockSpawner.floorPointIsland(this.loc);
         BlockSpawner.createBeacon(loc);
         // UtilCC.debugPoint(loc, radius); // Debug function
         spawnPointStructure(level);
@@ -107,7 +108,6 @@ public class Point {
         newloc.setZ(newloc.getZ() - DEFAULT_AREA);
         newloc.setY(newloc.getY() - 1);
         if (FileManager.checkFileAndFolderExist(DEFAULT_POINT_STRUCTURE_FOLDER, DEFAULT_POINT_STRUCTURE + level)) {
-            BlockSpawner.emptySky(this.loc);
             BlockSpawner.spawnStructure(DEFAULT_POINT_STRUCTURE + level, newloc);
             setPointBeam();
         }

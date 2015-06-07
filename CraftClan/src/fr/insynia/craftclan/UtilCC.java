@@ -27,7 +27,13 @@ public class UtilCC {
                 type != Material.LEAVES && type != Material.LEAVES_2 &&
                 type != Material.LONG_GRASS && type != Material.RED_MUSHROOM &&
                 type != Material.BROWN_MUSHROOM && type != Material.YELLOW_FLOWER &&
-                type != Material.LEAVES && type != Material.LOG && type != Material.LOG_2)
+                type != Material.LEAVES && type != Material.LOG &&
+                type != Material.RED_ROSE && type != Material.VINE &&
+                type != Material.WATER_LILY && type != Material.DOUBLE_PLANT &&
+                type != Material.SUGAR_CANE_BLOCK && type != Material.DEAD_BUSH &&
+                type != Material.CACTUS && type != Material.CROPS &&
+                type != Material.HUGE_MUSHROOM_1 && type != Material.HUGE_MUSHROOM_2 &&
+                type != Material.LOG_2 && type != Material.COCOA) // Non floor blocks
             return true;
         return false;
     }

@@ -33,7 +33,7 @@ public class Generator {
     public static int generatePoints(int layers) {
         int x, z, nb = 0;
         int curLayer = 1;
-        int diameter = 118; // Can't touch this. Well, calculate this. Your go (cf line 25/26), ONLY INCREASE THIS (Base value 118) <- do not remove this
+        int diameter = 196; // Can't touch this. Well, calculate this. Your go (cf line 25/26), ONLY INCREASE THIS (Base value 118) <- do not remove this
         int pointRadius = choseRadius(diameter); // Hammer time
         Location spawnLoc = Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation();
 

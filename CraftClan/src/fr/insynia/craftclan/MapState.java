@@ -11,7 +11,7 @@ import java.util.UUID;
  * Created by Doc on 11/05/2015.
  */
 public class MapState {
-    public static final int SPAWN_RADIUS = 61;
+    public static final int SPAWN_RADIUS = 196;
     public static String DEFAULT_WORLD = "world";
     public static String FARM_WORLD = "world_farm";
     private static MapState instance = null;

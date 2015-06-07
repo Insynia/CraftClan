@@ -130,5 +130,30 @@ public class BlockSpawner {
             zPoint = z - 2;
         }
     }
-    // Creating Beacon+Glass+Diamond Bed
+
+    public static void floorPointIsland(Location loc) {
+        Location nloc = loc.clone();
+        nloc.setY(nloc.getY() - 2);
+        fillSquare(nloc, 3, Material.DIRT);
+        nloc.setY(nloc.getY() - 1);
+        fillSquare(nloc, 3, Material.DIRT);
+        nloc.setY(nloc.getY() - 1);
+        fillSquare(nloc, 2, Material.DIRT);
+        nloc.setY(nloc.getY() - 1);
+        fillSquare(nloc, 1, Material.DIRT);
+    }
+
+    private static void fillSquare(Location center, int radius, Material mat) {
+        int x = center.getBlockX();
+        int y = center.getBlockY();
+        int z = center.getBlockZ();
+
+        World world = center.getWorld();
+
+        for (int xPoint = x - radius ; xPoint <= x + radius ; xPoint++) {
+            for (int zPoint = z - radius; zPoint <= z + radius; zPoint++) {
+                world.getBlockAt(xPoint, y, zPoint).setType(mat);
+            }
+        }
+    }
 }
