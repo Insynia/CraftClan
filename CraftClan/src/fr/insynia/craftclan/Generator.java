@@ -20,7 +20,13 @@ public class Generator {
             if (Bukkit.getServer().unloadWorld(MapState.FARM_WORLD, true))
                 FileManager.deleteFileOrFolder(folder);
         }
-        createFarmWorld();
+        Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("CraftClan"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        createFarmWorld();
+                    }
+                });
     }
 
     private static void createFarmWorld() {

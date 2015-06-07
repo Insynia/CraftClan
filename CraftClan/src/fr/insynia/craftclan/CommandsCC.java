@@ -36,31 +36,47 @@ public class CommandsCC {
                     help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
                     return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
                 case "newfaction":
-                    int newFactionArgs = 2;
-                    help = "La commande \"newfaction\" requiert " + (newFactionArgs) + " paramètres:\n" +
+                    help = "La commande \"newfaction\" requiert 2 paramètres:\n" +
                             "[Nom] Couleur]";
 
-                    if (!UtilCC.checkArgsChatCommand(args, newFactionArgs)) return die(help, sender);
+                    if (!UtilCC.checkArgsChatCommand(args, 2)) return die(help, sender);
                     return (PlayerCommands.newFaction(sender, args) || die(help, sender));
-//                case "join":
-//                    int joinFactionArgs = 1;
-//                    help = "La commande \"joinfaction\" requiert " + (joinFactionArgs) + " paramètres:\n" +
-//                            "[Nom]";
-//
-//                    if (!UtilCC.checkArgsChatCommand(args, joinFactionArgs)) return die(help, sender);
-//                    return (PlayerCommands.joinFaction(sender, args) || die(help, sender));
-//                case "accept":
-//                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
-//                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
-//                case "leave":
-//                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
-//                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
-//                case "kick":
-//                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
-//                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
-//                case "status":
-//                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
-//                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
+                case "join":
+                    help = "La commande \"joinfaction\" requiert 1 paramètre:\n" +
+                            "[Nom]";
+
+                    if (!UtilCC.checkArgsChatCommand(args, 1)) return die(help, sender);
+                    return (PlayerCommands.joinFaction(sender, args) || die(help, sender));
+                case "accept":
+                    help = "La commande \"accept\" requiert 1 paramètre:\n" +
+                            "[Nom]";
+
+                    if (!UtilCC.checkArgsChatCommand(args, 1)) return die(help, sender);
+                    return (PlayerCommands.acceptMember(sender, args) || die(help, sender));
+                case "refuse":
+                    help = "La commande \"refuse\" requiert 1 paramètre:\n" +
+                            "[Nom]";
+
+                    if (!UtilCC.checkArgsChatCommand(args, 1)) return die(help, sender);
+                    return (PlayerCommands.refuseMember(sender, args) || die(help, sender));
+                case "setleader":
+                    help = "La commande \"setleader\" requiert 1 paramètre:\n" +
+                            "[Nom]";
+
+                    if (!UtilCC.checkArgsChatCommand(args, 1)) return die(help, sender);
+                    return (PlayerCommands.setLeader(sender, args) || die(help, sender));
+                case "leave":
+                    return (PlayerCommands.leaveFaction(sender, args));
+                case "kick":
+                    help = "La commande \"kick\" requiert 1 paramètre:\n" +
+                            "[Nom]";
+                    return (PlayerCommands.kickMember(sender, args) || die(help, sender));
+                case "status":
+                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
+                    return (PlayerCommands.setFactionStatus(sender, args) || die(help, sender));
+                case "cancelrequest":
+                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
+                    return (PlayerCommands.cancelRequest(sender, args) || die(help, sender));
                 default:
                     sender.sendMessage("Cette commande n'existe pas");
             }
@@ -68,8 +84,6 @@ public class CommandsCC {
             if (!sender.isOp()) return checkOp(sender);
             if (args.length == 0) return false;
 
-            // In following lines, cf: "addPointReqArgs" counts addpoint as an argument.
-            // That is why there is a - 1 in sent messages, in order to get commands args count minus command name.
             switch (args[0].toLowerCase()) {
                 case "addpoint":
                     int addPointReqArgs = 3;

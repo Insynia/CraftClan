@@ -27,6 +27,8 @@ public class PlayerCommands {
     }
 
     public static boolean newFaction(CommandSender sender, String[] args) {
+        PlayerCC p = MapState.getInstance().findPlayer(((Player) sender).getUniqueId());
+
         if (!UtilCC.checkColor(args[2])) {
             String msg = "Couleurs valides: ";
             for (ChatColor c : UtilCC.getRealColors())
@@ -39,9 +41,13 @@ public class PlayerCommands {
             die("Nom de faction déjà utilisé", sender);
             return true;
         }
-        PlayerCC p = MapState.getInstance().findPlayer(((Player) sender).getUniqueId());
 
-        Faction f = new Faction(0, args[1], args[2], 1);
+        if (MapState.getInstance().findRequestByPlayer(p.getName()) != null) {
+            die("Vous avez une requête en cours, impossible de créer une faction. Tapez \"/cc cancelrequest\" pour annuler votre requête", sender);
+            return true;
+        }
+
+        Faction f = new Faction(0, args[1], args[2], 1, "CLOSED", args[3]);
 
         boolean ret = f.save();
 
@@ -88,5 +94,176 @@ public class PlayerCommands {
     private static boolean die(String msg, CommandSender sender) {
         sender.sendMessage(msg);
         return false;
+    }
+
+    public static boolean joinFaction(CommandSender sender, String[] args) {
+        MapState ms = MapState.getInstance();
+        PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
+
+        Faction playerFaction = p.getFaction();
+        Faction targetFaction = ms.findFaction(args[1]);
+
+        if (targetFaction != null) {
+            die("Cette faction n'existe pas", sender);
+            return true;
+        }
+        if (playerFaction.getLeaderName().equals(p.getName())) {
+            die("Vous êtes le leader de votre faction ! Pas question de déserter :(", sender);
+            return true;
+        }
+        if (ms.findRequestByPlayer(p.getName()) != null) {
+            die("Chaque chose en son temps, vous avez déjà une requête en cours", sender);
+            return true;
+        }
+        if (targetFaction.getStatus().equals("CLOSED")) {
+            die("Cette faction est fermée", sender);
+            return true;
+        }
+        if (targetFaction.getStatus().equals("OPEN")) {
+            if (!p.addToFaction(targetFaction.getName()))
+                return false;
+            targetFaction.broadcastToMembers(p.getName() + " fait maintenant partie de la faction :) ! Bienvenuuuuue !");
+        } else {
+            targetFaction.requestedBy(p);
+            sender.sendMessage("Votre requête est envoyée au leader !");
+        }
+        return true;
+    }
+
+    public static boolean acceptMember(CommandSender sender, String[] args) {
+        MapState ms = MapState.getInstance();
+        PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
+
+        Faction targetFaction = p.getFaction();
+
+        if (!targetFaction.getLeaderName().equals(p.getName())) {
+            die("Vous n'êtes pas le leader de la faction ;)", sender);
+            return true;
+        }
+        String target = args[1];
+        PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
+        if (onlinePlayerCC != null) {
+            onlinePlayerCC.addToFaction(targetFaction.getName());
+            ms.removeRequest(ms.findRequestByPlayer(args[1]).getId());
+            targetFaction.broadcastToMembers(p.getName() + " fait maintenant partie de la faction :) ! Bienvenuuuuue !");
+        } else {
+            SQLManager sqlm = SQLManager.getInstance();
+            sqlm.execUpdate("UPDATE users SET faction_id = " + targetFaction.getId() + " WHERE name = \"" + target + "\"");
+            ms.removeRequest(ms.findRequestByPlayer(args[1]).getId());
+            targetFaction.broadcastToMembers(p.getName() + " fait maintenant partie de la faction :) ! Pensez a lui souhaiter la bienvenue lorsqu'il sera connecté");
+        }
+        return true;
+    }
+
+    public static boolean refuseMember(CommandSender sender, String[] args) {
+        MapState ms = MapState.getInstance();
+        PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
+
+        Faction targetFaction = p.getFaction();
+
+        if (!targetFaction.getLeaderName().equals(p.getName())) {
+            die("Vous n'êtes pas le leader de la faction ;)", sender);
+            return true;
+        }
+        String target = args[1];
+        PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
+        if (onlinePlayerCC != null) {
+            ms.removeRequest(ms.findRequestByPlayer(args[1]).getId());
+            onlinePlayerCC.sendMessage("Vous avez été refusé par le leader de " + targetFaction.getFancyName());
+        } else {
+            ms.removeRequest(ms.findRequestByPlayer(args[1]).getId());
+        }
+        return true;
+    }
+
+    public static boolean setLeader(CommandSender sender, String[] args) {
+        MapState ms = MapState.getInstance();
+        PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
+
+        Faction targetFaction = p.getFaction();
+
+        if (!targetFaction.getLeaderName().equals(p.getName())) {
+            die("Vous n'êtes pas le leader de la faction ;)", sender);
+            return true;
+        }
+        String target = args[1];
+        PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
+        if (onlinePlayerCC != null) {
+            targetFaction.setLeaderName(onlinePlayerCC.getName());
+            onlinePlayerCC.sendMessage("Vous êtes maintenant leader de " + targetFaction.getFancyName());
+        } else {
+            die("Le joueur doit être en ligne pour devenir leader !", sender);
+        }
+        return true;
+    }
+
+    public static boolean leaveFaction(CommandSender sender, String[] args) {
+        MapState ms = MapState.getInstance();
+        PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
+
+        Faction targetFaction = p.getFaction();
+
+        if (targetFaction.getLeaderName().equals(p.getName())) {
+            die("Vous êtes le leader de votre faction ! Pas question de déserter :(", sender);
+            return true;
+        }
+        p.addToFaction("Newbie");
+        p.sendMessage("Vous retournez dans la faction " + p.getFaction().getFancyName());
+        return true;
+    }
+
+    public static boolean kickMember(CommandSender sender, String[] args) {
+        MapState ms = MapState.getInstance();
+        PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
+
+        Faction targetFaction = p.getFaction();
+        String target = args[1];
+        PlayerCC targetPlayer = MapState.getInstance().findPlayer(target);
+        if (!targetFaction.getLeaderName().equals(p.getName())) {
+            die("Vous n'êtes pas le leader de la faction ;)", sender);
+            return true;
+        }
+        if (targetPlayer != null) {
+            targetPlayer.addToFaction("Newbie");
+            targetPlayer.sendMessage("Vous avez été kick de votre faction :(");
+            targetFaction.broadcastToMembers(p.getName() + " a kické " + targetPlayer.getName() + " !");
+        } else {
+            SQLManager sqlm = SQLManager.getInstance();
+            if (sqlm.execUpdate("UPDATE users SET faction_id = " + MapState.getInstance().findFaction("Newbie").getId() + " WHERE name = \"" + target + "\""))
+                targetFaction.broadcastToMembers(p.getName() + " a kické " + target + " !");
+        }
+        return true;
+    }
+
+    public static boolean setFactionStatus(CommandSender sender, String[] args) {
+        MapState ms = MapState.getInstance();
+        PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
+
+        Faction targetFaction = p.getFaction();
+        String target = args[1];
+        PlayerCC targetPlayer = MapState.getInstance().findPlayer(target);
+        if (!targetFaction.getLeaderName().equals(p.getName())) {
+            die("Vous n'êtes pas le leader de la faction ;)", sender);
+            return true;
+        }
+        if (!args[1].equalsIgnoreCase("closed") || !args[1].equalsIgnoreCase("restricted") || !args[1].equalsIgnoreCase("open")) {
+            die("Statuts valides: closed, open, restricted", sender);
+            return true;
+        }
+        targetFaction.setStatus(args[1].toUpperCase());
+        return targetFaction.update();
+    }
+
+    public static boolean cancelRequest(CommandSender sender, String[] args) {
+        MapState ms = MapState.getInstance();
+        PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
+
+        Request r = ms.findRequestByPlayer(p.getName());
+        if (r == null) {
+            die("Aucune requête en cours", sender);
+            return true;
+        }
+        ms.removeRequest(r.getId());
+        return true;
     }
 }

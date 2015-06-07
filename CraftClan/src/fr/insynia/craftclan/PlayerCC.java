@@ -158,7 +158,7 @@ public class PlayerCC implements Loadable {
             public void run() {
                 if (timeToCapture == 0) {
                     this.cancel();
-                    Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClanPlugin"), new Runnable() {
+                    Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClan"), new Runnable() {
                         @Override
                         public void run() {
                             if (point.addToFaction(pcc.getFaction().getId())) {

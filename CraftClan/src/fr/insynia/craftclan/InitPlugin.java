@@ -44,13 +44,15 @@ public class InitPlugin {
                 " INDEX (name));");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS factions (" +
                 " id int NOT NULL AUTO_INCREMENT," +
+                " status ENUM('OPEN', 'CLOSED', 'RESTRICTED') NOT NULL DEFAULT 'RESTRICTED'," +
+                " leader_name VARCHAR(255) NOT NULL," +
                 " name VARCHAR(255) NOT NULL UNIQUE," +
                 " color VARCHAR(255) NOT NULL," +
                 " level INT(12) NOT NULL," +
                 " PRIMARY KEY (id)," +
                 " INDEX (name));");
-        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level) VALUES(\"Newbie\", \"GRAY\", 1)");
-        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level) VALUES(\"Neutre\", \"GRAY\", 1)");
+        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_id) VALUES(\"Newbie\", \"GRAY\", 1, 'OPEN', 0)");
+        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_id) VALUES(\"Neutre\", \"GRAY\", 1, 'CLOSED', 0)");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS users (" +
                 " id int NOT NULL AUTO_INCREMENT," +
                 " name VARCHAR(255) NOT NULL," +
@@ -77,6 +79,10 @@ public class InitPlugin {
                 " block VARCHAR(255) NOT NULL," +
                 " action ENUM('PLACE', 'BREAK') NOT NULL," +
                 " meta tinyint NOT NULL," +
+                " PRIMARY KEY (id));");
+        sqlm.execUpdate("CREATE TABLE IF NOT EXISTS faction_requests (" +
+                " faction_id INT(12) NOT NULL," +
+                " user_name INT(12) NOT NULL," +
                 " PRIMARY KEY (id));");
     }
 

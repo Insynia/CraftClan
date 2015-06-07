@@ -1,6 +1,7 @@
 package fr.insynia.craftclan;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ public class MapState {
     private static MapState instance = null;
     private List<Point> points;
     private List<PlayerCC> playerCCs;
+    private List<Request> requests;
     private List<Faction> factions;
     private List<Attack> attacks;
 
@@ -197,4 +199,48 @@ public class MapState {
         }
     }
 
+    public void removeRequest(int id) {
+        Iterator<Request> itr = requests.iterator();
+        while (itr.hasNext()) {
+            Request request = itr.next();
+            if (request.getId() == id) {
+                request.deleteDb();
+                itr.remove();
+            }
+        }
+    }
+
+    public void addRequest(Request request) {
+        requests.add(request);
+    }
+
+    private void reminders() {
+        Faction faction;
+        PlayerCC pcc;
+        PlayerCC leader;
+        for (Request r : requests) {
+            faction = findFaction(r.getFactionId());
+            pcc = findPlayer(r.getPlayerName());
+            leader = findPlayer(faction.getLeaderName());
+            if (leader != null)
+                leader.sendMessage("Le joueur " + pcc.getName() + "veut rejoindre votre faction !\n" +
+                        "Tapez /cc accept " + pcc.getName() + " ou /cc refuse " + pcc.getName());
+        }
+    }
+
+    private void launchReminders(Plugin plugin) {
+        Plugin p = Bukkit.getPluginManager().getPlugin("CraftClan");
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(p,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        reminders();
+                    }
+                }, 60 * 5 * 20, 60 * 5 * 20); // 5 minutes
+    }
+
+    public Request findRequestByPlayer(String playerName) {
+        for (Request r : requests) if (r.getPlayerName().equals(playerName)) return r;
+        return null;
+    }
 }

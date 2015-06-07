@@ -14,9 +14,11 @@ public class FactionList implements Loadable {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
+                String status = rs.getString("status");
+                String leaderName = rs.getString("leader_name");
                 String color = rs.getString("color");
                 int level = rs.getInt("level");
-                Faction faction = new Faction(id, name, color, level);
+                Faction faction = new Faction(id, name, color, level, status, leaderName);
                 MapState.getInstance().addFaction(faction);
             }
         } catch (SQLException e) {

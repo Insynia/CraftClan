@@ -12,14 +12,20 @@ import java.util.List;
 public class Faction implements IDable {
     private String name;
     private String color;
+    private String status;
     private int factionId;
+    private String leaderName;
     private int level;
 
-    public Faction(int factionId, String name, String color, int level) {
+    public Faction(int factionId, String name, String color, int level, String status, String leaderName) {
         this.factionId = factionId;
         this.name = name;
         this.color = color;
         this.level = level;
+        this.status = status;
+        if (leaderName == null)
+            leaderName = "";
+        this.leaderName = leaderName;
     }
 
     public String toString() {
@@ -36,8 +42,8 @@ public class Faction implements IDable {
             }
         }
         if (!colorOk) return false;
-        boolean ret = sqlm.execUpdate("INSERT INTO factions(name, color, level) " +
-                "VALUES(\"" + name + "\", \"" + color + "\", " + level + ");", this);
+        boolean ret = sqlm.execUpdate("INSERT INTO factions(name, color, level, status, leader_name) " +
+                "VALUES(\"" + name + "\", \"" + color + "\", " + level + ", \"" + status + "\", \"" + leaderName + "\" );", this);
         if (ret)
             this.addToMap();
         return ret;
@@ -54,10 +60,6 @@ public class Faction implements IDable {
 
     private void addToMap() {
         MapState.getInstance().addFaction(this);
-    }
-
-    public static Faction fromSQL() {
-        return null;
     }
 
     public String getName() {
@@ -97,5 +99,38 @@ public class Faction implements IDable {
 
     public String getFancyName() {
         return ChatColor.WHITE + "[" + ChatColor.valueOf(getColor()) + getName() + ChatColor.WHITE + "]";
+    }
+
+    public String getLeaderName() {
+        return leaderName;
+    }
+
+    public void setLeaderName(String leaderName) {
+        this.leaderName = leaderName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void requestedBy(PlayerCC p) {
+        Request request = new Request(factionId, p.getName());
+        request.save();
+        broadcastToMembers("Le joueur " + p.getName() + " veut rejoindre votre faction !");
+    }
+
+    public boolean update() {
+        SQLManager sqlm = SQLManager.getInstance();
+        return sqlm.execUpdate("UPDATE factions SET " +
+                "name = \"" + name + "\", " +
+                "color = \"" + color + "\", " +
+                "status = \"" + status + "\", " +
+                "leaderName = \"" + leaderName + "\", " +
+                "level = " + level + ", " +
+                "WHERE id = " + factionId + ";", this);
     }
 }

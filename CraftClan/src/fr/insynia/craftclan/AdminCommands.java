@@ -24,7 +24,7 @@ public class AdminCommands {
 
         if (!UtilCC.checkArgIsInteger(args[3])) return die("Arg 3 is supposed to be an integer", sender);
         if (UtilCC.checkFactionExists(args[1])) return die("This faction already exist", sender);
-        Faction f = new Faction(0, args[1], args[2], Integer.parseInt(args[3]));
+        Faction f = new Faction(0, args[1], args[2], Integer.parseInt(args[3]), "CLOSED", "Doc_CoBrA");
 
         boolean ret = f.save();
 
