@@ -26,8 +26,8 @@ public class Request implements IDable {
 
     public boolean save() {
         SQLManager sqlm = SQLManager.getInstance();
-        boolean ret = sqlm.execUpdate("INSERT INTO requests(id, faction_id, user_name) " +
-                "VALUES(" + id + ", " + factionId + ", " + playerName + ");", this);
+        boolean ret = sqlm.execUpdate("INSERT INTO faction_requests(id, faction_id, user_name) " +
+                "VALUES(" + id + ", " + factionId + ", \"" + playerName + "\");", this);
         if (ret)
             this.addToMap();
         return ret;
@@ -43,7 +43,7 @@ public class Request implements IDable {
 
     public void deleteDb() {
         SQLManager sqlm = SQLManager.getInstance();
-        sqlm.execUpdate("DELETE FROM requests WHERE id = " + id + ";");
+        sqlm.execUpdate("DELETE FROM faction_requests WHERE id = " + id + ";");
     }
 
     @Override

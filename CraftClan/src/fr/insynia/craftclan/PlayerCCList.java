@@ -22,7 +22,7 @@ public class PlayerCCList implements Loadable {
             while (rs.next()) {
                 String name = rs.getString("name");
                 String uuid = rs.getString("uuid");
-                int faction_id = rs.getInt("x");
+                int faction_id = rs.getInt("faction_id");
                 int level = rs.getInt("level");
                 PlayerCC player = new PlayerCC(name, faction_id, level, UUID.fromString(uuid));
                 players.add(player);

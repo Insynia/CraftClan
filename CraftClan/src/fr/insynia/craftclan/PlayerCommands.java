@@ -47,7 +47,7 @@ public class PlayerCommands {
             return true;
         }
 
-        Faction f = new Faction(0, args[1], args[2], 1, "CLOSED", args[3]);
+        Faction f = new Faction(0, args[1], args[2], 1, "RESTRICTED", p.getName());
 
         boolean ret = f.save();
 
@@ -142,10 +142,14 @@ public class PlayerCommands {
         }
         String target = args[1];
         PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
+        if (ms.findRequestByPlayer(args[1]) == null) {
+            die("Aucune requête de la part du joueur", sender);
+            return true;
+        }
         if (onlinePlayerCC != null) {
             onlinePlayerCC.addToFaction(targetFaction.getName());
             ms.removeRequest(ms.findRequestByPlayer(args[1]).getId());
-            targetFaction.broadcastToMembers(p.getName() + " fait maintenant partie de la faction :) ! Bienvenuuuuue !");
+            targetFaction.broadcastToMembers(onlinePlayerCC.getName() + " fait maintenant partie de la faction :) ! Bienvenuuuuue !");
         } else {
             SQLManager sqlm = SQLManager.getInstance();
             sqlm.execUpdate("UPDATE users SET faction_id = " + targetFaction.getId() + " WHERE name = \"" + target + "\"");
@@ -165,11 +169,16 @@ public class PlayerCommands {
             die("Vous n'êtes pas le leader de la faction ;)", sender);
             return true;
         }
+        if (ms.findRequestByPlayer(args[1]) == null) {
+            die("Aucune requête de la part du joueur", sender);
+            return true;
+        }
         String target = args[1];
         PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
         if (onlinePlayerCC != null) {
             ms.removeRequest(ms.findRequestByPlayer(args[1]).getId());
             onlinePlayerCC.sendMessage("Vous avez été refusé par le leader de " + targetFaction.getFancyName());
+            p.sendMessage("Joueur refusé !");
         } else {
             ms.removeRequest(ms.findRequestByPlayer(args[1]).getId());
         }
@@ -229,8 +238,20 @@ public class PlayerCommands {
             targetFaction.broadcastToMembers(p.getName() + " a kické " + targetPlayer.getName() + " !");
         } else {
             SQLManager sqlm = SQLManager.getInstance();
-            if (sqlm.execUpdate("UPDATE users SET faction_id = " + MapState.getInstance().findFaction("Newbie").getId() + " WHERE name = \"" + target + "\""))
-                targetFaction.broadcastToMembers(p.getName() + " a kické " + target + " !");
+            for (PlayerCC pcc : targetFaction.getMembers()) {
+                if (pcc.getName().equalsIgnoreCase(target)) {
+                    if (sqlm.execUpdate("UPDATE users SET faction_id = " + MapState.getInstance().findFaction("Newbie").getId() + " WHERE name = \"" + pcc.getName() + "\"")) {
+                        targetPlayer = MapState.getInstance().findPlayer(pcc.getName());
+                        if (targetPlayer != null) {
+                            targetPlayer.addToFaction("Newbie");
+                            targetPlayer.sendMessage("Vous avez été kick de votre faction :(");
+                        }
+                        targetFaction.broadcastToMembers(p.getName() + " a kické " + pcc.getName() + " !");
+                    }
+                    return true;
+                }
+            }
+            die("Ce joueur n'est pas dans votre faction", sender);
         }
         return true;
     }

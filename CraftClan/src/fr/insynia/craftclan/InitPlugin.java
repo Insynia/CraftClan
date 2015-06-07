@@ -83,7 +83,7 @@ public class InitPlugin {
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS faction_requests (" +
                 " id int NOT NULL AUTO_INCREMENT," +
                 " faction_id INT(12) NOT NULL," +
-                " user_name INT(12) NOT NULL," +
+                " user_name VARCHAR(255) NOT NULL," +
                 " PRIMARY KEY (id));");
     }
 

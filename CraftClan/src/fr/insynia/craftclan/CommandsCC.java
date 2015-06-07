@@ -37,7 +37,7 @@ public class CommandsCC {
                     return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
                 case "newfaction":
                     help = "La commande \"newfaction\" requiert 2 paramètres:\n" +
-                            "[Nom] Couleur]";
+                            "[Nom] [Couleur]";
 
                     if (!UtilCC.checkArgsChatCommand(args, 2)) return die(help, sender);
                     return (PlayerCommands.newFaction(sender, args) || die(help, sender));

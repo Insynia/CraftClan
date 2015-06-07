@@ -52,7 +52,7 @@ public class Faction implements IDable {
     public void broadcastToMembers(String msg) {
         List<PlayerCC> members = getOnlineMembers();
 
-        msg = "[ " + ChatColor.BOLD + ChatColor.GOLD + name + ChatColor.RESET + "]: " + msg;
+        msg = "[" + ChatColor.BOLD + ChatColor.GOLD + name + ChatColor.RESET + "]: " + msg;
 
         for (PlayerCC member : members)
             member.sendMessage(msg);

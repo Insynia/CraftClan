@@ -28,6 +28,7 @@ public class MapState {
         playerCCs = new ArrayList<PlayerCC>();
         factions = new ArrayList<Faction>();
         attacks = new ArrayList<Attack>();
+        launchReminders(Bukkit.getPluginManager().getPlugin("CraftClan"));
     }
     public static MapState getInstance() {
         if (instance == null) {
@@ -224,7 +225,7 @@ public class MapState {
             pcc = findPlayer(r.getPlayerName());
             leader = findPlayer(faction.getLeaderName());
             if (leader != null)
-                leader.sendMessage("Le joueur " + pcc.getName() + "veut rejoindre votre faction !\n" +
+                leader.sendMessage("Le joueur " + pcc.getName() + " veut rejoindre votre faction !\n" +
                         "Tapez /cc accept " + pcc.getName() + " ou /cc refuse " + pcc.getName());
         }
     }
