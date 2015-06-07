@@ -92,8 +92,8 @@ public class Attack implements IDable {
             attackers.add(pcc);
             Faction target = MapState.getInstance().findFaction(target_id);
             Point tarpoint = MapState.getInstance().findPoint(point_name);
-            Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous êtes en mode attaque contre la faction " + target.getFancyName());
-            Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous devez capturer le point \"" + point_name + "\" aux coordonnées :" +
+            pcc.sendMessage("Vous êtes en mode attaque contre la faction " + target.getFancyName());
+            pcc.sendMessage("Vous devez capturer le point \"" + point_name + "\" aux coordonnées :" +
                     " x: " + tarpoint.getLocation().getX() +
                     " y: " + tarpoint.getLocation().getY() +
                     " z: " + tarpoint.getLocation().getZ());
@@ -103,7 +103,7 @@ public class Attack implements IDable {
     public void addFailer(PlayerCC pcc) {
         removeAttacker(pcc);
         failers.add(pcc);
-        Bukkit.getPlayer(pcc.getUUID()).sendMessage("Vous ne participez plus à l'attaque du point " + point_name + " !");
+        pcc.sendMessage("Vous ne participez plus à l'attaque du point " + point_name + " !");
         if (attackers.size() == 0) {
             endAttack(false);
             MapState.getInstance().purgeAttacks();

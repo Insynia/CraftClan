@@ -3,6 +3,7 @@ package fr.insynia.craftclan;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -192,5 +193,20 @@ public class UtilCC {
         List<Player> players = byeWorld.getPlayers();
         for (Player p : players)
             p.teleport(to);
+    }
+
+    public static List<ChatColor> getRealColors() {
+        List<ChatColor> colors = new ArrayList<>();
+
+        for (ChatColor c : ChatColor.values()) {
+            if (c != ChatColor.UNDERLINE &&
+                    c != ChatColor.MAGIC &&
+                    c != ChatColor.ITALIC &&
+                    c != ChatColor.BOLD &&
+                    c != ChatColor.RESET &&
+                    c != ChatColor.STRIKETHROUGH)
+                colors.add(c);
+        }
+        return colors;
     }
 }

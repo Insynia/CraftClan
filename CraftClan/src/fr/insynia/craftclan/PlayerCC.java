@@ -249,4 +249,16 @@ public class PlayerCC implements Loadable {
     public boolean isOnWorld(String world) {
         return Bukkit.getPlayer(uuid).getLocation().getWorld().getName().equals(world);
     }
+
+    public boolean isOnline() {
+        if (Bukkit.getPlayer(uuid) != null)
+            return true;
+        return false;
+    }
+
+    public void sendMessage(String msg) {
+        Player p = Bukkit.getPlayer(uuid);
+        if (p != null)
+            p.sendMessage(msg);
+    }
 }

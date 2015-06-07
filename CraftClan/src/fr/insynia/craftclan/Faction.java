@@ -2,6 +2,9 @@ package fr.insynia.craftclan;
 
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * For CraftClan
  * Created by Doc on 11/05/2015 at 19:54.
@@ -40,6 +43,15 @@ public class Faction implements IDable {
         return ret;
     }
 
+    public void broadcastToMembers(String msg) {
+        List<PlayerCC> members = getOnlineMembers();
+
+        msg = "[ " + ChatColor.BOLD + ChatColor.GOLD + name + ChatColor.RESET + "]: " + msg;
+
+        for (PlayerCC member : members)
+            member.sendMessage(msg);
+    }
+
     private void addToMap() {
         MapState.getInstance().addFaction(this);
     }
@@ -50,6 +62,24 @@ public class Faction implements IDable {
 
     public String getName() {
         return name;
+    }
+
+    public List<PlayerCC> getOnlineMembers() {
+        List<PlayerCC> members = new ArrayList<>();
+
+        for (PlayerCC pcc : MapState.getInstance().getPlayerCCs()) {
+            if (pcc.getFaction().getId() == factionId)
+                members.add(pcc);
+        }
+        return members;
+    }
+
+    public List<PlayerCC> getMembers() {
+        PlayerCCList playerList = new PlayerCCList();
+        SQLManager sqlm = SQLManager.getInstance();
+        sqlm.fetchQuery("SELECT * from users WHERE faction_id = " + factionId + ";", playerList);
+
+        return playerList.getPlayers();
     }
 
     public int getId() {

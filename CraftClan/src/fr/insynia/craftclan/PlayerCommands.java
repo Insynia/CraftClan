@@ -1,6 +1,7 @@
 package fr.insynia.craftclan;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,10 +26,34 @@ public class PlayerCommands {
         return true;
     }
 
-    private static boolean die(String msg, CommandSender sender) {
-        sender.sendMessage(msg);
-        return false;
+    public static boolean newFaction(CommandSender sender, String[] args) {
+        if (!UtilCC.checkColor(args[2])) {
+            String msg = "Couleurs valides: ";
+            for (ChatColor c : UtilCC.getRealColors())
+                msg += c.name() + " ";
+            die(msg, sender);
+            return true; // Avoid default help
+        }
+
+        if (UtilCC.checkFactionExists(args[1])) {
+            die("Nom de faction déjà utilisé", sender);
+            return true;
+        }
+        PlayerCC p = MapState.getInstance().findPlayer(((Player) sender).getUniqueId());
+
+        Faction f = new Faction(0, args[1], args[2], 1);
+
+        boolean ret = f.save();
+
+        p.getFaction().broadcastToMembers(p.getName() + " nous quitte pour sa nouvelle faction " + f.getFancyName() + " !");
+
+        p.addToFaction(f.getName());
+        if (ret) sender.sendMessage("Bienvenue dans votre nouvelle faction " + f.getFancyName() + " !");
+        else sender.sendMessage("A faction named \"" + args[1] + "\" already exists");
+        return ret;
     }
+
+    // JOIN f.broadcastToMembers("Nouveau membre ! Bienvenue a " + p.getName());
 
     public static boolean cmdStopFarm(CommandSender sender, Location loc) {
         Player p = (Player) sender;
@@ -58,5 +83,10 @@ public class PlayerCommands {
         }, 10 * 20);
 
         return true;
+    }
+
+    private static boolean die(String msg, CommandSender sender) {
+        sender.sendMessage(msg);
+        return false;
     }
 }

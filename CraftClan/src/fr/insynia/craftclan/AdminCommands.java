@@ -17,7 +17,7 @@ public class AdminCommands {
     public static boolean cmdAddFaction(CommandSender sender, String[] args) {
         if (!UtilCC.checkColor(args[2])) {
             String msg = "Invalid Color: ";
-            for (ChatColor c : ChatColor.values())
+            for (ChatColor c : UtilCC.getRealColors())
                 msg += c.name() + " ";
             return die(msg, sender);
         }

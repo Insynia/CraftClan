@@ -112,22 +112,22 @@ public class BlockSpawner {
         World world = location.getWorld();
         // Clearing Y-axis Upper-Zone
 
-        int xPoint = x - 2;
-        int yPoint = y + 2;
-        int zPoint = z - 2;
+        int xPoint = x - Point.DEFAULT_AREA;
+        int yPoint = y + Point.DEFAULT_AREA;
+        int zPoint = z - Point.DEFAULT_AREA;
 
         int yMax = world.getMaxHeight();
-        while (xPoint <= x + 2) {
-            while (zPoint <= z + 2) {
+        while (xPoint <= x + Point.DEFAULT_AREA) {
+            while (zPoint <= z + Point.DEFAULT_AREA) {
                 while (yPoint <= yMax) {
                     world.getBlockAt(xPoint, yPoint, zPoint).setType(Material.AIR);
                     yPoint += 1;
                 }
                 zPoint += 1;
-                yPoint = y + 2;
+                yPoint = y + 1;
             }
             xPoint += 1;
-            zPoint = z - 2;
+            zPoint = z - Point.DEFAULT_AREA;
         }
     }
 

@@ -35,6 +35,32 @@ public class CommandsCC {
                 case "stopfarm":
                     help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
                     return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
+                case "newfaction":
+                    int newFactionArgs = 2;
+                    help = "La commande \"newfaction\" requiert " + (newFactionArgs) + " paramètres:\n" +
+                            "[Nom] Couleur]";
+
+                    if (!UtilCC.checkArgsChatCommand(args, newFactionArgs)) return die(help, sender);
+                    return (PlayerCommands.newFaction(sender, args) || die(help, sender));
+//                case "join":
+//                    int joinFactionArgs = 1;
+//                    help = "La commande \"joinfaction\" requiert " + (joinFactionArgs) + " paramètres:\n" +
+//                            "[Nom]";
+//
+//                    if (!UtilCC.checkArgsChatCommand(args, joinFactionArgs)) return die(help, sender);
+//                    return (PlayerCommands.joinFaction(sender, args) || die(help, sender));
+//                case "accept":
+//                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
+//                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
+//                case "leave":
+//                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
+//                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
+//                case "kick":
+//                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
+//                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
+//                case "status":
+//                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
+//                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
                 default:
                     sender.sendMessage("Cette commande n'existe pas");
             }
