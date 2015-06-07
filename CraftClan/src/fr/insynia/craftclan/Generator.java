@@ -20,20 +20,20 @@ public class Generator {
             if (Bukkit.getServer().unloadWorld(MapState.FARM_WORLD, true))
                 FileManager.deleteFileOrFolder(folder);
         }
-        Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("CraftClan"),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        createFarmWorld();
-                    }
-                });
+        createFarmWorld();
     }
 
     private static void createFarmWorld() {
-        WorldCreator wc = new WorldCreator(MapState.FARM_WORLD);
+        final WorldCreator wc = new WorldCreator(MapState.FARM_WORLD);
         wc.seed((new Random()).nextLong());
         wc.type(WorldType.AMPLIFIED);
-        wc.createWorld();
+        Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClan"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        wc.createWorld();
+                    }
+                });
     }
 
     public static int generatePoints(int layers) {

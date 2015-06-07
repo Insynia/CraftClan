@@ -24,6 +24,7 @@ public class MapState {
 
     protected MapState() {
         points = new ArrayList<Point>();
+        requests = new ArrayList<Request>();
         playerCCs = new ArrayList<PlayerCC>();
         factions = new ArrayList<Faction>();
         attacks = new ArrayList<Attack>();

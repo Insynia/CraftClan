@@ -103,7 +103,7 @@ public class PlayerCommands {
         Faction playerFaction = p.getFaction();
         Faction targetFaction = ms.findFaction(args[1]);
 
-        if (targetFaction != null) {
+        if (targetFaction == null) {
             die("Cette faction n'existe pas", sender);
             return true;
         }
@@ -246,7 +246,7 @@ public class PlayerCommands {
             die("Vous n'êtes pas le leader de la faction ;)", sender);
             return true;
         }
-        if (!args[1].equalsIgnoreCase("closed") || !args[1].equalsIgnoreCase("restricted") || !args[1].equalsIgnoreCase("open")) {
+        if (!args[1].equalsIgnoreCase("closed") && !args[1].equalsIgnoreCase("restricted") && !args[1].equalsIgnoreCase("open")) {
             die("Statuts valides: closed, open, restricted", sender);
             return true;
         }

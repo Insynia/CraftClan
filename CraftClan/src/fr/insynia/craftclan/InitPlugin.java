@@ -51,8 +51,8 @@ public class InitPlugin {
                 " level INT(12) NOT NULL," +
                 " PRIMARY KEY (id)," +
                 " INDEX (name));");
-        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_id) VALUES(\"Newbie\", \"GRAY\", 1, 'OPEN', 0)");
-        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_id) VALUES(\"Neutre\", \"GRAY\", 1, 'CLOSED', 0)");
+        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_name) VALUES(\"Newbie\", \"GRAY\", 1, 'OPEN', \"\")");
+        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_name) VALUES(\"Neutre\", \"GRAY\", 1, 'CLOSED', \"\")");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS users (" +
                 " id int NOT NULL AUTO_INCREMENT," +
                 " name VARCHAR(255) NOT NULL," +
@@ -81,6 +81,7 @@ public class InitPlugin {
                 " meta tinyint NOT NULL," +
                 " PRIMARY KEY (id));");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS faction_requests (" +
+                " id int NOT NULL AUTO_INCREMENT," +
                 " faction_id INT(12) NOT NULL," +
                 " user_name INT(12) NOT NULL," +
                 " PRIMARY KEY (id));");

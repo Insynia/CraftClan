@@ -72,11 +72,12 @@ public class CommandsCC {
                             "[Nom]";
                     return (PlayerCommands.kickMember(sender, args) || die(help, sender));
                 case "status":
-                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
+                    help = "La commande \"status\" requiert 1 paramètre:\n" +
+                            "[Statut]";
+                    if (!UtilCC.checkArgsChatCommand(args, 1)) return die(help, sender);
                     return (PlayerCommands.setFactionStatus(sender, args) || die(help, sender));
                 case "cancelrequest":
-                    help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
-                    return (PlayerCommands.cancelRequest(sender, args) || die(help, sender));
+                    return (PlayerCommands.cancelRequest(sender, args));
                 default:
                     sender.sendMessage("Cette commande n'existe pas");
             }

@@ -129,8 +129,8 @@ public class Faction implements IDable {
                 "name = \"" + name + "\", " +
                 "color = \"" + color + "\", " +
                 "status = \"" + status + "\", " +
-                "leaderName = \"" + leaderName + "\", " +
-                "level = " + level + ", " +
+                "leader_name = \"" + leaderName + "\", " +
+                "level = " + level + " " +
                 "WHERE id = " + factionId + ";", this);
     }
 }
