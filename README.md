@@ -19,13 +19,14 @@ ___
 ___
 # Mémo
 
+### Ajuster ou ajouter la protection aux entities et pas que aux blocs (onEntityDamage ou un truc du genre contre onBlockBreak)
 
 #### Coder les commandes player:
 
 
-## Seek member: broadcast announce (only if status = open)
+##### Seek member: broadcast announce (only if status = open)
 
-## Search faction
+##### Search faction
 
 
 #### Remove les factions lors d'un /cc leave du leader si personne n'est dedans + mettre les points de la faction en Neutre
