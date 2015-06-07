@@ -39,9 +39,11 @@ public class CommandsCC {
                     int newFactionArgs = 2;
                     help = "La commande \"newfaction\" requiert " + (newFactionArgs) + " paramètres:\n" +
                             "[Nom] Couleur]";
-
                     if (!UtilCC.checkArgsChatCommand(args, newFactionArgs)) return die(help, sender);
                     return (PlayerCommands.newFaction(sender, args) || die(help, sender));
+                case "upgrade":
+                    help = "\"upgrade\": Vous ne pouvez pas améliorer ce point";
+                    return (PlayerCommands.cmdUpgradePoint(sender, loc) || die(help, sender));
 //                case "join":
 //                    int joinFactionArgs = 1;
 //                    help = "La commande \"joinfaction\" requiert " + (joinFactionArgs) + " paramètres:\n" +

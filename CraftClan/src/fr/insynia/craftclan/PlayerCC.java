@@ -20,6 +20,9 @@ public class PlayerCC implements Loadable {
     private final Material ITEM_FOR_ATTACK = Material.DIAMOND;
     private final int NB_ITEMS_FOR_ATTACK = 10;
 
+    public static final Material ITEM_FOR_UPGRADE = Material.DIAMOND;
+    public static final int BASE_NB_ITEMS_FOR_UPGRADE = 10;
+
     private String name;
     private Faction faction;
     private int level;
@@ -244,6 +247,27 @@ public class PlayerCC implements Loadable {
         for (Attack a : attacks)
             if (a.getFactionId() == faction.getId())
                 a.addFailer(this);
+    }
+
+
+    // Check if the player can upgrade a point.
+    public Point canUpgrade(Location from) {
+        if (faction == null) return null;
+        List<Point> points = MapState.getInstance().getPoints();
+        for (Point p : points) {
+            if (p.getFactionId() == faction.getId() &&
+                    (UtilCC.distanceBasicFull(from, p.getLocation()) <= Point.DEFAULT_AREA) &&
+                    (p.getLevel() < Point.POINT_MAX_LEVEL)) {
+                if (hasEnough(ITEM_FOR_UPGRADE, BASE_NB_ITEMS_FOR_UPGRADE * p.getLevel())) return p;
+                else Bukkit.getPlayer(uuid).sendMessage("Vous devez avoir " + BASE_NB_ITEMS_FOR_UPGRADE * p.getLevel() + " diamants");
+            }
+        }
+        return null;
+    }
+
+    public void willUpgrade(Point point) {
+        if (point != null && hasEnough(ITEM_FOR_UPGRADE, BASE_NB_ITEMS_FOR_UPGRADE * point.getLevel()))
+            decreaseItem(ITEM_FOR_UPGRADE, BASE_NB_ITEMS_FOR_UPGRADE * point.getLevel());
     }
 
     public boolean isOnWorld(String world) {

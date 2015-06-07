@@ -15,6 +15,8 @@ public class Point {
     private static final String DEFAULT_POINT_STRUCTURE = "pointLevel_";
     public static final int DEFAULT_AREA = 3; // Area radius
 
+    public static final int POINT_MAX_LEVEL = 10;
+
     private Location loc;
     private String name;
     private int radius;
@@ -114,7 +116,7 @@ public class Point {
     }
 
     // Upgrade point level. ie: +1 Level
-    private void upgradePoint() {
+    public void upgradePoint() {
         level = level + 1;
         setPointLevel(level);
         updatePointLevel(level);
@@ -152,7 +154,7 @@ public class Point {
         BlockSpawner.spawnBlock(newLoc, blockType, gMeta);
     }
 
-    //
+    // Changing the point of a faction.
     public void changePointFaction(int faction_id) {
         this.factionId = faction_id;
         setPointBeam();
