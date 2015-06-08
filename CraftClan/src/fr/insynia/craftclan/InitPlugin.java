@@ -29,7 +29,7 @@ public class InitPlugin {
                                     }
                                 }, 60 * 5 * 20); // 5 minutes
                     }
-                }, 60 * 60 * 20, 60 * 60 * 20); // 1 hour
+                }, 60 * 20, 60 * 60 * 20 * 6); // 6 hours
     }
 
     private void createTables() {
