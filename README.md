@@ -21,6 +21,9 @@ ___
 
 ### Ajuster ou ajouter la protection aux entities et pas que aux blocs (onEntityDamage ou un truc du genre contre onBlockBreak)
 
+### Tp les failers/attackers une fois l'attaque finie lorsque win = false
+
+
 #### Coder les commandes player:
 
 
