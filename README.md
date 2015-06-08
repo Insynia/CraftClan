@@ -27,6 +27,8 @@ ___
 #### Coder les commandes player:
 
 
+##### Liste des membres
+
 ##### Seek member: broadcast announce (only if status = open)
 
 ##### Search faction
