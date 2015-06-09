@@ -1,6 +1,6 @@
 # Projet CraftClan @Insynia
 ___
-###### Dernière modification: 06/06/2015
+###### Dernière modification: 10/06/2015
 ###### Par Doc Cobra et Sharowin.
 ___
 
@@ -23,6 +23,9 @@ ___
 
 ### Tp les failers/attackers une fois l'attaque finie lorsque win = false
 
+### Ajouter 10s au /cc stopfarm
+
+### Mettre le tagg de clan devant le pseudo ?
 
 #### Coder les commandes player:
 
