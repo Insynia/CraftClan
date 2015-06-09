@@ -27,6 +27,8 @@ ___
 #### Coder les commandes player:
 
 
+##### Liste des membres
+
 ##### Seek member: broadcast announce (only if status = open)
 
 ##### Search faction
@@ -38,6 +40,9 @@ ___
 
 
 #### Configurer Essentials et créer une zone de vente
+
+#### Ajouter un script autosave si le screen -ls minecraft est bon + autosave 7j
+
 ___
 
 ## Tuto
