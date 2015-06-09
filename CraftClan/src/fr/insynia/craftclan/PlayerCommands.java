@@ -91,6 +91,25 @@ public class PlayerCommands {
         return true;
     }
 
+    //
+
+    public static boolean cmdUpgradePoint(CommandSender sender, Location loc) {
+        Player p = (Player) sender;
+        PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
+        if (pcc == null) return false;
+
+        Point point = pcc.canUpgrade(loc);
+        if (point == null) return die("Vous ne pouvez pas améliorer ce point \n" +
+                "Le point doit appartenir à votre faction et vous devez être placé sur lui \n" +
+                "Il doit être de niveau inférieur à " + Point.POINT_MAX_LEVEL, sender);
+        pcc.willUpgrade(point);
+        point.upgradePoint();
+        pcc.sendMessage("Félicitations, vous avez amélioré le point \"" + point.getName() + "\" !\n"+
+        "Il est désormais de niveau " + point.getLevel());
+        return true;
+
+    }
+
     private static boolean die(String msg, CommandSender sender) {
         sender.sendMessage(msg);
         return false;

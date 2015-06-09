@@ -81,6 +81,9 @@ public class CommandsCC {
                 case "help":
                     sender.sendMessage("Vous pouvez consulter les règles, conditions d'utilisation et commandes disponibles sur notre forum: http://forum.craftclan.fr");
                     return true;
+                case "upgrade":
+                    help = "\"upgrade\": Vous ne pouvez pas améliorer ce point";
+                    return (PlayerCommands.cmdUpgradePoint(sender, loc) || die(help, sender));
                 default:
                     sender.sendMessage("Cette commande n'existe pas");
             }
