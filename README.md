@@ -29,10 +29,14 @@ ___
 
 ##### Liste des membres
 
+##### Tp to point: lorsque proche du spawn
+
 ##### Seek member: broadcast announce (only if status = open)
 
 ##### Search faction
 
+
+#### Tp les joueurs qui changent de faction au spawn
 
 #### Remove les factions lors d'un /cc leave du leader si personne n'est dedans + mettre les points de la faction en Neutre
 
