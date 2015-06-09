@@ -78,6 +78,8 @@ public class CommandsCC {
                     return (PlayerCommands.setFactionStatus(sender, args) || die(help, sender));
                 case "cancelrequest":
                     return (PlayerCommands.cancelRequest(sender, args));
+                case "help":
+                    sender.sendMessage("Vous pouvez consulter les règles, conditions d'utilisation et commandes disponibles sur notre forum: http://forum.craftclan.fr");
                 default:
                     sender.sendMessage("Cette commande n'existe pas");
             }

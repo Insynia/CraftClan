@@ -17,6 +17,10 @@ public class PlayerEvents implements Listener {
         Player p = event.getPlayer();
         sqlm.fetchQuery("SELECT * FROM users WHERE uuid = \"" + p.getUniqueId() + "\";", new PlayerCC());
 
+        if (!p.hasPlayedBefore())
+            p.sendMessage("Le simple fait de jouer sur ce serveur vous engage à respecter nos" +
+                    " conditions d'utilisation présentes sur le forum: http://forum.craftclan.fr");
+
         PlayerCC player = MapState.getInstance().findPlayer(p.getUniqueId());
         if (player == null) {
             PlayerCC.create(p);
