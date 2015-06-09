@@ -6,4 +6,4 @@ if [ -z "$SCREEN_NAME" ]; then
 fi
 
 echo "Allowing IP <`dig +short craftclan.fr`> to request the server"
-CRAFTCLAN_WEB_IP=`dig +short craftclan.fr` bundle exec thin start -e production
+CRAFTCLAN_WEB_IP=`dig +short craftclan.fr` screen -AmdS craftclan-listener bundle exec thin start -e production
