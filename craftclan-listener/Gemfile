@@ -1,4 +1,4 @@
-source rubygems_source
+source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'rack-attack'
