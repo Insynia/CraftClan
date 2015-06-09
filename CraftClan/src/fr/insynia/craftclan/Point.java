@@ -119,21 +119,14 @@ public class Point {
     public void upgradePoint() {
         level = level + 1;
         setPointLevel(level);
-        updatePointLevel(level);
     }
 
     // Set a new level to a Point and build the proper structure
     public boolean setPointLevel(int newLevel) {
         this.level = newLevel;
-        boolean ret = updatePointLevel(level);
+        boolean ret = update();
         if (ret) spawnPointStructure(level);
         return ret;
-    }
-
-    // Update SQL datas
-    public boolean updatePointLevel(int newLevel) {
-        SQLManager sqlm = SQLManager.getInstance();
-        return (sqlm.execUpdate("UPDATE points SET level = " + newLevel + " WHERE name = \"" + this.name + "\";"));
     }
 
     // Modify glass block color to match with point faction
@@ -154,9 +147,23 @@ public class Point {
         BlockSpawner.spawnBlock(newLoc, blockType, gMeta);
     }
 
-    // Changing the point of a faction.
+    // Changing the faction of a point.
     public void changePointFaction(int faction_id) {
         this.factionId = faction_id;
         setPointBeam();
+    }
+
+    // Update SQL with the point name
+
+    private boolean update() {
+        SQLManager sqlm = SQLManager.getInstance();
+        return (sqlm.execUpdate("UPDATE points SET name = \"" + name +
+                "\", radius = \"" + radius +
+                "\", x = \"" + loc.getX() +
+                "\", y = \"" + loc.getY() +
+                "\", z = \"" + loc.getZ() +
+                "\", level = \"" + level +
+                "\", faction_id = \"" + factionId +
+                "\" WHERE name = \"" + this.name + "\";"));
     }
 }
