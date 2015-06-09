@@ -220,7 +220,7 @@ public class PlayerCC implements Loadable {
         Point point = MapUtils.getLocationPoint(block.getLocation());
         if (point == null)
             return false;
-        if (faction == null || faction.getId() == point.getFactionId())
+        if (faction == null || faction.getId() == point.getFactionId() || faction.getName().equals("Newbie"))
             return false;
         if (hasEnough(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK)) {
             decreaseItem(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK);
