@@ -40,6 +40,9 @@ ___
 
 
 #### Configurer Essentials et créer une zone de vente
+
+#### Ajouter un script autosave si le screen -ls minecraft est bon + autosave 7j
+
 ___
 
 ## Tuto
