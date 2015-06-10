@@ -31,30 +31,33 @@ ___
 ##### 24H: 10 * niveau
 ##### 12H: 4 * niveau
 #####  6H: 2 * niveau
+#### La protection assure la sécurité des coffres
 
 #### PVP Off au sein de la faction ?
 
 #### PVP Off sur le spawn !
-##### J'aime pas les spawnkills :-3
-    
     
 ### Coder les commandes player:
 
 
 ##### Liste des membres
 
-##### Tp to point: lorsque proche du spawn
+##### Tp to point: lorsque proche du spawn ?
 
 ##### Seek member: broadcast announce (only if status = open)
 
 ##### Search faction
 
+##### Faction message ? Envoie d'un message par le leader de la faction
+
 ##### Mise en place d'un chat de faction ?
 
 ### Ajouter les commandes admin:
 
-##### Renommer un point.
+##### Renommer un point
 ###### Rendre IDable les points, pour l'update sql
+
+##### Supprimer un point
 
 
 #### Tp les joueurs qui changent de faction au spawn
