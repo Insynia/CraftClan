@@ -168,7 +168,7 @@ public class Point implements IDable {
                 "\", z = \"" + loc.getZ() +
                 "\", level = \"" + level +
                 "\", faction_id = \"" + factionId +
-                "\" WHERE name = \"" + this.name + "\";"));
+                "\" WHERE id = \"" + this.id + "\";"));
     }
 
     @Override

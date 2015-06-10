@@ -387,7 +387,12 @@ public class PlayerCommands {
 
         EconomyCC.take(pcc.getName(), money);
         protection = new Protection(point.getId(), startTime, endTime, pcc.getName());
-        protection.save();
+        if (protection.save()) {
+            Bukkit.broadcastMessage(pcc.getName() + " a ajouté une protection sur son point: " + point.getName() + "\n" +
+                    "La protection sera active jusqu'au " + UtilCC.dateHumanReadable(endTime));
+        } else {
+            p.sendMessage("Erreur inconnue, votre commande a échoué");
+        }
         return true;
     }
 }

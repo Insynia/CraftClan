@@ -30,8 +30,6 @@ public class PvPRestriction implements Listener {
             if (attack.playerFailed(damagercc)) // If player failed the attack, he is neutralized
                 return true;
 
-        if (targetPoint.getProtection() != null && targetcc.isAtHome(target.getLocation()))
-            return true;
-        return false;
+        return targetPoint.getProtection() != null && targetcc.isAtHome(target.getLocation()); // targetPlayer is at home and his point is protected ?
     }
 }
