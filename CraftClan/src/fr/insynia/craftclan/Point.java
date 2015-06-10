@@ -35,6 +35,15 @@ public class Point implements IDable {
         this.id = 0;
     }
 
+    public Point(int id, String name, int radius, Location loc, int level, int factionId) {
+        this.name = name;
+        this.loc = loc;
+        this.radius = radius;
+        this.level = level;
+        this.factionId = factionId;
+        this.id = id;
+    }
+
     public String toString() {
         return "x: " + loc.getX() + " y: " + loc.getY() + " z: " + loc.getZ();
     }
