@@ -40,6 +40,7 @@ public class Generator {
         int x, z, nb = 0;
         int curLayer = 1;
         int diameter = 196; // Can't touch this. Well, calculate this. Your go (cf line 25/26), ONLY INCREASE THIS (Base value 118) <- do not remove this
+        // Remember that this value is the diameter - 1 (for the center point)
         int pointRadius = choseRadius(diameter); // Hammer time
         Location spawnLoc = Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation();
 

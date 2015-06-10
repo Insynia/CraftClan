@@ -62,11 +62,18 @@ public class PlayerCommands {
     // JOIN f.broadcastToMembers("Nouveau membre ! Bienvenue a " + p.getName());
 
     public static boolean cmdStopFarm(CommandSender sender, Location loc) {
-        Player p = (Player) sender;
+        final Player p = (Player) sender;
+
+        sender.sendMessage("Vous allez être téléporté dans 10s");
 
         if (p.getLocation().getWorld() != Bukkit.getWorld(MapState.FARM_WORLD))
             return false;
-        p.teleport(Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation());
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("CraftClan"), new Runnable() {
+            @Override
+            public void run() {
+                p.teleport(Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation());
+            }
+        }, 10 * 20);
         return true;
     }
 
