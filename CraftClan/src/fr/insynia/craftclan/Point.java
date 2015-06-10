@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Doc on 11/05/2015.
  * Modified by Sharowin on 18/05/2015.
  */
-public class Point {
+public class Point implements IDable {
 
     private static final String DEFAULT_POINT_STRUCTURE_FOLDER = "structures";
     private static final String DEFAULT_POINT_STRUCTURE = "pointLevel_";
@@ -22,6 +22,8 @@ public class Point {
     private int radius;
     private int factionId;
     private int level;
+    private int id;
+
 
     public Point(String name, int radius, Location loc, int level, int factionId) {
         this.name = name;
@@ -29,6 +31,7 @@ public class Point {
         this.radius = radius;
         this.level = level;
         this.factionId = factionId;
+        this.id = 0;
     }
 
     public String toString() {
@@ -45,7 +48,7 @@ public class Point {
         loc.setY((int) loc.getY());
         loc.setZ(UtilCC.getInt(loc.getZ()));
         boolean ret = sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z, faction_id, level) " +
-                "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + factionId + ", " + level + ");");
+                "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + factionId + ", " + level + ");", this);
         if (ret){this.addToMap();}
         return ret;
     }
@@ -165,5 +168,10 @@ public class Point {
                 "\", level = \"" + level +
                 "\", faction_id = \"" + factionId +
                 "\" WHERE name = \"" + this.name + "\";"));
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 }
