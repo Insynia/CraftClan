@@ -23,20 +23,10 @@ ___
 
 ### Tp les failers/attackers une fois l'attaque finie lorsque win = false
 
-#### Ajouter 10s au /cc stopfarm
-
 #### Mettre le tagg de clan devant le pseudo ?
-
-#### Mettre en place les protections 24H 12H 6H ? Ou 24H  ? ou 16H ?
-##### 24H: 10 * niveau
-##### 12H: 4 * niveau
-#####  6H: 2 * niveau
-#### La protection assure la sécurité des coffres
 
 #### PVP Off au sein de la faction ?
 
-#### PVP Off sur le spawn !
-    
 ### Coder les commandes player:
 
 
@@ -55,7 +45,6 @@ ___
 ### Ajouter les commandes admin:
 
 ##### Renommer un point
-###### Rendre IDable les points, pour l'update sql
 
 ##### Supprimer un point
 
