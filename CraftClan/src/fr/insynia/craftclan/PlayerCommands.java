@@ -293,8 +293,7 @@ public class PlayerCommands {
         PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
 
         Faction targetFaction = p.getFaction();
-        String target = args[1];
-        PlayerCC targetPlayer = MapState.getInstance().findPlayer(target);
+
         if (!targetFaction.getLeaderName().equals(p.getName())) {
             die("Vous n'êtes pas le leader de la faction ;)", sender);
             return true;
@@ -335,20 +334,20 @@ public class PlayerCommands {
 
         int amount = Integer.parseInt(args[1]);
 
-        int SCNeeded = Protection.BASE_AMOUNT;
+        int moneyNeeded = Protection.BASE_AMOUNT;
 
         switch (args[2]) {
             case "hour":
                 endTime.setTime(endTime.getTime() + amount * 3600 * 1000); // hour = 3600 seconds * 1000 milliseconds
-                SCNeeded *= Protection.HOUR_COEF;
+                moneyNeeded *= Protection.HOUR_COEF;
                 break;
             case "day":
                 endTime.setTime(endTime.getTime() + amount * 3600 * 1000 * 24); // day 24 * hour
-                SCNeeded *= Protection.DAY_COEF;
+                moneyNeeded *= Protection.DAY_COEF;
                 break;
             case "week":
                 endTime.setTime(endTime.getTime() + amount * 3600 * 1000 * 24 * 7); // week day * 7
-                SCNeeded *= Protection.WEEK_COEF;
+                moneyNeeded *= Protection.WEEK_COEF;
                 break;
             default:
                 die("L'unité de temps n'est pas valide, utilisez hour, day ou week", sender);
@@ -378,10 +377,11 @@ public class PlayerCommands {
             return true;
         }
 
-        BigDecimal money = BigDecimal.valueOf(SCNeeded);
+        BigDecimal money = BigDecimal.valueOf(moneyNeeded);
 
         if (!EconomyCC.has(pcc.getName(), money)) {
-            die("Vous n'avez pas assez d'argent\n" + "Il vous faut " + money + "$", sender);
+            die("Vous n'avez pas assez d'argent, il vous faut " + money + "$\n" +
+                    "Tapez /balance pour savoir combien vous avez !", sender);
             return true;
         }
 
