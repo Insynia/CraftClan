@@ -25,11 +25,12 @@ public class InitPlugin {
                                 new Runnable() {
                                     @Override
                                     public void run() {
+                                        Bukkit.getServer().broadcastMessage("La zone de farm se réinitialise !");
                                         Generator.resetFarmingZone();
                                     }
                                 }, 60 * 5 * 20); // 5 minutes
                     }
-                }, 60 * 20, 60 * 60 * 20); // 6 hours
+                }, 60 * 20, 60 * 60 * 20 * 2); // 2 hours
     }
 
     private void createTables() {
