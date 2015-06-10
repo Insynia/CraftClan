@@ -140,7 +140,8 @@ public class PlayerCC implements Loadable {
         if (faction == null) return null;
         List<Point> points = MapState.getInstance().getPoints();
         for (Point p : points) {
-            if (p.getFactionId() != faction.getId() && UtilCC.distanceBasicFull(from, p.getLocation()) <= Point.DEFAULT_AREA)
+            if (p.getFactionId() != faction.getId() &&
+                    UtilCC.distanceBasicFull(from, p.getLocation()) <= Point.DEFAULT_AREA)
                 return p;
         }
         return null;
@@ -155,6 +156,14 @@ public class PlayerCC implements Loadable {
             p.sendMessage("Vous devez avoir 10 diamants et casser un bloc sur ce point pour activer le mode attaque");
             return;
         }
+
+        if (point.getProtection() != null) {
+            Bukkit.getLogger().warning("SHOULD NOT BE HERE !!! On startCapture, checking the protection after" +
+                    " a player is on attack on the point (why is he on attack mode ?)");
+            p.sendMessage("Ce point bénéficie d'une protection");
+            return;
+        }
+
         Timer captureLoop = new Timer(true);
         captureLoop.schedule(new TimerTask() {
             @Override
@@ -227,6 +236,12 @@ public class PlayerCC implements Loadable {
             return false;
         if (faction == null || faction.getId() == point.getFactionId() || faction.getName().equals("Newbie"))
             return false;
+        Protection protection = point.getProtection();
+        if (protection != null) {
+            sendMessage("Vous ne pouvez pas attaquer ce point\n" +
+                    "Il est protégé jusqu'au: " + UtilCC.dateHumanReadable(protection.getEnd()));
+            return false;
+        }
         if (hasEnough(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK)) {
             decreaseItem(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK);
             new Attack(faction.getId(), point.getFactionId(), point.getId());
@@ -287,5 +302,15 @@ public class PlayerCC implements Loadable {
         Player p = Bukkit.getPlayer(uuid);
         if (p != null)
             p.sendMessage(msg);
+    }
+
+    public Point canProtect(Location from) {
+        if (faction == null) return null;
+        List<Point> points = MapState.getInstance().getPoints();
+        for (Point p : points) {
+            if (p.getFactionId() == faction.getId() && (UtilCC.distanceBasicFull(from, p.getLocation()) <= Point.DEFAULT_AREA))
+                return p;
+        }
+        return null;
     }
 }

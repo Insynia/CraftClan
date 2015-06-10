@@ -84,6 +84,12 @@ public class CommandsCC {
                 case "upgrade":
                     help = "\"upgrade\": Vous ne pouvez pas améliorer ce point";
                     return (PlayerCommands.cmdUpgradePoint(sender, loc) || die(help, sender));
+                case "protect":
+                    help = "La commande \"protect\" requiert 2 paramètres:\n" +
+                            "[Quantité] [Unité temporelle]\n" +
+                            "Unités temporelles valides: hour (heure), day (jour), week (semaine)";
+                    if (!UtilCC.checkArgsChatCommand(args, 2)) return die(help, sender);
+                    return (PlayerCommands.protectPoint(sender, args) || die(help, sender));
                 default:
                     sender.sendMessage("Cette commande n'existe pas");
             }

@@ -3,6 +3,7 @@ package fr.insynia.craftclan;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -177,5 +178,24 @@ public class Point implements IDable {
 
     public int getId() {
         return id;
+    }
+
+    public Protection getProtection() {
+        Protection protection = MapState.getInstance().findProtectionForPoint(this.id);
+        if (protection != null) {
+            Date now = new Date();
+            if (protection.getEnd().getTime() < now.getTime()) {
+                MapState.getInstance().removeProtection(protection.getId());
+                protection = null;
+            }
+        }
+
+        return protection;
+    }
+
+    public boolean isAttacked() {
+        if (MapState.getInstance().findAttackByPointId(id) != null)
+            return true;
+        return false;
     }
 }

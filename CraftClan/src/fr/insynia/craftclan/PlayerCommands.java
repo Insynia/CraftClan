@@ -6,6 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * Created by Sharowin on 27/05/15.
  */
@@ -20,7 +23,10 @@ public class PlayerCommands {
         if (pcc == null) return false;
 
         Point point = pcc.canCapture(loc);
-        if (point == null) return false;
+        if (point == null) {
+            die("Vous ne pouvez pas capturer ce point !", sender);
+            return true;
+        }
 
         pcc.startCapture(point, p);
         return true;
@@ -112,7 +118,7 @@ public class PlayerCommands {
         pcc.willUpgrade(point);
         point.upgradePoint();
         pcc.sendMessage("Félicitations, vous avez amélioré le point \"" + point.getName() + "\" !\n"+
-        "Il est désormais de niveau " + point.getLevel());
+                "Il est désormais de niveau " + point.getLevel());
         return true;
 
     }
@@ -311,6 +317,77 @@ public class PlayerCommands {
             return true;
         }
         ms.removeRequest(r.getId());
+        return true;
+    }
+
+    public static boolean protectPoint(CommandSender sender, String[] args) {
+        Protection protection;
+        Player p = (Player) sender;
+        PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
+
+        Date startTime = new Date();
+        Date endTime = (Date) startTime.clone();
+
+        if (!UtilCC.isInteger(args[1])) {
+            die("Merci de mettre une quantité valable, exemple: /cc protect 2 hour", sender);
+            return true;
+        }
+
+        int amount = Integer.parseInt(args[1]);
+
+        int SCNeeded = Protection.BASE_AMOUNT;
+
+        switch (args[2]) {
+            case "hour":
+                endTime.setTime(endTime.getTime() + amount * 3600 * 1000); // hour = 3600 seconds * 1000 milliseconds
+                SCNeeded *= Protection.HOUR_COEF;
+                break;
+            case "day":
+                endTime.setTime(endTime.getTime() + amount * 3600 * 1000 * 24); // day 24 * hour
+                SCNeeded *= Protection.DAY_COEF;
+                break;
+            case "week":
+                endTime.setTime(endTime.getTime() + amount * 3600 * 1000 * 24 * 7); // week day * 7
+                SCNeeded *= Protection.WEEK_COEF;
+                break;
+            default:
+                die("L'unité de temps n'est pas valide, utilisez hour, day ou week", sender);
+                return true;
+        }
+
+        Point point = pcc.canProtect(p.getLocation());
+
+        if (point == null) {
+            die("Vous devez être à proximité d'un point de votre faction pour effectuer cette commande", sender);
+            return true;
+        }
+
+        if (pcc.getFaction().getId() != point.getFactionId()) {
+            die("Ce point ne vous appartient pas", sender);
+            return true;
+        }
+
+        if (point.getProtection() != null) {
+            die("Merci d'attendre que la protection précédente expire", sender);
+            return true;
+        }
+
+        if (point.isAttacked()) {
+            die("Vous ne pouvez pas ajouter une protection lorsque votre point subit une attaque\n" +
+                    "Merci d'attendre que l'attaque soit terminée", sender);
+            return true;
+        }
+
+        BigDecimal money = BigDecimal.valueOf(SCNeeded);
+
+        if (!EconomyCC.has(pcc.getName(), money)) {
+            die("Vous n'avez pas assez d'argent\n" + "Il vous faut " + money + "$", sender);
+            return true;
+        }
+
+        EconomyCC.take(pcc.getName(), money);
+        protection = new Protection(point.getId(), startTime, endTime, pcc.getName());
+        protection.save();
         return true;
     }
 }

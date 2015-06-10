@@ -22,7 +22,7 @@ public class AdminCommands {
             return die(msg, sender);
         }
 
-        if (!UtilCC.checkArgIsInteger(args[3])) return die("Arg 3 is supposed to be an integer", sender);
+        if (!UtilCC.isInteger(args[3])) return die("Arg 3 is supposed to be an integer", sender);
         if (UtilCC.checkFactionExists(args[1])) return die("This faction already exist", sender);
         Faction f = new Faction(0, args[1], args[2], Integer.parseInt(args[3]), "CLOSED", "Doc_CoBrA");
 
@@ -35,7 +35,7 @@ public class AdminCommands {
 
     // Add a Point.
     public static boolean cmdAddPoint(CommandSender sender, Location loc, String[] args) {
-        if (!UtilCC.checkArgIsInteger(args[2]) || !UtilCC.checkArgIsInteger(args[3]))
+        if (!UtilCC.isInteger(args[2]) || !UtilCC.isInteger(args[3]))
             return die("Args 2 and 3 are supposed to be integers", sender);
         if (UtilCC.checkPointExists(args[1])) return die("This point already exist", sender);
 
@@ -100,7 +100,7 @@ public class AdminCommands {
 
     // Set a Point's level
     public static boolean cmdSetPointLevel(CommandSender sender, String[] args) {
-        if (!UtilCC.checkArgIsInteger(args[2])) return die("Arg 2 is supposed to be an integer", sender);
+        if (!UtilCC.isInteger(args[2])) return die("Arg 2 is supposed to be an integer", sender);
         Point point = MapState.getInstance().findPoint(args[1]);
         if (!UtilCC.checkPointExists(args[1])) return die("This point does not exist", sender);
 
@@ -135,7 +135,7 @@ public class AdminCommands {
     }
 
     public static boolean cmdGeneratePoints(CommandSender sender, String[] args) {
-        if (!UtilCC.checkArgIsInteger(args[1])) return die("Arg 1 is supposed to be an integer", sender);
+        if (!UtilCC.isInteger(args[1])) return die("Arg 1 is supposed to be an integer", sender);
 
         Generator.generatePoints(Integer.parseInt(args[1]));
         return true;

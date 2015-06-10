@@ -86,6 +86,13 @@ public class InitPlugin {
                 " faction_id INT(12) NOT NULL," +
                 " user_name VARCHAR(255) NOT NULL," +
                 " PRIMARY KEY (id));");
+        sqlm.execUpdate("CREATE TABLE IF NOT EXISTS protections (" +
+                " id int NOT NULL AUTO_INCREMENT," +
+                " point_id INT(12) NOT NULL," +
+                " begin DATETIME NOT NULL," +
+                " end DATETIME NOT NULL," +
+                " user_name VARCHAR(255) NOT NULL," +
+                " PRIMARY KEY (id));");
     }
 
     private void fetchItems() {

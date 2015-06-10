@@ -2,7 +2,7 @@ package fr.insynia.craftclan;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * For CraftClan
@@ -14,11 +14,12 @@ public class ProtectionList implements Loadable {
         try {
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int point_id = rs.getInt("point_id");
+                int pointId = rs.getInt("point_id");
                 Date begin = rs.getDate("start_time");
-                Date end = rs.getDate("start_time");
-                // Protection protection = new Protection(id, point_id, begin, end);
-                // MapState.getInstance().addProtection(protection);
+                Date end = rs.getDate("end_time");
+                String userName = rs.getString("user_name");
+                Protection protection = new Protection(id, pointId, begin, end, userName);
+                MapState.getInstance().addProtection(protection);
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -19,11 +19,13 @@ public class MapState {
     private List<Point> points;
     private List<PlayerCC> playerCCs;
     private List<Request> requests;
+    private List<Protection> protections;
     private List<Faction> factions;
     private List<Attack> attacks;
 
     protected MapState() {
         points = new ArrayList<Point>();
+        protections = new ArrayList<>();
         requests = new ArrayList<Request>();
         playerCCs = new ArrayList<PlayerCC>();
         factions = new ArrayList<Faction>();
@@ -201,8 +203,10 @@ public class MapState {
         Iterator<Attack> itr = attacks.iterator();
         while (itr.hasNext()) {
             Attack a = itr.next();
-            if (a.getAttackers().size() == 0 || a.isWon())
+            if (a.getAttackers().size() == 0 || a.isWon()) {
+                Bukkit.getLogger().info("Attack purged");
                 itr.remove();
+            }
         }
     }
 
@@ -248,6 +252,36 @@ public class MapState {
 
     public Request findRequestByPlayer(String playerName) {
         for (Request r : requests) if (r.getPlayerName().equals(playerName)) return r;
+        return null;
+    }
+
+    public void addProtection(Protection protection) {
+        protections.add(protection);
+    }
+
+    public Protection findProtectionForPoint(int pointId) {
+        for (Protection p : protections)
+            if (p.getPointId() == pointId)
+                return (p);
+        return null;
+    }
+
+    public void removeProtection(int id) {
+        Iterator<Request> itr = requests.iterator();
+        while (itr.hasNext()) {
+            Request request = itr.next();
+            if (request.getId() == id) {
+                request.deleteDb();
+                itr.remove();
+            }
+        }
+    }
+
+    public Attack findAttackByPointId(int pointId) {
+        for (Attack a : attacks) {
+            if (a.getPoint().getId() == pointId)
+                return a;
+        }
         return null;
     }
 }
