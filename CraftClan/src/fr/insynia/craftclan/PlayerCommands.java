@@ -377,7 +377,7 @@ public class PlayerCommands {
             return true;
         }
 
-        BigDecimal money = BigDecimal.valueOf(moneyNeeded);
+        BigDecimal money = BigDecimal.valueOf(moneyNeeded * point.getLevel()); // 1 day = 100 * 10 * Point level
 
         if (!EconomyCC.has(pcc.getName(), money)) {
             die("Vous n'avez pas assez d'argent, il vous faut " + money + "$\n" +
