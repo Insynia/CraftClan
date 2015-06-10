@@ -334,20 +334,24 @@ public class PlayerCommands {
 
         int amount = Integer.parseInt(args[1]);
 
+        if (amount < 1 || amount > 24) {
+            die("Quantité invalide !", sender);
+        }
+
         int moneyNeeded = Protection.BASE_AMOUNT;
 
         switch (args[2]) {
             case "hour":
                 endTime.setTime(endTime.getTime() + amount * 3600 * 1000); // hour = 3600 seconds * 1000 milliseconds
-                moneyNeeded *= Protection.HOUR_COEF;
+                moneyNeeded *= Protection.HOUR_COEF * amount;
                 break;
             case "day":
                 endTime.setTime(endTime.getTime() + amount * 3600 * 1000 * 24); // day 24 * hour
-                moneyNeeded *= Protection.DAY_COEF;
+                moneyNeeded *= Protection.DAY_COEF * amount;
                 break;
             case "week":
                 endTime.setTime(endTime.getTime() + amount * 3600 * 1000 * 24 * 7); // week day * 7
-                moneyNeeded *= Protection.WEEK_COEF;
+                moneyNeeded *= Protection.WEEK_COEF * amount;
                 break;
             default:
                 die("L'unité de temps n'est pas valide, utilisez hour, day ou week", sender);

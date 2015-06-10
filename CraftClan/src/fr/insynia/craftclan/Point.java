@@ -113,7 +113,7 @@ public class Point implements IDable {
         newloc.setX(newloc.getX() - DEFAULT_AREA);
         newloc.setZ(newloc.getZ() - DEFAULT_AREA);
         newloc.setY(newloc.getY() - 1);
-        if (FileManager.checkFileAndFolderExist(DEFAULT_POINT_STRUCTURE_FOLDER, DEFAULT_POINT_STRUCTURE + level)) {
+        if (FileManagerCC.checkFileAndFolderExist(DEFAULT_POINT_STRUCTURE_FOLDER, DEFAULT_POINT_STRUCTURE + level)) {
             BlockSpawner.spawnStructure(DEFAULT_POINT_STRUCTURE + level, newloc);
             setPointBeam();
         }

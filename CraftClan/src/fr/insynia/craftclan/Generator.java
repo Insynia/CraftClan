@@ -18,7 +18,7 @@ public class Generator {
             File folder = farmingZone.getWorldFolder();
             UtilCC.kickPlayersFromWorld(MapState.FARM_WORLD);
             if (Bukkit.getServer().unloadWorld(MapState.FARM_WORLD, true))
-                FileManager.deleteFileOrFolder(folder);
+                FileManagerCC.deleteFileOrFolder(folder);
         }
         createFarmWorld();
     }

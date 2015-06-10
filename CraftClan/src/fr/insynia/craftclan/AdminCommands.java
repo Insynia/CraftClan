@@ -90,7 +90,7 @@ public class AdminCommands {
         Location tloc = p.getTargetBlock((Set<Material>) null, 10).getLocation();
         tloc.setY(tloc.getY() + 1);
 
-        if (!FileManager.checkFileAndFolderExist(BlockSpawner.DEFAULT_FILE, args[1]))
+        if (!FileManagerCC.checkFileAndFolderExist(BlockSpawner.DEFAULT_FILE, args[1]))
             return die("The file \"" + args[1] + "\" does not exist", sender);
 
         BlockSpawner.spawnStructure(args[1], tloc);
