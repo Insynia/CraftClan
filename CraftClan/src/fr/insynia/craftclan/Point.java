@@ -174,4 +174,8 @@ public class Point implements IDable {
     public void setId(int id) {
         this.id = id;
     }
+
+    public int getId() {
+        return id;
+    }
 }

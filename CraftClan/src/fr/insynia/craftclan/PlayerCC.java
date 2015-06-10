@@ -214,7 +214,7 @@ public class PlayerCC implements Loadable {
         List<Attack> attacks = MapState.getInstance().getAttacks();
 
         for (Attack a : attacks)
-            if (a.getFactionId() == faction.getId() && a.getPointName().equals(point.getName()) && !a.playerFailed(this))
+            if (a.getFactionId() == faction.getId() && a.getPoint().getName().equals(point.getName()) && !a.playerFailed(this))
                 return a;
         return null;
     }
@@ -223,11 +223,13 @@ public class PlayerCC implements Loadable {
         Point point = MapUtils.getLocationPoint(block.getLocation());
         if (point == null)
             return false;
+        if (point.getFactionId() == -1 || MapState.getInstance().findFaction(point.getFactionId()) == null)
+            return false;
         if (faction == null || faction.getId() == point.getFactionId() || faction.getName().equals("Newbie"))
             return false;
         if (hasEnough(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK)) {
             decreaseItem(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK);
-            new Attack(faction.getId(), point.getFactionId(), point.getName());
+            new Attack(faction.getId(), point.getFactionId(), point.getId());
             return true;
         } else {
             Bukkit.getPlayer(uuid).sendMessage("Vous n'avez pas assez de diamants pour attaquer ce point");
@@ -246,7 +248,8 @@ public class PlayerCC implements Loadable {
 
         for (Attack a : attacks)
             if (a.getFactionId() == faction.getId())
-                a.addFailer(this);
+                a.addFailerWithoutPurge(this);
+        MapState.getInstance().purgeAttacks();
     }
 
 

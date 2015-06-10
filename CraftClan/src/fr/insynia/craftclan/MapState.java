@@ -121,6 +121,11 @@ public class MapState {
         return null;
     }
 
+    public Point findPoint(int id) {
+        for (Point p : points) if (p.getId() == id) return p;
+        return null;
+    }
+
     public Faction findFaction(int id) {
         for (Faction f : factions) if (f.getId() == id) return f;
         return null;
@@ -148,11 +153,11 @@ public class MapState {
         Bukkit.getLogger().info(msg);
     }
 
-    public void removePoint(String name) {
+    public void removePoint(int id) {
         Iterator<Point> itr = points.iterator();
         while (itr.hasNext()) {
             Point point = itr.next();
-            if (point.getName().equals(name)) {
+            if (point.getId() == id) {
                 itr.remove();
             }
         }

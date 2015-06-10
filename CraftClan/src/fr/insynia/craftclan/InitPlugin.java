@@ -68,7 +68,7 @@ public class InitPlugin {
                 " faction_id INT(12) NOT NULL," +
                 " target_id INT(12) NOT NULL," +
                 " active tinyint NOT NULL," +
-                " point_name VARCHAR(255) NOT NULL," +
+                " point_id INT(12) NOT NULL," +
                 " win tinyint NOT NULL," +
                 " start_time DATETIME NOT NULL," +
                 " end_time DATETIME DEFAULT NULL," +
