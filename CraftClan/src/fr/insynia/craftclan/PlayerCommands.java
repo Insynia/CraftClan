@@ -104,8 +104,6 @@ public class PlayerCommands {
         return true;
     }
 
-    //
-
     public static boolean cmdUpgradePoint(CommandSender sender, Location loc) {
         Player p = (Player) sender;
         PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
