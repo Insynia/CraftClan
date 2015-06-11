@@ -1,8 +1,10 @@
 package fr.insynia.craftclan;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.UUID;
  */
 public class MapState {
     public static final int SPAWN_RADIUS = 196;
+    private static final int BASE_PAYDAY = 5;
     public static String DEFAULT_WORLD = "world";
     public static String FARM_WORLD = "world_farm";
     private static MapState instance = null;
@@ -283,5 +286,16 @@ public class MapState {
                 return a;
         }
         return null;
+    }
+
+    public void payDay() {
+        for (PlayerCC pcc : playerCCs) {
+            for (Point p : points) {
+                if (p.getFactionId() == pcc.getFaction().getId()) {
+                    EconomyCC.give(pcc.getName(), BigDecimal.valueOf(p.getLevel() * BASE_PAYDAY));
+                    pcc.sendMessage(ChatColor.GREEN + "+" + p.getLevel() * BASE_PAYDAY + "$");
+                }
+            }
+        }
     }
 }

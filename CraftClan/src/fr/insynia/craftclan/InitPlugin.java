@@ -13,6 +13,18 @@ public class InitPlugin {
         prepareFarmTimer(plugin);
     }
 
+    private void preparePayDay(Plugin plugin) {
+        p = plugin;
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(p,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getServer().broadcastMessage("Jour de paie !");
+                        MapState.getInstance().payDay();
+                    }
+                }, 60 * 60 * 20, 60 * 60 * 20); // 1 hour
+    }
+
     private void prepareFarmTimer(Plugin plugin) {
         p = plugin;
         Bukkit.getScheduler().scheduleSyncRepeatingTask(p,

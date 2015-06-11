@@ -1,5 +1,6 @@
 package fr.insynia.craftclan;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,8 +13,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
 public class PlayerRestriction implements Listener {
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event)
-    {
+    public void onBlockBreak(BlockBreakEvent event) {
         if (!event.getBlock().getLocation().getWorld().getName().equals(MapState.DEFAULT_WORLD))
             return;
         Player player = event.getPlayer();
@@ -23,8 +23,7 @@ public class PlayerRestriction implements Listener {
     }
 
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event)
-    {
+    public void onBlockPlace(BlockPlaceEvent event) {
         if (!event.getBlock().getLocation().getWorld().getName().equals(MapState.DEFAULT_WORLD))
             return;
         Player player = event.getPlayer();
@@ -83,6 +82,7 @@ public class PlayerRestriction implements Listener {
     }
 
     private boolean isAllowed(Block block, PlayerCC playercc) {
+        if (!Bukkit.getPlayer(playercc.getUUID()).getLocation().getWorld().getName().equals(MapState.DEFAULT_WORLD)) return true;
         Location locBlock = block.getLocation();
         return playercc.isAtHome(locBlock) && !playercc.isOnPointArea(locBlock);
     }

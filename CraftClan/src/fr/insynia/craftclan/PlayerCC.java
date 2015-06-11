@@ -21,7 +21,7 @@ public class PlayerCC implements Loadable {
     private final Material ITEM_FOR_ATTACK = Material.DIAMOND;
     private final int NB_ITEMS_FOR_ATTACK = 10;
 
-    public static final int BASE_MONEY_UPGRADE = 10;
+    public static final int BASE_MONEY_UPGRADE = 1000;
 
     private String name;
     private Faction faction;
