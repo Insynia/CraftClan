@@ -20,6 +20,8 @@ public class PvPRestriction implements Listener {
     private boolean checkPvPRestricted(Player damager, Player target) {
         PlayerCC damagercc = MapState.getInstance().findPlayer(damager.getUniqueId());
         PlayerCC targetcc = MapState.getInstance().findPlayer(damager.getUniqueId());
+        if (!damager.getLocation().getWorld().getName().equals(MapState.DEFAULT_WORLD)) return false;
+
         Point targetPoint = MapUtils.getLocationPoint(target.getLocation()); // The point the target is on
 
         if (damagercc.isAtHome(target.getLocation()) || targetPoint == null) // Check if the target is at damager's home, then it is never restricted

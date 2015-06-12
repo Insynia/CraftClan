@@ -142,8 +142,8 @@ socialspy-commands:
 player-commands:
   - afk
   - afk.auto
-  - back
-  - back.ondeath
+#  - back
+#  - back.ondeath
   - balance
   - balance.others
   - balancetop
@@ -174,7 +174,7 @@ player-commands:
   - motd
   - msg
   - msg.color
-  - nick
+#  - nick
 #  - near
   - pay
 #  - ping

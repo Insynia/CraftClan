@@ -227,11 +227,11 @@ public class PlayerCommands {
         }
         String target = args[1];
         PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
-        if (onlinePlayerCC != null) {
+        if (onlinePlayerCC != null && onlinePlayerCC.getFaction().getId() == p.getFaction().getId()) {
             targetFaction.setLeaderName(onlinePlayerCC.getName());
             onlinePlayerCC.sendMessage("Vous êtes maintenant leader de " + targetFaction.getFancyName());
         } else {
-            die("Le joueur doit être en ligne pour devenir leader !", sender);
+            die("Le joueur doit être en ligne et être dans votre faction pour devenir leader !", sender);
         }
         return true;
     }

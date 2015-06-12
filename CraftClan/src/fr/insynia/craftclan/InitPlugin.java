@@ -11,6 +11,7 @@ public class InitPlugin {
         fetchItems();
         Generator.resetFarmingZone();
         prepareFarmTimer(plugin);
+        preparePayDay(plugin);
     }
 
     private void preparePayDay(Plugin plugin) {
