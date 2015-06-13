@@ -291,6 +291,7 @@ public class PlayerCommands {
             return true;
         }
         targetFaction.setStatus(args[1].toUpperCase());
+        targetFaction.broadcastToMembers(p.getName() + " a modifié le statut de la faction en " + args[1].toUpperCase());
         return targetFaction.update();
     }
 
