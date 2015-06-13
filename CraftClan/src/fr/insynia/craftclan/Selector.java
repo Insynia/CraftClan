@@ -44,7 +44,7 @@ public class Selector {
     }
 
     public static boolean saveStructure(String filename) {
-        if(!FileManager.checkFileAndFolderExist(BlockSpawner.DEFAULT_FILE,filename)) {
+        if(!FileManagerCC.checkFileAndFolderExist(BlockSpawner.DEFAULT_FILE, filename)) {
             BlockSpawner.saveStructure(filename, firstPoint, secondPoint);
             return true;
         } else return false;

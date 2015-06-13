@@ -11,6 +11,19 @@ public class InitPlugin {
         fetchItems();
         Generator.resetFarmingZone();
         prepareFarmTimer(plugin);
+        preparePayDay(plugin);
+    }
+
+    private void preparePayDay(Plugin plugin) {
+        p = plugin;
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(p,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getServer().broadcastMessage("Jour de paie !");
+                        MapState.getInstance().payDay();
+                    }
+                }, 60 * 60 * 20, 60 * 60 * 20); // 1 hour
     }
 
     private void prepareFarmTimer(Plugin plugin) {
@@ -25,11 +38,12 @@ public class InitPlugin {
                                 new Runnable() {
                                     @Override
                                     public void run() {
+                                        Bukkit.getServer().broadcastMessage("La zone de farm se réinitialise !");
                                         Generator.resetFarmingZone();
                                     }
                                 }, 60 * 5 * 20); // 5 minutes
                     }
-                }, 60 * 20, 60 * 60 * 20); // 6 hours
+                }, 60 * 20, 60 * 60 * 20 * 2); // 2 hours
     }
 
     private void createTables() {
@@ -67,7 +81,7 @@ public class InitPlugin {
                 " faction_id INT(12) NOT NULL," +
                 " target_id INT(12) NOT NULL," +
                 " active tinyint NOT NULL," +
-                " point_name VARCHAR(255) NOT NULL," +
+                " point_id INT(12) NOT NULL," +
                 " win tinyint NOT NULL," +
                 " start_time DATETIME NOT NULL," +
                 " end_time DATETIME DEFAULT NULL," +
@@ -83,6 +97,13 @@ public class InitPlugin {
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS faction_requests (" +
                 " id int NOT NULL AUTO_INCREMENT," +
                 " faction_id INT(12) NOT NULL," +
+                " user_name VARCHAR(255) NOT NULL," +
+                " PRIMARY KEY (id));");
+        sqlm.execUpdate("CREATE TABLE IF NOT EXISTS protections (" +
+                " id int NOT NULL AUTO_INCREMENT," +
+                " point_id INT(12) NOT NULL," +
+                " begin DATETIME NOT NULL," +
+                " end DATETIME NOT NULL," +
                 " user_name VARCHAR(255) NOT NULL," +
                 " PRIMARY KEY (id));");
     }

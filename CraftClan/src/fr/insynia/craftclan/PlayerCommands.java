@@ -6,6 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * Created by Sharowin on 27/05/15.
  */
@@ -20,7 +23,10 @@ public class PlayerCommands {
         if (pcc == null) return false;
 
         Point point = pcc.canCapture(loc);
-        if (point == null) return false;
+        if (point == null) {
+            die("Vous ne pouvez pas capturer ce point !", sender);
+            return true;
+        }
 
         pcc.startCapture(point, p);
         return true;
@@ -62,11 +68,18 @@ public class PlayerCommands {
     // JOIN f.broadcastToMembers("Nouveau membre ! Bienvenue a " + p.getName());
 
     public static boolean cmdStopFarm(CommandSender sender, Location loc) {
-        Player p = (Player) sender;
+        final Player p = (Player) sender;
+
+        sender.sendMessage("Vous allez être téléporté dans 10s");
 
         if (p.getLocation().getWorld() != Bukkit.getWorld(MapState.FARM_WORLD))
             return false;
-        p.teleport(Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation());
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("CraftClan"), new Runnable() {
+            @Override
+            public void run() {
+                p.teleport(Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation());
+            }
+        }, 10 * 20);
         return true;
     }
 
@@ -91,8 +104,6 @@ public class PlayerCommands {
         return true;
     }
 
-    //
-
     public static boolean cmdUpgradePoint(CommandSender sender, Location loc) {
         Player p = (Player) sender;
         PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
@@ -105,7 +116,7 @@ public class PlayerCommands {
         pcc.willUpgrade(point);
         point.upgradePoint();
         pcc.sendMessage("Félicitations, vous avez amélioré le point \"" + point.getName() + "\" !\n"+
-        "Il est désormais de niveau " + point.getLevel());
+                "Il est désormais de niveau " + point.getLevel());
         return true;
 
     }
@@ -216,11 +227,11 @@ public class PlayerCommands {
         }
         String target = args[1];
         PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
-        if (onlinePlayerCC != null) {
+        if (onlinePlayerCC != null && onlinePlayerCC.getFaction().getId() == p.getFaction().getId()) {
             targetFaction.setLeaderName(onlinePlayerCC.getName());
             onlinePlayerCC.sendMessage("Vous êtes maintenant leader de " + targetFaction.getFancyName());
         } else {
-            die("Le joueur doit être en ligne pour devenir leader !", sender);
+            die("Le joueur doit être en ligne et être dans votre faction pour devenir leader !", sender);
         }
         return true;
     }
@@ -280,8 +291,7 @@ public class PlayerCommands {
         PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
 
         Faction targetFaction = p.getFaction();
-        String target = args[1];
-        PlayerCC targetPlayer = MapState.getInstance().findPlayer(target);
+
         if (!targetFaction.getLeaderName().equals(p.getName())) {
             die("Vous n'êtes pas le leader de la faction ;)", sender);
             return true;
@@ -305,6 +315,87 @@ public class PlayerCommands {
             return true;
         }
         ms.removeRequest(r.getId());
+        return true;
+    }
+
+    public static boolean protectPoint(CommandSender sender, String[] args) {
+        Protection protection;
+        Player p = (Player) sender;
+        PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
+
+        Date startTime = new Date();
+        Date endTime = (Date) startTime.clone();
+
+        if (!UtilCC.isInteger(args[1])) {
+            die("Merci de mettre une quantité valable, exemple: /cc protect 2 hour", sender);
+            return true;
+        }
+
+        int amount = Integer.parseInt(args[1]);
+
+        if (amount < 1 || amount > 24) {
+            die("Quantité invalide !", sender);
+        }
+
+        int moneyNeeded = Protection.BASE_AMOUNT;
+
+        switch (args[2]) {
+            case "hour":
+                endTime.setTime(endTime.getTime() + amount * 3600 * 1000); // hour = 3600 seconds * 1000 milliseconds
+                moneyNeeded *= Protection.HOUR_COEF * amount;
+                break;
+            case "day":
+                endTime.setTime(endTime.getTime() + amount * 3600 * 1000 * 24); // day 24 * hour
+                moneyNeeded *= Protection.DAY_COEF * amount;
+                break;
+            case "week":
+                endTime.setTime(endTime.getTime() + amount * 3600 * 1000 * 24 * 7); // week day * 7
+                moneyNeeded *= Protection.WEEK_COEF * amount;
+                break;
+            default:
+                die("L'unité de temps n'est pas valide, utilisez hour, day ou week", sender);
+                return true;
+        }
+
+        Point point = pcc.canProtect(p.getLocation());
+
+        if (point == null) {
+            die("Vous devez être à proximité d'un point de votre faction pour effectuer cette commande", sender);
+            return true;
+        }
+
+        if (pcc.getFaction().getId() != point.getFactionId()) {
+            die("Ce point ne vous appartient pas", sender);
+            return true;
+        }
+
+        if (point.getProtection() != null) {
+            die("Merci d'attendre que la protection précédente expire", sender);
+            return true;
+        }
+
+        if (point.isAttacked()) {
+            die("Vous ne pouvez pas ajouter une protection lorsque votre point subit une attaque\n" +
+                    "Merci d'attendre que l'attaque soit terminée", sender);
+            return true;
+        }
+
+        BigDecimal money = BigDecimal.valueOf(moneyNeeded * point.getLevel()); // 1 day = 100 * 10 * Point level
+
+        if (!EconomyCC.has(pcc.getName(), money)) {
+            die("Vous n'avez pas assez d'argent, il vous faut " + money + "$\n" +
+                    "Tapez /balance pour savoir combien vous avez !", sender);
+            return true;
+        }
+
+        EconomyCC.take(pcc.getName(), money);
+        protection = new Protection(point.getId(), startTime, endTime, pcc.getName());
+        if (protection.save()) {
+            Bukkit.broadcastMessage(pcc.getName() + " a ajouté une protection sur son point: " + point.getName() + "\n" +
+                    "La protection sera active jusqu'au " + UtilCC.dateHumanReadable(endTime));
+        } else {
+            p.sendMessage("Erreur inconnue, votre commande a échoué");
+        }
         return true;
     }
 }

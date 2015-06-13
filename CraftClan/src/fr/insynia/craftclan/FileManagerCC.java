@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 
-public class FileManager {
+public class FileManagerCC {
     private static final String DELIMITER = ",";
 
     public static List<String> fileReadtoListCC(String folder, String filename) {

@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -82,7 +83,7 @@ public class UtilCC {
     }
 
     // Check if an string arg is an integer
-    public static boolean checkArgIsInteger(String arg) {
+    public static boolean isInteger(String arg) {
         try {
             Integer.parseInt(arg);
             return true;
@@ -208,5 +209,10 @@ public class UtilCC {
                 colors.add(c);
         }
         return colors;
+    }
+
+    public static String dateHumanReadable(Date datetime) {
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("dd/MM, HH'h'mm'm'ss's' ");
+        return format.format(datetime);
     }
 }

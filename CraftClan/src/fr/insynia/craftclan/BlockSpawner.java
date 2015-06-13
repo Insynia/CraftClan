@@ -38,10 +38,10 @@ public class BlockSpawner {
         // emptySky(location);
         List<String> blocks;
         List<String> parsed;
-            blocks = FileManager.fileReadtoListCC(DEFAULT_FILE, filename);
+            blocks = FileManagerCC.fileReadtoListCC(DEFAULT_FILE, filename);
             int i = 0;
             while (i < blocks.size()) {
-                parsed = FileManager.parseLine(blocks.get(i));
+                parsed = FileManagerCC.parseLine(blocks.get(i));
                 i += 1;
                 spawnBlock(location, parsed);
         }
@@ -101,7 +101,7 @@ public class BlockSpawner {
                 ((int) (z - delta.getZ())) + "," +
                 block.getType().toString() + "," +
                 ((int) block.getData());
-        FileManager.writeLineToFile(DEFAULT_FILE, filename, line);
+        FileManagerCC.writeLineToFile(DEFAULT_FILE, filename, line);
     }
 
     public static void emptySky(Location location){

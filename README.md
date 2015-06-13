@@ -1,6 +1,6 @@
 # Projet CraftClan @Insynia
 ___
-###### Dernière modification: 06/06/2015
+###### Dernière modification: 10/06/2015
 ###### Par Doc Cobra et Sharowin.
 ___
 
@@ -19,21 +19,36 @@ ___
 ___
 # Mémo
 
+### Vérifier toutes les entrées utilisateurs lors des commandes
+
 ### Ajuster ou ajouter la protection aux entities et pas que aux blocs (onEntityDamage ou un truc du genre contre onBlockBreak)
 
 ### Tp les failers/attackers une fois l'attaque finie lorsque win = false
 
+#### Mettre le tagg de clan devant le pseudo ?
 
-#### Coder les commandes player:
+#### PVP Off au sein de la faction ?
+
+### Coder les commandes player:
 
 
 ##### Liste des membres
 
-##### Tp to point: lorsque proche du spawn
+##### Tp to point: lorsque proche du spawn ?
 
 ##### Seek member: broadcast announce (only if status = open)
 
 ##### Search faction
+
+##### Faction message ? Envoie d'un message par le leader de la faction
+
+##### Mise en place d'un chat de faction ?
+
+### Ajouter les commandes admin:
+
+##### Renommer un point
+
+##### Supprimer un point
 
 
 #### Tp les joueurs qui changent de faction au spawn

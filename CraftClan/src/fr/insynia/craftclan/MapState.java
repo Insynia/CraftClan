@@ -1,8 +1,10 @@
 package fr.insynia.craftclan;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,17 +15,20 @@ import java.util.UUID;
  */
 public class MapState {
     public static final int SPAWN_RADIUS = 196;
+    private static final int BASE_PAYDAY = 5;
     public static String DEFAULT_WORLD = "world";
     public static String FARM_WORLD = "world_farm";
     private static MapState instance = null;
     private List<Point> points;
     private List<PlayerCC> playerCCs;
     private List<Request> requests;
+    private List<Protection> protections;
     private List<Faction> factions;
     private List<Attack> attacks;
 
     protected MapState() {
         points = new ArrayList<Point>();
+        protections = new ArrayList<>();
         requests = new ArrayList<Request>();
         playerCCs = new ArrayList<PlayerCC>();
         factions = new ArrayList<Faction>();
@@ -121,6 +126,11 @@ public class MapState {
         return null;
     }
 
+    public Point findPoint(int id) {
+        for (Point p : points) if (p.getId() == id) return p;
+        return null;
+    }
+
     public Faction findFaction(int id) {
         for (Faction f : factions) if (f.getId() == id) return f;
         return null;
@@ -148,11 +158,11 @@ public class MapState {
         Bukkit.getLogger().info(msg);
     }
 
-    public void removePoint(String name) {
+    public void removePoint(int id) {
         Iterator<Point> itr = points.iterator();
         while (itr.hasNext()) {
             Point point = itr.next();
-            if (point.getName().equals(name)) {
+            if (point.getId() == id) {
                 itr.remove();
             }
         }
@@ -196,8 +206,10 @@ public class MapState {
         Iterator<Attack> itr = attacks.iterator();
         while (itr.hasNext()) {
             Attack a = itr.next();
-            if (a.getAttackers().size() == 0 || a.isWon())
+            if (a.getAttackers().size() == 0 || a.isWon()) {
+                Bukkit.getLogger().info("Attack purged");
                 itr.remove();
+            }
         }
     }
 
@@ -244,5 +256,46 @@ public class MapState {
     public Request findRequestByPlayer(String playerName) {
         for (Request r : requests) if (r.getPlayerName().equals(playerName)) return r;
         return null;
+    }
+
+    public void addProtection(Protection protection) {
+        protections.add(protection);
+    }
+
+    public Protection findProtectionForPoint(int pointId) {
+        for (Protection p : protections)
+            if (p.getPointId() == pointId)
+                return (p);
+        return null;
+    }
+
+    public void removeProtection(int id) {
+        Iterator<Request> itr = requests.iterator();
+        while (itr.hasNext()) {
+            Request request = itr.next();
+            if (request.getId() == id) {
+                request.deleteDb();
+                itr.remove();
+            }
+        }
+    }
+
+    public Attack findAttackByPointId(int pointId) {
+        for (Attack a : attacks) {
+            if (a.getPoint().getId() == pointId)
+                return a;
+        }
+        return null;
+    }
+
+    public void payDay() {
+        for (PlayerCC pcc : playerCCs) {
+            for (Point p : points) {
+                if (p.getFactionId() == pcc.getFaction().getId()) {
+                    EconomyCC.give(pcc.getName(), BigDecimal.valueOf(p.getLevel() * BASE_PAYDAY));
+                    pcc.sendMessage(ChatColor.GREEN + "+" + p.getLevel() * BASE_PAYDAY + "$");
+                }
+            }
+        }
     }
 }
