@@ -4,8 +4,6 @@ ___
 ###### Par Doc Cobra et Sharowin.
 ___
 
-**[Tuto](#tuto)**
-
 **[Concept](#concept)**
 
 **[Installation](#installation)**
@@ -19,21 +17,23 @@ ___
 ___
 # Mémo
 
-### Optimize
-public class CustomComparator implements Comparator<MyObject>
+## First
 
 ### Vérifier toutes les entrées utilisateurs lors des commandes
 
-### Ajuster ou ajouter la protection aux entities et pas que aux blocs (onEntityDamage ou un truc du genre contre onBlockBreak)
-
 ### Tp les failers/attackers une fois l'attaque finie lorsque win = false
 
-#### Mettre le tagg de clan devant le pseudo ?
+### Remove les factions lors d'un /cc leave du leader si personne n'est dedans + mettre les points de la faction en Neutre
 
-#### PVP Off au sein de la faction ?
+
+### Optimize
+public class CustomComparator implements Comparator<MyObject>
+
+## Second
+
+#### Tp les joueurs qui changent de faction au spawn
 
 ### Coder les commandes player:
-
 
 ##### Liste des membres
 
@@ -42,6 +42,16 @@ public class CustomComparator implements Comparator<MyObject>
 ##### Seek member: broadcast announce (only if status = open)
 
 ##### Search faction
+
+## Last
+
+### Ajuster ou ajouter la protection aux entities et pas que aux blocs (onEntityDamage ou un truc du genre contre onBlockBreak)
+
+### Mettre le tagg de clan devant le pseudo ?
+
+### PVP Off au sein de la faction ?
+
+### Coder les commandes player:
 
 ##### Faction message ? Envoie d'un message par le leader de la faction
 
@@ -53,11 +63,6 @@ public class CustomComparator implements Comparator<MyObject>
 
 ##### Supprimer un point
 
-
-#### Tp les joueurs qui changent de faction au spawn
-
-#### Remove les factions lors d'un /cc leave du leader si personne n'est dedans + mettre les points de la faction en Neutre
-
 #### Coder le site et la map
 
 
@@ -66,17 +71,6 @@ public class CustomComparator implements Comparator<MyObject>
 #### Ajouter un script autosave si le screen -ls minecraft est bon + autosave 7j
 
 ___
-
-## Tuto
-
-### A faire
-
-* La zone de farming
-
-* Rejoindre une faction
-
-* Capturer un point
-
 
 ## Concept
 
