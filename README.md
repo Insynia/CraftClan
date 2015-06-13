@@ -19,6 +19,9 @@ ___
 ___
 # Mémo
 
+### Optimize
+public class CustomComparator implements Comparator<MyObject>
+
 ### Vérifier toutes les entrées utilisateurs lors des commandes
 
 ### Ajuster ou ajouter la protection aux entities et pas que aux blocs (onEntityDamage ou un truc du genre contre onBlockBreak)
