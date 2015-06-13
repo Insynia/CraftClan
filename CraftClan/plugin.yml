@@ -1,5 +1,5 @@
 name: CraftClan
-main: fr.insynia.craftclan.CraftClanPlugin
+main: fr.insynia.craftclan.Base.CraftClanPlugin
 version: 1.0
 commands:
    cc:
