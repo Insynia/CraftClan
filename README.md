@@ -17,31 +17,23 @@ ___
 ___
 # Mémo
 
+
+## Lock Player.CC:236 (if deja attacked) autres attacks si une attaque est en cours sur le point + leave join newfaction (tout ce qui fait leave une faction)
+Empecher le leader de se kick
+
 ## First
 
+### Set leader hors ligne
+
+### Centraliser les changements de faction (cf plus haut)
+
 ### Vérifier toutes les entrées utilisateurs lors des commandes
-
-### Tp les failers/attackers une fois l'attaque finie lorsque win = false
-
-### Remove les factions lors d'un /cc leave du leader si personne n'est dedans + mettre les points de la faction en Neutre
-
-
-### Optimize
-public class CustomComparator implements Comparator<MyObject>
 
 ## Second
 
 #### Tp les joueurs qui changent de faction au spawn
 
-### Coder les commandes player:
-
-##### Liste des membres
-
-##### Tp to point: lorsque proche du spawn ?
-
 ##### Seek member: broadcast announce (only if status = open)
-
-##### Search faction
 
 ## Last
 
@@ -66,9 +58,9 @@ public class CustomComparator implements Comparator<MyObject>
 #### Coder le site et la map
 
 
-#### Configurer Essentials et créer une zone de vente
+#### Créer une zone de vente
 
-#### Ajouter un script autosave si le screen -ls minecraft est bon + autosave 7j
+#### Ajouter un script autosave si le screen -ls minecraft est bon
 
 ___
 
