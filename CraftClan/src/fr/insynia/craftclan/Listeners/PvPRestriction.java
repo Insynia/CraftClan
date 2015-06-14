@@ -32,10 +32,13 @@ public class PvPRestriction implements Listener {
         if (damagercc.isAtHome(target.getLocation()) || targetPoint == null) // Check if the target is at damager's home, then it is never restricted
             return false;
 
-        Attack attack = damagercc.isOnAttackOn(targetPoint);
-        if (attack != null)
-            if (attack.playerFailed(damagercc)) // If player failed the attack, he is neutralized
+        Attack attack = damagercc.hasFailedOn(targetPoint);
+        if (attack != null) {
+            if (attack.playerFailed(damagercc)) { // If player failed the attack, he is neutralized
+                damagercc.sendMessage("Vous avez échoué votre attaque, vous ne pouvez pas vous battre");
                 return true;
+            }
+        }
 
         return targetPoint.getProtection() != null && targetcc.isAtHome(target.getLocation()); // targetPlayer is at home and his point is protected ?
     }

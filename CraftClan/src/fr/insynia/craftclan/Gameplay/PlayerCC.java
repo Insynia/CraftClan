@@ -356,4 +356,14 @@ public class PlayerCC implements Loadable {
     public boolean isLeader() {
         return name.equals(faction.getLeaderName());
     }
+
+    public Attack hasFailedOn(Point point) {
+        if (point == null) return null;
+        List<Attack> attacks = MapState.getInstance().getAttacks();
+
+        for (Attack a : attacks)
+            if (a.getFactionId() == faction.getId() && a.getPoint().getName().equals(point.getName()) && a.playerFailed(this))
+                return a;
+        return null;
+    }
 }
