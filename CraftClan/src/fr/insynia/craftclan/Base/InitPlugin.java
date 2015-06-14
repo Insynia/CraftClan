@@ -1,7 +1,9 @@
 package fr.insynia.craftclan.Base;
 
 import fr.insynia.craftclan.Adapters.FactionList;
+import fr.insynia.craftclan.Adapters.FactionRequestList;
 import fr.insynia.craftclan.Adapters.PointList;
+import fr.insynia.craftclan.Adapters.ProtectionList;
 import fr.insynia.craftclan.Gameplay.Generator;
 import fr.insynia.craftclan.Gameplay.MapState;
 import org.bukkit.Bukkit;
@@ -118,5 +120,9 @@ public class InitPlugin {
         sqlm.fetchQuery(query, new PointList());
         query = "SELECT * FROM factions";
         sqlm.fetchQuery(query, new FactionList());
+        query = "SELECT * FROM protections";
+        sqlm.fetchQuery(query, new ProtectionList());
+        query = "SELECT * FROM faction_requests";
+        sqlm.fetchQuery(query, new FactionRequestList());
     }
 }
