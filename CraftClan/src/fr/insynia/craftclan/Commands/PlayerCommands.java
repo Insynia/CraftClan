@@ -29,10 +29,7 @@ public class PlayerCommands {
         if (pcc == null) return false;
 
         Point point = pcc.canCapture(loc);
-        if (point == null) {
-            die("Vous ne pouvez pas capturer ce point !", sender);
-            return true;
-        }
+        if (point == null) return live("Vous ne pouvez pas capturer ce point !", sender);
 
         pcc.startCapture(point, p);
         return true;
@@ -41,33 +38,22 @@ public class PlayerCommands {
     public static boolean newFaction(CommandSender sender, String[] args) {
         PlayerCC p = MapState.getInstance().findPlayer(((Player) sender).getUniqueId());
 
-        if (p.isLeader()) {
-            die("Vous êtes le leader de votre faction, vous ne pouvez pas la quitter !", sender);
-           return true;
-        }
+        if (p.isLeader()) return live("Vous êtes le leader de votre faction, vous ne pouvez pas la quitter !", sender);
 
-        if (!UtilCC.validatorName(args[1])) {
-            die("Le nom est trop long (Maximum: " + UtilCC.MAX_NAME_CHAR_LENGTH + " caractères), ou comporte des caractères interdits", sender);
-            return true;
-        }
+        if (!UtilCC.validatorName(args[1]))
+            return live("Le nom est trop long (Maximum: " + UtilCC.MAX_NAME_CHAR_LENGTH + " caractères), ou comporte des caractères interdits", sender);
 
         if (!UtilCC.checkColor(args[2])) {
             String msg = "Couleurs valides: ";
             for (ChatColor c : UtilCC.getRealColors())
                 msg += c.name() + " ";
-            die(msg, sender);
-            return true; // Avoid default help
+            return live(msg, sender);
         }
 
-        if (UtilCC.checkFactionExists(args[1])) {
-            die("Nom de faction déjà utilisé", sender);
-            return true;
-        }
+        if (UtilCC.checkFactionExists(args[1])) return live("Nom de faction déjà utilisé", sender);
 
-        if (MapState.getInstance().findRequestByPlayer(p.getName()) != null) {
-            die("Vous avez une requête en cours, impossible de créer une faction. Tapez \"/cc cancelrequest\" pour annuler votre requête", sender);
-            return true;
-        }
+        if (MapState.getInstance().findRequestByPlayer(p.getName()) != null)
+            return live("Vous avez une requête en cours, impossible de créer une faction. Tapez \"/cc cancelrequest\" pour annuler votre requête", sender);
 
         Faction f = new Faction(0, args[1], args[2], 1, "RESTRICTED", p.getName());
 
@@ -80,8 +66,6 @@ public class PlayerCommands {
         else sender.sendMessage("A faction named \"" + args[1] + "\" already exists");
         return ret;
     }
-
-    // JOIN f.broadcastToMembers("Nouveau membre ! Bienvenue a " + p.getName());
 
     public static boolean cmdStopFarm(CommandSender sender, Location loc) {
         final Player p = (Player) sender;
@@ -126,7 +110,7 @@ public class PlayerCommands {
         if (pcc == null) return false;
 
         Point point = pcc.canUpgrade(loc);
-        if (point == null) return die("Vous ne pouvez pas améliorer ce point \n" +
+        if (point == null) return live("Vous ne pouvez pas améliorer ce point \n" +
                 "Le point doit appartenir à votre faction et vous devez être placé sur lui \n" +
                 "Il doit être de niveau inférieur à " + Point.POINT_MAX_LEVEL, sender);
         pcc.willUpgrade(point);
@@ -137,21 +121,13 @@ public class PlayerCommands {
 
     }
 
-    private static boolean die(String msg, CommandSender sender) {
-        sender.sendMessage(msg);
-        return false;
-    }
-
     // Faction Organization
 
     public static boolean listFactionMembers(CommandSender sender) {
         MapState ms = MapState.getInstance();
         PlayerCC pcc = ms.findPlayer(((Player) sender).getUniqueId());
 
-        if (pcc.getFaction() == null) {
-            die("Vous n'appartenez à aucune faction", sender);
-            return true;
-        }
+        if (pcc.getFaction() == null) return live("Vous n'appartenez à aucune faction", sender);
 
         Faction playerFaction = pcc.getFaction();
         List<PlayerCC> factionMembers = playerFaction.getMembers();
@@ -173,26 +149,18 @@ public class PlayerCommands {
         Faction playerFaction = p.getFaction();
         Faction targetFaction = ms.findFaction(args[1]);
 
-        if (targetFaction == null) {
-            die("Cette faction n'existe pas", sender);
-            return true;
-        }
-        if (playerFaction.getLeaderName().equals(p.getName())) {
-            die("Vous êtes le leader de votre faction ! Pas question de déserter :(", sender);
-            return true;
-        }
-        if (ms.findRequestByPlayer(p.getName()) != null) {
-            die("Chaque chose en son temps, vous avez déjà une requête en cours", sender);
-            return true;
-        }
-        if (targetFaction.getStatus().equals("CLOSED")) {
-            die("Cette faction est fermée", sender);
-            return true;
-        }
-        if (targetFaction.getMembers().size() >= MAX_MEMBERS) {
-            die("Cette faction est pleine !", sender);
-            return true;
-        }
+        if (targetFaction == null) return live("Cette faction n'existe pas", sender);
+
+        if (playerFaction.getLeaderName().equals(p.getName()))
+            return live("Vous êtes le leader de votre faction ! Pas question de déserter :(", sender);
+
+        if (ms.findRequestByPlayer(p.getName()) != null)
+            return live("Chaque chose en son temps, vous avez déjà une requête en cours", sender);
+
+        if (targetFaction.getStatus().equals("CLOSED")) return live("Cette faction est fermée", sender);
+
+        if (targetFaction.getMembers().size() >= MAX_MEMBERS) return live("Cette faction est pleine !", sender);
+
         if (targetFaction.getStatus().equals("OPEN")) {
             if (!p.addToFaction(targetFaction.getName()))
                 return false;
@@ -210,16 +178,13 @@ public class PlayerCommands {
 
         Faction targetFaction = p.getFaction();
 
-        if (!targetFaction.getLeaderName().equals(p.getName())) {
-            die("Vous n'êtes pas le leader de la faction ;)", sender);
-            return true;
-        }
+        if (!targetFaction.getLeaderName().equals(p.getName())) return live("Vous n'êtes pas le leader de la faction ;)", sender);
+
         String target = args[1];
         PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
-        if (ms.findRequestByPlayer(args[1]) == null) {
-            die("Aucune requête de la part du joueur", sender);
-            return true;
-        }
+
+        if (ms.findRequestByPlayer(args[1]) == null) return live("Aucune requête de la part du joueur", sender);
+
         if (onlinePlayerCC != null) {
             onlinePlayerCC.addToFaction(targetFaction.getName());
             ms.removeRequest(ms.findRequestByPlayer(args[1]).getId());
@@ -239,14 +204,10 @@ public class PlayerCommands {
 
         Faction targetFaction = p.getFaction();
 
-        if (!targetFaction.getLeaderName().equals(p.getName())) {
-            die("Vous n'êtes pas le leader de la faction ;)", sender);
-            return true;
-        }
-        if (ms.findRequestByPlayer(args[1]) == null) {
-            die("Aucune requête de la part du joueur", sender);
-            return true;
-        }
+        if (!targetFaction.getLeaderName().equals(p.getName())) return live("Vous n'êtes pas le leader de la faction ;)", sender);
+
+        if (ms.findRequestByPlayer(args[1]) == null) return live("Aucune requête de la part du joueur", sender);
+
         String target = args[1];
         PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
         if (onlinePlayerCC != null) {
@@ -265,10 +226,8 @@ public class PlayerCommands {
 
         Faction targetFaction = p.getFaction();
 
-        if (!targetFaction.getLeaderName().equals(p.getName())) {
-            die("Vous n'êtes pas le leader de la faction ;)", sender);
-            return true;
-        }
+        if (!targetFaction.getLeaderName().equals(p.getName())) return live("Vous n'êtes pas le leader de la faction ;)", sender);
+
         String target = args[1];
         PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
         if (onlinePlayerCC != null && onlinePlayerCC.getFaction().getId() == p.getFaction().getId()) {
@@ -286,10 +245,8 @@ public class PlayerCommands {
 
         Faction targetFaction = p.getFaction();
 
-        if (targetFaction.getLeaderName().equals(p.getName())) {
-            die("Vous êtes le leader de votre faction ! Pas question de déserter :(", sender);
-            return true;
-        }
+        if (targetFaction.getLeaderName().equals(p.getName())) return live("Vous êtes le leader de votre faction ! Pas question de déserter :(", sender);
+
         p.addToFaction("Newbie");
         p.sendMessage("Vous retournez dans la faction " + p.getFaction().getFancyName());
         return true;
@@ -302,10 +259,8 @@ public class PlayerCommands {
         Faction targetFaction = p.getFaction();
         String target = args[1];
         PlayerCC targetPlayer = MapState.getInstance().findPlayer(target);
-        if (!targetFaction.getLeaderName().equals(p.getName())) {
-            die("Vous n'êtes pas le leader de la faction ;)", sender);
-            return true;
-        }
+        if (!targetFaction.getLeaderName().equals(p.getName())) return live("Vous n'êtes pas le leader de la faction ;)", sender);
+
         if (targetPlayer != null) {
             targetPlayer.addToFaction("Newbie");
             targetPlayer.sendMessage("Vous avez été kick de votre faction :(");
@@ -336,14 +291,11 @@ public class PlayerCommands {
 
         Faction targetFaction = p.getFaction();
 
-        if (!targetFaction.getLeaderName().equals(p.getName())) {
-            die("Vous n'êtes pas le leader de la faction ;)", sender);
-            return true;
-        }
-        if (!args[1].equalsIgnoreCase("closed") && !args[1].equalsIgnoreCase("restricted") && !args[1].equalsIgnoreCase("open")) {
-            die("Statuts valides: closed, open, restricted", sender);
-            return true;
-        }
+        if (!targetFaction.getLeaderName().equals(p.getName())) return live("Vous n'êtes pas le leader de la faction ;)", sender);
+
+        if (!args[1].equalsIgnoreCase("closed") && !args[1].equalsIgnoreCase("restricted") && !args[1].equalsIgnoreCase("open"))
+            return live("Statuts valides: closed, open, restricted", sender);
+
         targetFaction.setStatus(args[1].toUpperCase());
         targetFaction.broadcastToMembers(p.getName() + " a modifié le statut de la faction en " + args[1].toUpperCase());
         return targetFaction.update();
@@ -354,10 +306,8 @@ public class PlayerCommands {
         PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
 
         Request r = ms.findRequestByPlayer(p.getName());
-        if (r == null) {
-            die("Aucune requête en cours", sender);
-            return true;
-        }
+        if (r == null) return live("Aucune requête en cours", sender);
+
         ms.removeRequest(r.getId());
         return true;
     }
@@ -370,16 +320,12 @@ public class PlayerCommands {
         Date startTime = new Date();
         Date endTime = (Date) startTime.clone();
 
-        if (!UtilCC.isInteger(args[1])) {
-            die("Merci de mettre une quantité valable, exemple: /cc protect 2 hour", sender);
-            return true;
-        }
+        if (!UtilCC.isInteger(args[1])) return live("Merci de mettre une quantité valable, exemple: /cc protect 2 hour", sender);
 
         int amount = Integer.parseInt(args[1]);
 
-        if (amount < 1 || amount > 24) {
+        if (amount < 1 || amount > 24)
             die("Quantité invalide !", sender);
-        }
 
         int moneyNeeded = Protection.BASE_AMOUNT;
 
@@ -397,40 +343,27 @@ public class PlayerCommands {
                 moneyNeeded *= Protection.WEEK_COEF * amount;
                 break;
             default:
-                die("L'unité de temps n'est pas valide, utilisez hour, day ou week", sender);
-                return true;
+                return live("L'unité de temps n'est pas valide, utilisez hour, day ou week", sender);
         }
 
         Point point = pcc.canProtect(p.getLocation());
 
-        if (point == null) {
-            die("Vous devez être à proximité d'un point de votre faction pour effectuer cette commande", sender);
-            return true;
-        }
+        if (point == null)
+            return live("Vous devez être à proximité d'un point de votre faction pour effectuer cette commande", sender);
 
-        if (pcc.getFaction().getId() != point.getFactionId()) {
-            die("Ce point ne vous appartient pas", sender);
-            return true;
-        }
+        if (pcc.getFaction().getId() != point.getFactionId()) return live("Ce point ne vous appartient pas", sender);
 
-        if (point.getProtection() != null) {
-            die("Merci d'attendre que la protection précédente expire", sender);
-            return true;
-        }
+        if (point.getProtection() != null) return live("Merci d'attendre que la protection précédente expire", sender);
 
-        if (point.isAttacked()) {
-            die("Vous ne pouvez pas ajouter une protection lorsque votre point subit une attaque\n" +
+        if (point.isAttacked())
+            return live("Vous ne pouvez pas ajouter une protection lorsque votre point subit une attaque\n" +
                     "Merci d'attendre que l'attaque soit terminée", sender);
-            return true;
-        }
 
         BigDecimal money = BigDecimal.valueOf(moneyNeeded * point.getLevel()); // 1 day = 100 * 10 * Point level
 
-        if (!EconomyCC.has(pcc.getName(), money)) {
-            die("Vous n'avez pas assez d'argent, il vous faut " + money + "$\n" +
+        if (!EconomyCC.has(pcc.getName(), money))
+            return live("Vous n'avez pas assez d'argent, il vous faut " + money + "$\n" +
                     "Tapez /balance pour savoir combien vous avez !", sender);
-            return true;
-        }
 
         EconomyCC.take(pcc.getName(), money);
         protection = new Protection(point.getId(), startTime, endTime, pcc.getName());
@@ -440,6 +373,16 @@ public class PlayerCommands {
         } else {
             p.sendMessage("Erreur inconnue, votre commande a échoué");
         }
+        return true;
+    }
+
+    private static boolean die(String msg, CommandSender sender) {
+        sender.sendMessage(msg);
+        return false;
+    }
+
+    private static boolean live(String msg, CommandSender sender) {
+        sender.sendMessage(msg);
         return true;
     }
 }
