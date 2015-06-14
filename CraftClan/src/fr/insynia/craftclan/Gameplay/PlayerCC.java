@@ -322,4 +322,34 @@ public class PlayerCC implements Loadable {
         }
         return null;
     }
+
+    public boolean isOnPoint(Point point) {
+        Player p = Bukkit.getPlayer(uuid);
+        if (p == null) return false;
+        return (p.getLocation().getZ() <= point.getLocation().getZ() + point.getRadius() &&
+                p.getLocation().getZ() >= point.getLocation().getZ() - point.getRadius() &&
+                p.getLocation().getX() <= point.getLocation().getX() + point.getRadius() &&
+                p.getLocation().getX() >= point.getLocation().getX() - point.getRadius());
+    }
+
+    public void goToNearestHome() {
+        int distance = -1;
+        int curDistance;
+        Location target = Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation();
+
+        Player p = Bukkit.getPlayer(uuid);
+        if (p == null) return;
+
+        for (Point point : MapState.getInstance().getPoints()) {
+            if (point.getFactionId() == faction.getId()) {
+                curDistance = UtilCC.distanceBasicFull(point.getLocation(), p.getLocation());
+                if (distance == -1 || curDistance < distance) {
+                    distance = curDistance;
+                    target = point.getLocation().clone();
+                }
+            }
+        }
+        p.teleport(target);
+        p.sendMessage("Vous avez été téléporté au point sûr le plus proche");
+    }
 }

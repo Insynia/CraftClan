@@ -1,7 +1,5 @@
 package fr.insynia.craftclan.Gameplay;
 
-import fr.insynia.craftclan.Gameplay.MapState;
-import fr.insynia.craftclan.Gameplay.Point;
 import fr.insynia.craftclan.Utils.FileManagerCC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,7 +16,6 @@ import java.util.List;
  */
 public class BlockSpawner {
     public static final String DEFAULT_FILE = "structures/";
-    private static final String DEFAULT_WORLD = "world";
 
     public static void createBeacon(Location location) {
         int x = location.getBlockX();

@@ -134,12 +134,23 @@ public class Attack implements IDable {
         win = isWon;
         end_time = new Date();
         update();
-        if (!isWon)
-            Bukkit.broadcastMessage("La faction " + MapState.getInstance().findFaction(faction_id).getFancyName() +
-                    " a raté son attaque contre la faction " +  MapState.getInstance().findFaction(target_id).getFancyName());
-        else
-            Bukkit.broadcastMessage("La faction " + MapState.getInstance().findFaction(faction_id).getFancyName() +
-                    " a capturé le point \"" + point.getName() + "\" à la faction " +  MapState.getInstance().findFaction(target_id).getFancyName());
+        Faction hostileFaction = MapState.getInstance().findFaction(faction_id);
+        Faction targetFaction = MapState.getInstance().findFaction(target_id);
+        if (!isWon) {
+            Bukkit.broadcastMessage("La faction " + hostileFaction.getFancyName() +
+                    " a raté son attaque contre la faction " + targetFaction.getFancyName());
+            for (PlayerCC pcc : hostileFaction.getOnlineMembers()) {
+                if (pcc.isOnPoint(point))
+                    pcc.goToNearestHome();
+            }
+        } else {
+            Bukkit.broadcastMessage("La faction " + hostileFaction.getFancyName() +
+                    " a capturé le point \"" + point.getName() + "\" à la faction " + targetFaction.getFancyName());
+            for (PlayerCC pcc : targetFaction.getOnlineMembers()) {
+                if (pcc.isOnPoint(point))
+                    pcc.goToNearestHome();
+            }
+        }
         restoreBlocks();
     }
 
