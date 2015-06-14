@@ -20,6 +20,7 @@ import java.util.List;
 public class PlayerCommands {
 
     private static final int DISTANCE_FARM_CMD = 50;
+    private static final int MAX_MEMBERS = 20;
 
     // Capture a point
     public static boolean cmdCapture(CommandSender sender, Location loc) {
@@ -186,6 +187,10 @@ public class PlayerCommands {
         }
         if (targetFaction.getStatus().equals("CLOSED")) {
             die("Cette faction est fermée", sender);
+            return true;
+        }
+        if (targetFaction.getMembers().size() >= MAX_MEMBERS) {
+            die("Cette faction est pleine !", sender);
             return true;
         }
         if (targetFaction.getStatus().equals("OPEN")) {

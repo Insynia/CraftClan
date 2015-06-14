@@ -350,7 +350,7 @@ public class PlayerCC implements Loadable {
             }
         }
         p.teleport(target);
-        p.sendMessage("Vous avez été téléporté au point sûr le plus proche");
+        p.sendMessage(ChatColor.GREEN + "Vous avez été téléporté au point sûr le plus proche" + ChatColor.RESET);
     }
 
     public boolean isLeader() {
