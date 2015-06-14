@@ -37,8 +37,12 @@ public class PlayerCommands {
 
     public static boolean newFaction(CommandSender sender, String[] args) {
         PlayerCC p = MapState.getInstance().findPlayer(((Player) sender).getUniqueId());
+        Faction  playerFaction = p.getFaction();
+        int factionMembers = playerFaction.getMembers().size();
 
-        if (p.isLeader()) return live("Vous êtes le leader de votre faction, vous ne pouvez pas la quitter !", sender);
+        if (p.isLeader() && factionMembers > 1) return live("Vous êtes le leader de votre faction !\n" +
+                "Vous devez être seul dans la faction, ou désigner un autre leader en tapant /cc setleader [Nom]\n" +
+                "Voici les membres de votre faction: " + playerFaction.listMembers(), sender);
 
         if (!UtilCC.validatorName(args[1]))
             return live("Le nom est trop long (Maximum: " + UtilCC.MAX_NAME_CHAR_LENGTH + " caractères), ou comporte des caractères interdits", sender);
@@ -124,21 +128,20 @@ public class PlayerCommands {
     // Faction Organization
 
     public static boolean listFactionMembers(CommandSender sender) {
-        MapState ms = MapState.getInstance();
-        PlayerCC pcc = ms.findPlayer(((Player) sender).getUniqueId());
+        PlayerCC pcc = MapState.getInstance().findPlayer(sender.getName());
 
         if (pcc.getFaction() == null) return live("Vous n'appartenez à aucune faction", sender);
 
-        Faction playerFaction = pcc.getFaction();
-        List<PlayerCC> factionMembers = playerFaction.getMembers();
-
-        pcc.sendMessage("Votre faction comporte " + factionMembers.size() + (factionMembers.size() > 1 ? " membres:" : " membre:" ) + "\n");
-
+        Faction f = pcc.getFaction();
         String members = "";
-        for (PlayerCC p : factionMembers) {
-            members = members + p.getName() + "\n";
+        List<PlayerCC> memberList = f.getMembers();
+
+        if (memberList.size() == 0) return live("La faction est vide", sender);
+        for (PlayerCC p : memberList) {
+            members += (p.isLeader() ? ChatColor.BLUE : ChatColor.RESET) + p.getName() + ChatColor.RESET + (p.equals(memberList.get(memberList.size() - 1)) ? "." : ", ");
         }
-        pcc.sendMessage(members);
+        sender.sendMessage("Votre faction comporte " + memberList.size() +
+                (memberList.size() > 1 ? " membres: " : " membre:") + "\n" + members);
         return true;
     }
 
@@ -148,7 +151,11 @@ public class PlayerCommands {
 
         Faction playerFaction = p.getFaction();
         Faction targetFaction = ms.findFaction(args[1]);
+        int factionMembers = playerFaction.getMembers().size();
 
+        if (p.isLeader() && factionMembers > 1) return live("Vous êtes le leader de votre faction !\n" +
+                "Vous devez être seul dans la faction, ou désigner un autre leader en tapant /cc setleader [Nom]\n" +
+                "Voici les membres de votre faction: " + playerFaction.listMembers(), sender);
         if (targetFaction == null) return live("Cette faction n'existe pas", sender);
 
         if (playerFaction.getLeaderName().equals(p.getName()))
@@ -220,6 +227,8 @@ public class PlayerCommands {
         return true;
     }
 
+    // Mettre en place même si le gars est déconnecté
+    // Broadcast à la faction
     public static boolean setLeader(CommandSender sender, String[] args) {
         MapState ms = MapState.getInstance();
         PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
@@ -232,7 +241,8 @@ public class PlayerCommands {
         PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
         if (onlinePlayerCC != null && onlinePlayerCC.getFaction().getId() == p.getFaction().getId()) {
             targetFaction.setLeaderName(onlinePlayerCC.getName());
-            onlinePlayerCC.sendMessage("Vous êtes maintenant leader de " + targetFaction.getFancyName());
+            if (targetFaction.update()) onlinePlayerCC.sendMessage("Vous êtes maintenant leader de " + targetFaction.getFancyName());
+            else live("Erreur inconnue", sender);
         } else {
             die("Le joueur doit être en ligne et être dans votre faction pour devenir leader !", sender);
         }
@@ -244,9 +254,11 @@ public class PlayerCommands {
         PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
 
         Faction targetFaction = p.getFaction();
-
-        if (targetFaction.getLeaderName().equals(p.getName())) return live("Vous êtes le leader de votre faction ! Pas question de déserter :(", sender);
-
+        int factionMembers = targetFaction.getMembers().size();
+        if (p.isLeader() && factionMembers > 1) return live("Vous êtes le leader de votre faction !\n" +
+                "Vous devez être seul dans la faction, ou désigner un autre leader en tapant /cc setleader [Nom]\n" +
+                "Voici les membres de votre faction: " + targetFaction.listMembers(), sender);
+        if (factionMembers == 1) targetFaction.neutralize();
         p.addToFaction("Newbie");
         p.sendMessage("Vous retournez dans la faction " + p.getFaction().getFancyName());
         return true;
@@ -382,7 +394,7 @@ public class PlayerCommands {
     }
 
     private static boolean live(String msg, CommandSender sender) {
-        sender.sendMessage(msg);
+        sender.sendMessage(ChatColor.RED + msg + ChatColor.RESET);
         return true;
     }
 }
