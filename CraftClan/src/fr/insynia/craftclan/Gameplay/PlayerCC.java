@@ -234,6 +234,7 @@ public class PlayerCC implements Loadable {
     }
 
     public boolean willAttack(Block block) {
+        if (UtilCC.blockAttackBlacklist(block)) return false;
         Point point = MapUtils.getLocationPoint(block.getLocation());
         if (point == null)
             return false;

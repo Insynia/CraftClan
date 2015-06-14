@@ -5,6 +5,7 @@ import fr.insynia.craftclan.Gameplay.MapState;
 import fr.insynia.craftclan.Gameplay.PlayerCC;
 import fr.insynia.craftclan.Gameplay.Point;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -233,6 +234,18 @@ public class UtilCC {
     public static boolean containsForbiddenChars(String arg) {
         char[] forbiddenChars = {'"', '$', '|', '{', '}', '/', '\\'};
         for (char c : forbiddenChars) if (arg.contains(String.valueOf(c))) return true;
+        return false;
+    }
+
+    public static boolean blockAttackBlacklist(Block block) {
+        Material type = block.getType();
+        if (type == Material.SNOW || type == Material.RED_ROSE ||
+                type == Material.LONG_GRASS || type == Material.RED_MUSHROOM ||
+                type == Material.BROWN_MUSHROOM || type == Material.YELLOW_FLOWER ||
+                type == Material.WATER_LILY || type == Material.DOUBLE_PLANT ||
+                type == Material.SUGAR_CANE_BLOCK || type == Material.DEAD_BUSH ||
+                type == Material.CROPS || type == Material.VINE || type == Material.COCOA)
+            return true;
         return false;
     }
 }
