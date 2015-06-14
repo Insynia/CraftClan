@@ -23,6 +23,8 @@ Empecher le leader de se kick
 
 ## First
 
+### Set leader hors ligne
+
 ### Centraliser les changements de faction (cf plus haut)
 
 ### Vérifier toutes les entrées utilisateurs lors des commandes
