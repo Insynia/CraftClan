@@ -322,4 +322,8 @@ public class PlayerCC implements Loadable {
         }
         return null;
     }
+
+    public boolean isLeader() {
+        return name.equals(faction.getLeaderName());
+    }
 }

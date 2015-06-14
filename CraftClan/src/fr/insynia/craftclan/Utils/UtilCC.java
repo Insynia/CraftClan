@@ -14,7 +14,10 @@ import java.util.List;
 /**
  * Created by Doc on 13/05/2015.
  */
+
 public class UtilCC {
+
+    public final static int MAX_NAME_CHAR_LENGTH = 20;
 
     public static int getFloorY(int x, int z) {
         Location loc = new Location(Bukkit.getWorld(MapState.DEFAULT_WORLD), x, 0, z);
@@ -218,5 +221,18 @@ public class UtilCC {
     public static String dateHumanReadable(Date datetime) {
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("dd/MM, HH'h'mm'm'ss's' ");
         return format.format(datetime);
+    }
+
+    // Check if a name can be used.
+    // Needs to check: Length, Forbidden characters
+
+    public static boolean validatorName(String arg) {
+        return !containsForbiddenChars(arg) && arg.length() <= MAX_NAME_CHAR_LENGTH;
+    }
+
+    public static boolean containsForbiddenChars(String arg) {
+        char[] forbiddenChars = {'"', '$', '|', '{', '}', '/', '\\'};
+        for (char c : forbiddenChars) if (arg.contains(String.valueOf(c))) return true;
+        return false;
     }
 }
