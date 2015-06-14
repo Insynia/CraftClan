@@ -21,6 +21,7 @@ public class Faction implements IDable {
     private int level;
 
     public final static String BASE_FACTION = "Newbie";
+    public final static String BASE_NEUTRAL = "Neutre";
 
     public Faction(int factionId, String name, String color, int level, String status, String leaderName) {
         this.factionId = factionId;
@@ -143,7 +144,7 @@ public class Faction implements IDable {
         List<Point> factionPoints = MapState.getInstance().getFactionPoints(factionId);
         if (factionPoints == null) return false;
         for (Point p : factionPoints) {
-            p.addToFaction(BASE_FACTION);
+            p.addToFaction(BASE_NEUTRAL);
             p.setPointLevel(1);
         }
         return true;
