@@ -20,6 +20,9 @@ public class Faction implements IDable {
     private String leaderName;
     private int level;
 
+    public final static String BASE_FACTION = "Newbie";
+    public final static String BASE_NEUTRAL = "Neutre";
+
     public Faction(int factionId, String name, String color, int level, String status, String leaderName) {
         this.factionId = factionId;
         this.name = name;
@@ -135,5 +138,26 @@ public class Faction implements IDable {
                 "leader_name = \"" + leaderName + "\", " +
                 "level = " + level + " " +
                 "WHERE id = " + factionId + ";", this);
+    }
+
+    public boolean neutralize() {
+        List<Point> factionPoints = MapState.getInstance().getFactionPoints(factionId);
+        if (factionPoints == null) return false;
+        for (Point p : factionPoints) {
+            p.addToFaction(BASE_NEUTRAL);
+            p.setPointLevel(1);
+        }
+        return true;
+    }
+
+    public String listMembers() {
+        String members = "";
+        List<PlayerCC> memberList = getMembers();
+
+        if (memberList.size() == 0) return members;
+        for (PlayerCC p : memberList) {
+            members += (p.isLeader() ? ChatColor.BLUE : ChatColor.RESET) + p.getName() + ChatColor.RESET + (p.equals(memberList.get(memberList.size() - 1)) ? "." : ", ");
+        }
+        return members;
     }
 }
