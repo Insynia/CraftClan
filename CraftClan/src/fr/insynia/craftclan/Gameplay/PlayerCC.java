@@ -352,4 +352,8 @@ public class PlayerCC implements Loadable {
         p.teleport(target);
         p.sendMessage("Vous avez été téléporté au point sûr le plus proche");
     }
+
+    public boolean isLeader() {
+        return name.equals(faction.getLeaderName());
+    }
 }

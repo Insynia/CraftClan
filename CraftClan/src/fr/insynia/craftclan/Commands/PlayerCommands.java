@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Sharowin on 27/05/15.
@@ -38,6 +39,16 @@ public class PlayerCommands {
 
     public static boolean newFaction(CommandSender sender, String[] args) {
         PlayerCC p = MapState.getInstance().findPlayer(((Player) sender).getUniqueId());
+
+        if (p.isLeader()) {
+            die("Vous êtes le leader de votre faction, vous ne pouvez pas la quitter !", sender);
+           return true;
+        }
+
+        if (!UtilCC.validatorName(args[1])) {
+            die("Le nom est trop long (Maximum: " + UtilCC.MAX_NAME_CHAR_LENGTH + " caractères), ou comporte des caractères interdits", sender);
+            return true;
+        }
 
         if (!UtilCC.checkColor(args[2])) {
             String msg = "Couleurs valides: ";
@@ -119,7 +130,7 @@ public class PlayerCommands {
                 "Il doit être de niveau inférieur à " + Point.POINT_MAX_LEVEL, sender);
         pcc.willUpgrade(point);
         point.upgradePoint();
-        pcc.sendMessage("Félicitations, vous avez amélioré le point \"" + point.getName() + "\" !\n"+
+        pcc.sendMessage("Félicitations, vous avez amélioré le point \"" + point.getName() + "\" !\n" +
                 "Il est désormais de niveau " + point.getLevel());
         return true;
 
@@ -128,6 +139,30 @@ public class PlayerCommands {
     private static boolean die(String msg, CommandSender sender) {
         sender.sendMessage(msg);
         return false;
+    }
+
+    // Faction Organization
+
+    public static boolean listFactionMembers(CommandSender sender) {
+        MapState ms = MapState.getInstance();
+        PlayerCC pcc = ms.findPlayer(((Player) sender).getUniqueId());
+
+        if (pcc.getFaction() == null) {
+            die("Vous n'appartenez à aucune faction", sender);
+            return true;
+        }
+
+        Faction playerFaction = pcc.getFaction();
+        List<PlayerCC> factionMembers = playerFaction.getMembers();
+
+        pcc.sendMessage("Votre faction comporte " + factionMembers.size() + (factionMembers.size() > 1 ? " membres:" : " membre:" ) + "\n");
+
+        String members = "";
+        for (PlayerCC p : factionMembers) {
+            members = members + p.getName() + "\n";
+        }
+        pcc.sendMessage(members);
+        return true;
     }
 
     public static boolean joinFaction(CommandSender sender, String[] args) {
