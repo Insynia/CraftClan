@@ -19,8 +19,8 @@ public class ProtectionList implements Loadable {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int pointId = rs.getInt("point_id");
-                Date begin = rs.getDate("start_time");
-                Date end = rs.getDate("end_time");
+                Date begin = new Date(rs.getTimestamp("begin").getTime());
+                Date end = new Date(rs.getTimestamp("end").getTime());
                 String userName = rs.getString("user_name");
                 Protection protection = new Protection(id, pointId, begin, end, userName);
                 MapState.getInstance().addProtection(protection);
