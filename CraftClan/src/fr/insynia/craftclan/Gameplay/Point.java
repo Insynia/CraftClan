@@ -1,5 +1,6 @@
 package fr.insynia.craftclan.Gameplay;
 
+import fr.insynia.craftclan.Base.MaperCC;
 import fr.insynia.craftclan.Base.SQLManager;
 import fr.insynia.craftclan.Interfaces.IDable;
 import fr.insynia.craftclan.Utils.FileManagerCC;
@@ -78,21 +79,19 @@ public class Point implements IDable {
     }
 
     public boolean addToFaction(int factionId) {
-        SQLManager sqlm = SQLManager.getInstance();
         this.factionId = factionId;
         changePointFaction(this.factionId);
-        return (sqlm.execUpdate("UPDATE points SET faction_id = " + factionId + " WHERE name = \"" + this.name + "\";"));
+        return update();
     }
 
     public boolean addToFaction(String name) {
-
-        SQLManager sqlm = SQLManager.getInstance();
         List<Faction> factions = MapState.getInstance().getFactions();
+
         for (Faction f : factions) {
             if (f.getName().equals(name)) {
                 this.factionId = f.getId();
                 changePointFaction(this.factionId);
-                return (sqlm.execUpdate("UPDATE points SET faction_id = " + factionId + " WHERE name = \"" + this.name + "\";"));
+                return update();
             }
         }
         return false;
@@ -175,6 +174,7 @@ public class Point implements IDable {
 
     private boolean update() {
         SQLManager sqlm = SQLManager.getInstance();
+        MaperCC.updatePointArea(this);
         return (sqlm.execUpdate("UPDATE points SET name = \"" + name +
                 "\", radius = \"" + radius +
                 "\", x = \"" + loc.getX() +

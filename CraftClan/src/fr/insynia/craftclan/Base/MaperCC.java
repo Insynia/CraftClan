@@ -36,7 +36,7 @@ public class MaperCC {
     public static void generateAreas() {
         initMarker();
         MarkerSet pointSet = api.getMarkerAPI().getMarkerSet(POINTS_MARKER_ID);
-        for (AreaMarker marker :pointSet.getAreaMarkers())
+        for (AreaMarker marker : pointSet.getAreaMarkers())
             marker.deleteMarker();
         pointSet.setHideByDefault(false);
         for (Point point : MapState.getInstance().getPoints()) {
@@ -63,5 +63,35 @@ public class MaperCC {
                 Bukkit.getLogger().info("Error during point area generation for Dynmap");
             }
         }
+    }
+
+    public static void updatePointArea(Point point) {
+        initMarker();
+        MarkerSet pointSet = api.getMarkerAPI().getMarkerSet(POINTS_MARKER_ID);
+        AreaMarker am = null;
+
+        for (AreaMarker marker : pointSet.getAreaMarkers())
+            if (marker.getMarkerID().equals("point_" + point.getId()))
+                am = marker;
+
+        if (am == null) {
+            Bukkit.getLogger().warning("Tried to change a non existent area");
+            return;
+        }
+
+        Faction f = MapState.getInstance().findFaction(point.getFactionId());
+        am.setLabel(point.getName());
+        if (f == null) {
+            am.setFillStyle(0.3, 0xAAAAAA);
+            am.setLineStyle(1, 0.8, 0xAAAAAA);
+            am.setDescription("Nom du point: " + point.getName() + "<br>Faction: inconnue"
+                    + "<br>Taille: " + point.getRadius() + "x" + point.getRadius());
+        } else {
+            am.setLineStyle(1, 0.8, f.getColorHex());
+            am.setFillStyle(0.1, f.getColorHex());
+            am.setDescription("Nom du point: " + point.getName() + "<br>Faction: " + f.getName()
+                    + "<br>Taille: " + point.getRadius() + "x" + point.getRadius());
+        }
+        am.setRangeY(point.getLocation().getY(), point.getLocation().getY() + 1);
     }
 }
