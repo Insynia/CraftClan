@@ -29,6 +29,8 @@ Empecher le leader de se kick
 
 ### Vérifier toutes les entrées utilisateurs lors des commandes
 
+### Faire une methode de respawn structure des points
+
 ## Second
 
 #### Tp les joueurs qui changent de faction au spawn
