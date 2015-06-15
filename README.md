@@ -23,7 +23,7 @@ Empecher le leader de se kick
 
 ## First
 
-### Set leader hors ligne
+### Set leader hors ligne                                                       Sharowin
 
 ### Centraliser les changements de faction (cf plus haut)
 
