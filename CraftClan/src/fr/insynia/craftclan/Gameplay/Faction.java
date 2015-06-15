@@ -160,4 +160,45 @@ public class Faction implements IDable {
         }
         return members;
     }
+
+    public int getColorHex() {
+        if (color == null)
+            return 0xAAAAAA;
+        switch (color.toLowerCase()) {
+            case "white":
+                return 0xFFFFFF;
+            case "gold":
+                return 0xFFAA00;
+            case "dark_purple":
+                return 0xAA00AA;
+            case "aqua":
+                return 0x55FFFF;
+            case "yellow":
+                return 0xFFFF55;
+            case "green":
+                return 0x55FF55;
+            case "red":
+                return 0xFF5555;
+            case "dark_gray":
+                return 0x555555;
+            case "gray":
+                return 0xAAAAAA;
+            case "dark_aqua":
+                return 0x00AAAA;
+            case "light_purple":
+                return 0xFF55FF;
+            case "dark_blue":
+                return 0x0000AA;
+            case "dark_green":
+                return 0x00AA00;
+            case "dark_red":
+                return 0xAA0000;
+            case "black":
+                return 0x000000;
+            case "blue":
+                return 0x5555FF;
+            default:
+                return 0xAAAAAA;
+        }
+    }
 }

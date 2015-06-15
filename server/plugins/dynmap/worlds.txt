@@ -8,6 +8,10 @@
 worlds:
   - name: world_farm
     enabled: false
+  - name: world_nether
+    enabled: false
+  - name: world_the_end
+    enabled: false
 
   # Worlds can be handled by templates, based on world type
   # You can override the properties of the template by specifying them in this section

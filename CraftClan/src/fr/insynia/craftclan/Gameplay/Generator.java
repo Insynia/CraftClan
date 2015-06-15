@@ -28,7 +28,7 @@ public class Generator {
     private static void createFarmWorld() {
         final WorldCreator wc = new WorldCreator(MapState.FARM_WORLD);
         wc.seed((new Random()).nextLong());
-        wc.type(WorldType.AMPLIFIED);
+        wc.type(WorldType.NORMAL);
         Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClan"),
                 new Runnable() {
                     @Override

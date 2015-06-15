@@ -18,6 +18,19 @@ public class InitPlugin {
         Generator.resetFarmingZone();
         prepareFarmTimer(plugin);
         preparePayDay(plugin);
+        prepareAreas(plugin);
+    }
+
+    private void prepareAreas(Plugin plugin) {
+        p = plugin;
+        Bukkit.getScheduler().scheduleSyncDelayedTask(p,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        MaperCC.generateAreas();
+                    }
+                }, 15 * 20); // 15 seconds
+
     }
 
     private void preparePayDay(Plugin plugin) {
