@@ -40,8 +40,8 @@ public class MaperCC {
             marker.deleteMarker();
         pointSet.setHideByDefault(false);
         for (Point point : MapState.getInstance().getPoints()) {
-            double[] xVals = { point.getLocation().getX() - point.getRadius(), point.getLocation().getX() + point.getRadius() };
-            double[] zVals = { point.getLocation().getZ() - point.getRadius(), point.getLocation().getZ() + point.getRadius() };
+            double[] xVals = { point.getLocation().getX() - point.getRadius(), point.getLocation().getX() + point.getRadius() + 1 };
+            double[] zVals = { point.getLocation().getZ() - point.getRadius(), point.getLocation().getZ() + point.getRadius() + 1 };
 
             AreaMarker am = pointSet.createAreaMarker("point_" + point.getId(), point.getName(), false, MapState.DEFAULT_WORLD, xVals, zVals, false);
             if (am != null) {

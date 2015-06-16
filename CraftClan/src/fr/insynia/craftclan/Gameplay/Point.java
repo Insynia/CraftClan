@@ -65,7 +65,7 @@ public class Point implements IDable {
         loc.setZ(UtilCC.getInt(loc.getZ()));
         boolean ret = sqlm.execUpdate("INSERT INTO points(name, radius, x, y, z, faction_id, level) " +
                 "VALUES(\"" + name + "\", " + radius + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", " + factionId + ", " + level + ");", this);
-        if (ret){this.addToMap();}
+        if (ret) this.addToMap();
         return ret;
     }
 
@@ -74,7 +74,6 @@ public class Point implements IDable {
         BlockSpawner.emptySky(loc);
         BlockSpawner.floorPointIsland(this.loc);
         BlockSpawner.createBeacon(loc);
-        // UtilCC.debugPoint(loc, radius); // Debug function
         spawnPointStructure(level);
     }
 
