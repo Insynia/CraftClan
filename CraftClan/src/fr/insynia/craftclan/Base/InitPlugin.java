@@ -4,6 +4,7 @@ import fr.insynia.craftclan.Adapters.FactionList;
 import fr.insynia.craftclan.Adapters.FactionRequestList;
 import fr.insynia.craftclan.Adapters.PointList;
 import fr.insynia.craftclan.Adapters.ProtectionList;
+import fr.insynia.craftclan.Gameplay.Faction;
 import fr.insynia.craftclan.Gameplay.Generator;
 import fr.insynia.craftclan.Gameplay.MapState;
 import org.bukkit.Bukkit;
@@ -84,8 +85,8 @@ public class InitPlugin {
                 " level INT(12) NOT NULL," +
                 " PRIMARY KEY (id)," +
                 " INDEX (name));");
-        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_name) VALUES(\"Newbie\", \"GRAY\", 1, 'OPEN', \"\")");
-        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_name) VALUES(\"Neutre\", \"GRAY\", 1, 'CLOSED', \"\")");
+        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_name) VALUES(\"" + Faction.BASE_FACTION+ "\", \"GRAY\", 1, 'OPEN', \"\")");
+        sqlm.execUpdate("INSERT IGNORE INTO factions(name, color, level, status, leader_name) VALUES(\"" + Faction.NEUTRAL_FACTION + "\", \"GRAY\", 1, 'CLOSED', \"\")");
         sqlm.execUpdate("CREATE TABLE IF NOT EXISTS users (" +
                 " id int NOT NULL AUTO_INCREMENT," +
                 " name VARCHAR(255) NOT NULL," +

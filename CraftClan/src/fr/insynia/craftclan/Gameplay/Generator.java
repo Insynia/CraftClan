@@ -83,7 +83,7 @@ public class Generator {
         int insetRadius = (diameter / 2);
         int x = xCenter - insetRadius - pointRadius - 1;
         int z = zCenter - insetRadius - pointRadius - 1;
-        int neutralFactionId = MapState.getInstance().findFaction("Neutre").getId();
+        int neutralFactionId = MapState.getInstance().findFaction(Faction.NEUTRAL_FACTION).getId();
         World world = Bukkit.getWorld(MapState.DEFAULT_WORLD);
 
         while (x <= xCenter + insetRadius + pointRadius + 1) {

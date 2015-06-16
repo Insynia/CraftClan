@@ -259,7 +259,7 @@ public class PlayerCommands {
                 "Vous devez être seul dans la faction, ou désigner un autre leader en tapant /cc setleader [Nom]\n" +
                 "Voici les membres de votre faction: " + targetFaction.listMembers(), sender);
         if (factionMembers == 1) targetFaction.neutralize();
-        p.addToFaction("Newbie");
+        p.addToFaction(Faction.BASE_FACTION);
         p.sendMessage("Vous retournez dans la faction " + p.getFaction().getFancyName());
         return true;
     }
@@ -274,17 +274,17 @@ public class PlayerCommands {
         if (!targetFaction.getLeaderName().equals(p.getName())) return live("Vous n'êtes pas le leader de la faction ;)", sender);
 
         if (targetPlayer != null) {
-            targetPlayer.addToFaction("Newbie");
+            targetPlayer.addToFaction(Faction.BASE_FACTION);
             targetPlayer.sendMessage("Vous avez été kick de votre faction :(");
             targetFaction.broadcastToMembers(p.getName() + " a kické " + targetPlayer.getName() + " !");
         } else {
             SQLManager sqlm = SQLManager.getInstance();
             for (PlayerCC pcc : targetFaction.getMembers()) {
                 if (pcc.getName().equalsIgnoreCase(target)) {
-                    if (sqlm.execUpdate("UPDATE users SET faction_id = " + MapState.getInstance().findFaction("Newbie").getId() + " WHERE name = \"" + pcc.getName() + "\"")) {
+                    if (sqlm.execUpdate("UPDATE users SET faction_id = " + MapState.getInstance().findFaction(Faction.BASE_FACTION).getId() + " WHERE name = \"" + pcc.getName() + "\"")) {
                         targetPlayer = MapState.getInstance().findPlayer(pcc.getName());
                         if (targetPlayer != null) {
-                            targetPlayer.addToFaction("Newbie");
+                            targetPlayer.addToFaction(Faction.BASE_FACTION);
                             targetPlayer.sendMessage("Vous avez été kick de votre faction :(");
                         }
                         targetFaction.broadcastToMembers(p.getName() + " a kické " + pcc.getName() + " !");

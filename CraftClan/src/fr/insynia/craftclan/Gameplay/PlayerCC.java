@@ -85,7 +85,7 @@ public class PlayerCC implements Loadable {
     }
 
     public static void create(Player player) {
-        PlayerCC playerCC = new PlayerCC(player.getName(), MapState.getInstance().findFaction("Newbie").getId(), 0, player.getUniqueId());
+        PlayerCC playerCC = new PlayerCC(player.getName(), MapState.getInstance().findFaction(Faction.BASE_FACTION).getId(), 0, player.getUniqueId());
         MapState.getInstance().addPlayer(playerCC);
         playerCC.save();
         Bukkit.getLogger().info("Created player: " + playerCC.name);
@@ -240,7 +240,7 @@ public class PlayerCC implements Loadable {
             return false;
         if (point.getFactionId() == -1 || MapState.getInstance().findFaction(point.getFactionId()) == null)
             return false;
-        if (faction == null || faction.getId() == point.getFactionId() || faction.getName().equals("Newbie"))
+        if (faction == null || faction.getId() == point.getFactionId() || faction.getName().equals(Faction.BASE_FACTION))
             return false;
         Protection protection = point.getProtection();
         if (protection != null) {
