@@ -35,6 +35,7 @@ public class PlayerCommands {
         return true;
     }
 
+    // Create a new faction
     public static boolean newFaction(CommandSender sender, String[] args) {
         PlayerCC p = MapState.getInstance().findPlayer(((Player) sender).getUniqueId());
         Faction  playerFaction = p.getFaction();
@@ -71,6 +72,7 @@ public class PlayerCommands {
         return ret;
     }
 
+    // Get out farm world
     public static boolean cmdStopFarm(CommandSender sender, Location loc) {
         final Player p = (Player) sender;
 
@@ -87,6 +89,7 @@ public class PlayerCommands {
         return true;
     }
 
+    // Go to farm world
     public static boolean cmdGoFarm(final CommandSender sender, Location loc) {
         final Player p = (Player) sender;
         PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
@@ -108,6 +111,7 @@ public class PlayerCommands {
         return true;
     }
 
+    // Upgrade a point
     public static boolean cmdUpgradePoint(CommandSender sender, Location loc) {
         Player p = (Player) sender;
         PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
@@ -124,9 +128,9 @@ public class PlayerCommands {
         return true;
 
     }
-
+    //
     // Faction Organization
-
+    //
     public static boolean listFactionMembers(CommandSender sender) {
         PlayerCC pcc = MapState.getInstance().findPlayer(sender.getName());
 
@@ -138,13 +142,30 @@ public class PlayerCommands {
 
         if (memberList.size() == 0) return live("La faction est vide", sender);
         for (PlayerCC p : memberList) {
-            members += (p.isLeader() ? ChatColor.BLUE : ChatColor.RESET) + p.getName() + ChatColor.RESET + (p.equals(memberList.get(memberList.size() - 1)) ? "." : ", ");
+            members += (p.isOnline() ? ChatColor.GREEN : ChatColor.GRAY) + "■ " +
+                    ChatColor.RESET + (p.isLeader() ? ChatColor.BLUE : ChatColor.RESET) + p.getName() +
+                    ChatColor.RESET + (p.equals(memberList.get(memberList.size() - 1)) ? "." : ", ");
         }
         sender.sendMessage("Votre faction comporte " + memberList.size() +
                 (memberList.size() > 1 ? " membres: " : " membre:") + "\n" + members);
         return true;
     }
+    public static boolean listFactions(CommandSender sender) {
+        MapState ms = MapState.getInstance();
+        String msg = "";
+        List<Faction> factionList = ms.getFactions();
+        if (factionList.size() <= Faction.BASE_FACTION_NB) return live("Aucune faction n'existe", sender);
 
+        for (Faction f : factionList) {
+            if (!f.getName().equals(Faction.BASE_FACTION) && !f.getName().equals(Faction.NEUTRAL_FACTION))
+                msg += f.getFancyName() + (f.equals(factionList.get(factionList.size() - 1)) ? "." : ", ");
+        }
+        sender.sendMessage("Il existe " + (factionList.size() - Faction.BASE_FACTION_NB) +
+                (factionList.size() > (Faction.BASE_FACTION_NB + 1) ? " factions: " : " faction: ") + "\n" + msg);
+        return true;
+
+    }
+    
     public static boolean joinFaction(CommandSender sender, String[] args) {
         MapState ms = MapState.getInstance();
         PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
@@ -227,8 +248,6 @@ public class PlayerCommands {
         return true;
     }
 
-    // Mettre en place même si le gars est déconnecté
-    // Broadcast à la faction
     public static boolean setLeader(CommandSender sender, String[] args) {
         MapState ms = MapState.getInstance();
         PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
