@@ -235,16 +235,29 @@ public class PlayerCommands {
 
         Faction targetFaction = p.getFaction();
 
-        if (!targetFaction.getLeaderName().equals(p.getName())) return live("Vous n'êtes pas le leader de la faction ;)", sender);
+        if (!p.isLeader()) return live("Vous n'êtes pas le leader de la faction ;)", sender);
 
         String target = args[1];
-        PlayerCC onlinePlayerCC = MapState.getInstance().findPlayer(target);
-        if (onlinePlayerCC != null && onlinePlayerCC.getFaction().getId() == p.getFaction().getId()) {
-            targetFaction.setLeaderName(onlinePlayerCC.getName());
-            if (targetFaction.update()) onlinePlayerCC.sendMessage("Vous êtes maintenant leader de " + targetFaction.getFancyName());
-            else live("Erreur inconnue", sender);
+        PlayerCC targetPlayer = MapState.getInstance().findPlayer(target);
+
+        if (!(targetPlayer == null)) {
+            targetFaction.setLeaderName(targetPlayer.getName());
+            if (targetFaction.update())
+                targetFaction.broadcastToMembers(targetPlayer.getName() + "est le nouveau leader de la faction " + targetFaction.getFancyName());
+            else live("Erreur inconue", sender);
         } else {
-            die("Le joueur doit être en ligne et être dans votre faction pour devenir leader !", sender);
+            SQLManager sqlm = SQLManager.getInstance();
+            for  (PlayerCC pcc : targetFaction.getMembers()) {
+                if (pcc.getName().equalsIgnoreCase(target)) {
+                    if (sqlm.execUpdate("UPDATE factions SET leader_name = \"" + pcc.getName() + "\" WHERE name = \"" + targetFaction.getName() + "\"")) {
+                        targetFaction.setLeaderName(pcc.getName());
+                        targetFaction.broadcastToMembers(p.getName() + " a nommé " + pcc.getName() +
+                                " en tant que nouveau leader de la faction " + targetFaction.getFancyName() + "!");
+                    }
+                    return true;
+                }
+            }
+            die("Ce joueur n'est pas dans votre faction", sender);
         }
         return true;
     }
@@ -271,9 +284,11 @@ public class PlayerCommands {
         Faction targetFaction = p.getFaction();
         String target = args[1];
         PlayerCC targetPlayer = MapState.getInstance().findPlayer(target);
-        if (!targetFaction.getLeaderName().equals(p.getName())) return live("Vous n'êtes pas le leader de la faction ;)", sender);
+
+        if (!p.isLeader()) return live("Vous n'êtes pas le leader de la faction ;)", sender);
 
         if (targetPlayer != null) {
+            if (targetPlayer.isLeader()) return live("Vous êtes le leader de votre faction, vous ne pouvez pas vous kick !", sender);
             targetPlayer.addToFaction(Faction.BASE_FACTION);
             targetPlayer.sendMessage("Vous avez été kick de votre faction :(");
             targetFaction.broadcastToMembers(p.getName() + " a kické " + targetPlayer.getName() + " !");
@@ -285,7 +300,6 @@ public class PlayerCommands {
                         targetPlayer = MapState.getInstance().findPlayer(pcc.getName());
                         if (targetPlayer != null) {
                             targetPlayer.addToFaction(Faction.BASE_FACTION);
-                            targetPlayer.sendMessage("Vous avez été kick de votre faction :(");
                         }
                         targetFaction.broadcastToMembers(p.getName() + " a kické " + pcc.getName() + " !");
                     }
