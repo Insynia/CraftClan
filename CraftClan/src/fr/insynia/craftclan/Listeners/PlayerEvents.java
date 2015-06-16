@@ -1,13 +1,14 @@
 package fr.insynia.craftclan.Listeners;
 
+import fr.insynia.craftclan.Base.SQLManager;
 import fr.insynia.craftclan.Gameplay.MapState;
 import fr.insynia.craftclan.Gameplay.PlayerCC;
-import fr.insynia.craftclan.Base.SQLManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -54,6 +55,24 @@ public class PlayerEvents implements Listener {
         } else {
             pcc.failAttacks();
             MapState.getInstance().removePlayer(pcc);
+        }
+    }
+
+    @EventHandler
+    public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
+        Player p = event.getPlayer();
+        final PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
+        final String msg = event.getMessage();
+
+        if (pcc.isTalkingToFaction()) {
+            Runnable task = new Runnable() {
+                @Override
+                public void run() {
+                    pcc.getFaction().msgFromPlayerToFaction(pcc, msg);
+                }
+            };
+            Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClan"), task);
+            event.setCancelled(true);
         }
     }
 }

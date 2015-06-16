@@ -411,4 +411,18 @@ public class PlayerCommands {
         sender.sendMessage(ChatColor.RED + msg + ChatColor.RESET);
         return true;
     }
+
+    public static boolean cmdTalkToFaction(CommandSender sender, Location loc) {
+        Player p = (Player) sender;
+        PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
+        Faction curFaction = pcc.getFaction();
+
+        if (curFaction == null || curFaction.getName().equals(Faction.BASE_FACTION) || curFaction.getName().equals(Faction.NEUTRAL_FACTION))
+            return false;
+        if (pcc.isTalkingToFaction())
+            pcc.setTalkingToFaction(false);
+        else
+            pcc.setTalkingToFaction(true);
+        return true;
+    }
 }

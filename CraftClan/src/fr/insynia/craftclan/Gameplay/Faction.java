@@ -201,4 +201,13 @@ public class Faction implements IDable {
                 return 0xAAAAAA;
         }
     }
+
+    public void msgFromPlayerToFaction(PlayerCC pcc, String msg) {
+        List<PlayerCC> members = getOnlineMembers();
+
+        msg = "(" + ChatColor.BOLD + ChatColor.valueOf(color) + name + ChatColor.RESET + ") " + pcc.getName() + ": " + msg;
+
+        for (PlayerCC member : members)
+            member.sendMessage(msg);
+    }
 }

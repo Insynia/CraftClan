@@ -33,6 +33,7 @@ public class PlayerCC implements Loadable {
     private int level;
     private UUID uuid;
     private int timeToCapture = 10;
+    private boolean talkingToFaction = false;
 
     public PlayerCC(){}
 
@@ -371,5 +372,18 @@ public class PlayerCC implements Loadable {
             if (a.getFactionId() == faction.getId() && a.getPoint().getName().equals(point.getName()) && a.playerFailed(this))
                 return a;
         return null;
+    }
+
+    public boolean isTalkingToFaction() {
+        return talkingToFaction;
+    }
+
+    public void setTalkingToFaction(boolean talkingToFaction) {
+        if (talkingToFaction == true)
+            sendMessage("Vous parlez maintenant uniquement aux membres de votre faction");
+        else
+            sendMessage("Vous parlez maintenant à tous les joueurs du serveur");
+
+        this.talkingToFaction = talkingToFaction;
     }
 }

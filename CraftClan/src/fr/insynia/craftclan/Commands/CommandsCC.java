@@ -27,6 +27,9 @@ public class CommandsCC {
         if (cmd.getName().equalsIgnoreCase("cc")) {
             if (args.length == 0) return false;
             switch (args[0].toLowerCase()) {
+                case "f":
+                    help = "Votre faction ne peut pas communiquer en privé";
+                    return (PlayerCommands.cmdTalkToFaction(sender, loc) || die(help, sender));
                 case "capture":
                     help = "\"capture\": Vous devez être à proximité d'un point ennemi pour pouvoir le capturer";
                     return (PlayerCommands.cmdCapture(sender, loc) || die(help, sender));
