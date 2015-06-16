@@ -191,6 +191,8 @@ public class CommandsCC {
 
                     if (!UtilCC.checkArgsChatCommand(args, genPointsReqArgs)) return die(help, sender);
                     return (AdminCommands.cmdGeneratePoints(sender, args) || die(help, sender));
+                case "regenpoints":
+                    return (AdminCommands.cmdRegeneratePoints(sender));
                 default:
                     sender.sendMessage("This command does not exist");
             }
