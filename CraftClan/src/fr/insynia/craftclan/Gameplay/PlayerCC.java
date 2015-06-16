@@ -81,6 +81,7 @@ public class PlayerCC implements Loadable {
         this.faction = f;
         boolean ret = sqlm.execUpdate("UPDATE users SET faction_id = " + f.getId() + " WHERE uuid = \"" + uuid + "\";");
         if (ret) loadFaction();
+        failAttacks();
         return ret;
     }
 
@@ -238,6 +239,10 @@ public class PlayerCC implements Loadable {
         Point point = MapUtils.getLocationPoint(block.getLocation());
         if (point == null)
             return false;
+        if (point.isAttacked()) {
+            sendMessage("Ce point subit déjà une attaque");
+            return false;
+        }
         if (point.getFactionId() == -1 || MapState.getInstance().findFaction(point.getFactionId()) == null)
             return false;
         if (faction == null || faction.getId() == point.getFactionId() || faction.getName().equals(Faction.BASE_FACTION))
