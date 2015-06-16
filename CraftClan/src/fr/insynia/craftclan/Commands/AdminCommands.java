@@ -144,6 +144,11 @@ public class AdminCommands {
         return true;
     }
 
+    public static boolean cmdRegeneratePoints(CommandSender sender) {
+        Generator.regenerate();
+        return true;
+    }
+
     private static boolean die(String msg, CommandSender sender) {
         sender.sendMessage(msg);
         return false;

@@ -13,6 +13,12 @@ import java.util.Random;
  */
 public class Generator {
 
+    public static void regenerate() {
+        MapState ms = MapState.getInstance();
+        for (Point p : ms.getPoints()) p.materialize();
+
+    }
+
     public static void resetFarmingZone() {
         Bukkit.getLogger().info("The farming zone is being reset !");
         World farmingZone = Bukkit.getWorld(MapState.FARM_WORLD);

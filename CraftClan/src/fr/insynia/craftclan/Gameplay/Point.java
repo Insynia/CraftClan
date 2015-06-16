@@ -71,6 +71,10 @@ public class Point implements IDable {
 
     private void addToMap() {
         MapState.getInstance().addPoint(this);
+        materialize();
+    }
+
+    public void materialize() {
         BlockSpawner.emptySky(loc);
         BlockSpawner.floorPointIsland(this.loc);
         BlockSpawner.createBeacon(loc);
