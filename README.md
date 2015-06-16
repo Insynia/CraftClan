@@ -27,10 +27,6 @@ ___
 
 ## Last
 
-### Ajuster ou ajouter la protection aux entities et pas que aux blocs (onEntityDamage ou un truc du genre contre onBlockBreak)
-
-### Coder les commandes player:
-
 ### Ajouter les commandes admin:
 
 ##### Renommer un point
