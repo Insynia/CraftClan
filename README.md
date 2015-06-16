@@ -17,11 +17,6 @@ ___
 ___
 # Mémo
 
-
-## Lock Player.CC:236 (if deja attacked) autres attacks si une attaque est en cours sur le point + leave join newfaction (tout ce qui fait leave une faction)
-
-Empecher le leader de se kick
-    Sharowin working on it
 ## First
 
 ### Set leader hors ligne
