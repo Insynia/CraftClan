@@ -19,34 +19,13 @@ ___
 
 ## First
 
-### Set leader hors ligne
-    Sharowin working on it
-
-### Centraliser les changements de faction (cf plus haut)
-
 ### Vérifier toutes les entrées utilisateurs lors des commandes
 
-### Faire une methode de respawn structure des points
+### Refactor
 
 ## Second
 
-#### Tp les joueurs qui changent de faction au spawn
-
-##### Seek member: broadcast announce (only if status = open)
-
 ## Last
-
-### Ajuster ou ajouter la protection aux entities et pas que aux blocs (onEntityDamage ou un truc du genre contre onBlockBreak)
-
-### Mettre le tagg de clan devant le pseudo ?
-
-### PVP Off au sein de la faction ?
-
-### Coder les commandes player:
-
-##### Faction message ? Envoie d'un message par le leader de la faction
-
-##### Mise en place d'un chat de faction ?
 
 ### Ajouter les commandes admin:
 
@@ -54,10 +33,7 @@ ___
 
 ##### Supprimer un point
 
-#### Coder le site et la map
-
-
-#### Créer une zone de vente
+#### Coder le site
 
 #### Ajouter un script autosave si le screen -ls minecraft est bon
 
