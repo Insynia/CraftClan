@@ -17,6 +17,8 @@ ___
 ___
 # Mémo
 
+http://www.spigotmc.org/threads/tutorial-creating-custom-entities-with-pathfindergoals.18519/
+
 ## First
 
 ### Vérifier toutes les entrées utilisateurs lors des commandes
