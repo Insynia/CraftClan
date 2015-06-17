@@ -3,6 +3,7 @@ package fr.insynia.craftclan.Gameplay;
 import fr.insynia.craftclan.Adapters.PlayerCCList;
 import fr.insynia.craftclan.Base.SQLManager;
 import fr.insynia.craftclan.Interfaces.IDable;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -205,7 +206,9 @@ public class Faction implements IDable {
     public void msgFromPlayerToFaction(PlayerCC pcc, String msg) {
         List<PlayerCC> members = getOnlineMembers();
 
-        msg = "(" + ChatColor.BOLD + ChatColor.valueOf(color) + name + ChatColor.RESET + ") " + pcc.getName() + ": " + msg;
+        msg =  pcc.getName() + " » " + "[" + ChatColor.BOLD + ChatColor.valueOf(color) + name + ChatColor.RESET + "]: " + msg;
+
+        Bukkit.getLogger().info(msg);
 
         for (PlayerCC member : members)
             member.sendMessage(msg);
