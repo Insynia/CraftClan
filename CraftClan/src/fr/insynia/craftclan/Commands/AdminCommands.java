@@ -137,6 +137,20 @@ public class AdminCommands {
         return true;
     }
 
+    // Rename Point
+    public static boolean cmdRenamePoint(CommandSender sender, String[] args) {
+        if (!UtilCC.checkPointExists(args[1])) return die("The point does not exist", sender);
+        if (UtilCC.checkPointExists(args[2])) return die("A point name \"" + args[2] + "\" already exists !", sender);
+        MapState ms = MapState.getInstance();
+        Point p = ms.findPoint(args[1]);
+        p.setName(args[2]);
+        boolean ret = p.update();
+        if (ret) sender.sendMessage("Point \"" + args[1] + "\" has been renamed to \"" + args[2] + "\"");
+        UtilCC.serverLogger("Point (ID:" + p.getId() + ") \"" + args[1] + "\" has been renamed to \"" + args[2] +
+                "\" by " + sender.getName());
+        return (ret || die("Unknown error !", sender));
+    }
+
     public static boolean cmdGeneratePoints(CommandSender sender, String[] args) {
         if (!UtilCC.isInteger(args[1])) return die("Arg 1 is supposed to be an integer", sender);
 

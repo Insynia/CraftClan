@@ -14,6 +14,7 @@ import java.util.List;
  * Created by Doc on 11/05/2015 at 19:54.
  */
 public class Faction implements IDable {
+
     private String name;
     private String color;
     private String status;
@@ -23,6 +24,7 @@ public class Faction implements IDable {
 
     public final static String BASE_FACTION = "Newbie";
     public final static String NEUTRAL_FACTION = "Neutre";
+    public static final int BASE_FACTION_NB = 2;
 
     public Faction(int factionId, String name, String color, int level, String status, String leaderName) {
         this.factionId = factionId;
