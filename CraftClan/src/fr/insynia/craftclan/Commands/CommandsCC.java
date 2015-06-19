@@ -77,6 +77,8 @@ public class CommandsCC {
                     return (PlayerCommands.kickMember(sender, args) || die(help, sender));
                 case "listmembers":
                     return PlayerCommands.listFactionMembers(sender);
+                case "listfactions":
+                    return PlayerCommands.listFactions(sender);
                 case "status":
                     help = "La commande \"status\" requiert 1 paramètre:\n" +
                             "[Statut]";
