@@ -148,7 +148,7 @@ public class AdminCommands {
         if (ret) sender.sendMessage("Point \"" + args[1] + "\" has been renamed to \"" + args[2] + "\"");
         UtilCC.serverLogger("Point (ID:" + p.getId() + ") \"" + args[1] + "\" has been renamed to \"" + args[2] +
                 "\" by " + sender.getName());
-        return (ret || die("Erreur inconue !", sender));
+        return (ret || die("Unknown error !", sender));
     }
 
     public static boolean cmdGeneratePoints(CommandSender sender, String[] args) {
