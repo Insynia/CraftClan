@@ -77,6 +77,8 @@ public class CommandsCC {
                     return (PlayerCommands.kickMember(sender, args) || die(help, sender));
                 case "listmembers":
                     return PlayerCommands.listFactionMembers(sender);
+                case "listfactions":
+                    return PlayerCommands.listFactions(sender);
                 case "status":
                     help = "La commande \"status\" requiert 1 paramètre:\n" +
                             "[Statut]";
@@ -99,6 +101,7 @@ public class CommandsCC {
                 default:
                     sender.sendMessage("Cette commande n'existe pas");
             }
+// Admin Commands
         } else if (cmd.getName().equalsIgnoreCase("cca")) {
             if (!sender.isOp()) return checkOp(sender);
             if (args.length == 0) return false;
@@ -194,6 +197,14 @@ public class CommandsCC {
 
                     if (!UtilCC.checkArgsChatCommand(args, genPointsReqArgs)) return die(help, sender);
                     return (AdminCommands.cmdGeneratePoints(sender, args) || die(help, sender));
+                case "renamepoint":
+                    int renamePointsReqArgs = 2;
+                    help = "\"renamepoint\" command needs \"" + (renamePointsReqArgs) + "\" parameters:\n" +
+                            "[PointName]    [NewName]\n" +
+                            "<String>       <String>";
+
+                    if (!UtilCC.checkArgsChatCommand(args, renamePointsReqArgs)) return die(help, sender);
+                    return (AdminCommands.cmdRenamePoint(sender, args) || die(help, sender));
                 case "regenpoints":
                     return (AdminCommands.cmdRegeneratePoints(sender));
                 default:
