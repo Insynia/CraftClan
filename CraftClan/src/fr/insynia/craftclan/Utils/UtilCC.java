@@ -110,14 +110,14 @@ public class UtilCC {
     // Check if a faction exists
     public static boolean checkFactionExists(String factionName) {
         List<Faction> factions = MapState.getInstance().getFactions();
-        for (Faction f : factions) if (factionName.equals(f.getName())) return true;
+        for (Faction f : factions) if (factionName.equalsIgnoreCase(f.getName())) return true;
         return false;
     }
 
     // Check if a point exists
     public static boolean checkPointExists(String pointName) {
         List<Point> points = MapState.getInstance().getPoints();
-        for (Point p : points) if (pointName.equals(p.getName())) return true;
+        for (Point p : points) if (pointName.equalsIgnoreCase(p.getName())) return true;
         return false;
     }
 

@@ -118,12 +118,12 @@ public class MapState {
     }
 
     public PlayerCC findPlayer(String name) {
-        for (PlayerCC p : playerCCs) if (p.getName().equals(name)) return p;
+        for (PlayerCC p : playerCCs) if (p.getName().equalsIgnoreCase(name)) return p;
         return null;
     }
 
     public Point findPoint(String name) {
-        for (Point p : points) if (p.getName().equals(name)) return p;
+        for (Point p : points) if (p.getName().equalsIgnoreCase(name)) return p;
         return null;
     }
 
@@ -138,7 +138,7 @@ public class MapState {
     }
 
     public Faction findFaction(String name) {
-        for (Faction f : factions) if (f.getName().equals(name)) return f;
+        for (Faction f : factions) if (f.getName().equalsIgnoreCase(name)) return f;
         return null;
     }
 
@@ -177,7 +177,8 @@ public class MapState {
         Iterator<Faction> itr = factions.iterator();
         while (itr.hasNext()) {
             Faction faction = itr.next();
-            if (faction.getName().equals(name)) {
+            if (faction.getName().equalsIgnoreCase
+                    (name)) {
                 itr.remove();
             }
         }
@@ -255,7 +256,7 @@ public class MapState {
     }
 
     public Request findRequestByPlayer(String playerName) {
-        for (Request r : requests) if (r.getPlayerName().equals(playerName)) return r;
+        for (Request r : requests) if (r.getPlayerName().equalsIgnoreCase(playerName)) return r;
         return null;
     }
 
