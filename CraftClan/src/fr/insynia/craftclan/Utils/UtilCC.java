@@ -248,4 +248,10 @@ public class UtilCC {
             return true;
         return false;
     }
+
+    public static void serverLogger(String msg) {
+        Date time = new Date();
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Bukkit.getLogger().info(msg + " on " + format.format(time));
+    }
 }

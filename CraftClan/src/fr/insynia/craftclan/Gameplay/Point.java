@@ -25,6 +25,7 @@ public class Point implements IDable {
     public static final int POINT_MAX_LEVEL = 10;
 
     private Location loc;
+
     private String name;
     private int radius;
     private int factionId;
@@ -135,6 +136,11 @@ public class Point implements IDable {
         }
     }
 
+    // Setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
     // Upgrade point level. ie: +1 Level
     public void upgradePoint() {
         level = level + 1;
@@ -175,7 +181,7 @@ public class Point implements IDable {
 
     // Update SQL with the point name
 
-    private boolean update() {
+    public boolean update() {
         SQLManager sqlm = SQLManager.getInstance();
         MaperCC.updatePointArea(this);
         return (sqlm.execUpdate("UPDATE points SET name = \"" + name +
