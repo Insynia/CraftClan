@@ -31,8 +31,6 @@ http://www.spigotmc.org/threads/tutorial-creating-custom-entities-with-pathfinde
 
 ### Ajouter les commandes admin:
 
-##### Renommer un point Sharowin: On It
-
 ##### Supprimer un point
 
 #### Coder le site
