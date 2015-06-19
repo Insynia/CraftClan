@@ -19,6 +19,8 @@ import java.util.List;
 public class UtilCC {
 
     public final static int MAX_NAME_CHAR_LENGTH = 20;
+    public final static String DEFAULT_LOGS_FOLDER=  "logsCC/";
+    public final static String DEFAULT_LOGS_FILE=  "logs";
 
     public static int getFloorY(int x, int z) {
         Location loc = new Location(Bukkit.getWorld(MapState.DEFAULT_WORLD), x, 0, z);
@@ -249,9 +251,15 @@ public class UtilCC {
         return false;
     }
 
-    public static void serverLogger(String msg) {
+    public static void serverLogger(String msg, final String file) {
         Date time = new Date();
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Bukkit.getLogger().info(msg + " on " + format.format(time));
+        final String log = "[" + format.format(time) + "]: " + msg;
+        Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("CraftClan"), new Runnable() {
+            @Override
+            public void run() {
+                FileManagerCC.writeLineToFile(DEFAULT_LOGS_FOLDER, file, log);
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@ package fr.insynia.craftclan.Base;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import fr.insynia.craftclan.Interfaces.IDable;
 import fr.insynia.craftclan.Interfaces.Loadable;
+import fr.insynia.craftclan.Utils.UtilCC;
 import org.bukkit.Bukkit;
 
 import javax.sql.DataSource;
@@ -49,6 +50,9 @@ public class SQLManager {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
+
+        UtilCC.serverLogger("SQL Query: " + sql, "sql");
+
         try {
             con = ds.getConnection();
             stmt = con.createStatement();
@@ -71,6 +75,9 @@ public class SQLManager {
         Connection con = null;
         Statement stmt = null;
         boolean ret;
+
+        UtilCC.serverLogger("SQL Query: " + sql, "sql");
+
         try {
             con = ds.getConnection();
             stmt = con.createStatement();
@@ -95,6 +102,9 @@ public class SQLManager {
         Connection con = null;
         Statement stmt = null;
         boolean ret;
+
+        UtilCC.serverLogger("SQL Query: " + sql, "sql");
+
         try {
             con = ds.getConnection();
             stmt = con.createStatement();

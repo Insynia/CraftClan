@@ -147,7 +147,7 @@ public class AdminCommands {
         boolean ret = p.update();
         if (ret) sender.sendMessage("Point \"" + args[1] + "\" has been renamed to \"" + args[2] + "\"");
         UtilCC.serverLogger("Point (ID:" + p.getId() + ") \"" + args[1] + "\" has been renamed to \"" + args[2] +
-                "\" by " + sender.getName());
+                "\" by " + sender.getName(), UtilCC.DEFAULT_LOGS_FILE);
         return (ret || die("Unknown error !", sender));
     }
 
