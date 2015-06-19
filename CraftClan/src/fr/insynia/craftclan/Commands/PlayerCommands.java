@@ -165,7 +165,7 @@ public class PlayerCommands {
         return true;
 
     }
-    
+
     public static boolean joinFaction(CommandSender sender, String[] args) {
         MapState ms = MapState.getInstance();
         PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
@@ -174,16 +174,24 @@ public class PlayerCommands {
         Faction targetFaction = ms.findFaction(args[1]);
         int factionMembers = playerFaction.getMembers().size();
 
+
         if (p.isLeader() && factionMembers > 1) return live("Vous êtes le leader de votre faction !\n" +
                 "Vous devez être seul dans la faction, ou désigner un autre leader en tapant /cc setleader [Nom]\n" +
                 "Voici les membres de votre faction: " + playerFaction.listMembers(), sender);
+
         if (targetFaction == null) return live("Cette faction n'existe pas", sender);
 
-        if (playerFaction.getLeaderName().equals(p.getName()))
-            return live("Vous êtes le leader de votre faction ! Pas question de déserter :(", sender);
 
         if (ms.findRequestByPlayer(p.getName()) != null)
             return live("Chaque chose en son temps, vous avez déjà une requête en cours", sender);
+
+        if (targetFaction.getMembers().size() == 0){
+            p.addToFaction(targetFaction.getName());
+            sender.sendMessage("Vous intégrez la faction \"" + targetFaction.getFancyName() +"\", et devenez son nouveau leader !");
+            targetFaction.setLeaderName(sender.getName());
+            targetFaction.update();
+            return true;
+        }
 
         if (targetFaction.getStatus().equals("CLOSED")) return live("Cette faction est fermée", sender);
 
