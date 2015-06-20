@@ -129,7 +129,7 @@ public class AdminCommands {
         Player p = ((Player) sender);
         if (!UtilCC.checkPointExists(args[1]) ||
                 MapState.getInstance().findPlayer(p.getName()) == null) return die("The point does not extist", sender);
-        Point point = MapState.getInstance().findPoint(args [1]);
+        Point point = MapState.getInstance().findPoint(args[1]);
         Location newLoc = point.getLocation().clone();
         newLoc.setX(newLoc.getX() + 0.5);
         newLoc.setZ(newLoc.getZ() + 0.5);
@@ -140,15 +140,36 @@ public class AdminCommands {
     // Rename Point
     public static boolean cmdRenamePoint(CommandSender sender, String[] args) {
         if (!UtilCC.checkPointExists(args[1])) return die("The point does not exist", sender);
-        if (UtilCC.checkPointExists(args[2])) return die("A point name \"" + args[2] + "\" already exists !", sender);
+        if (UtilCC.checkPointExists(args[2])) return die("A point named \"" + args[2] + "\" already exists !", sender);
         MapState ms = MapState.getInstance();
         Point p = ms.findPoint(args[1]);
         p.setName(args[2]);
         boolean ret = p.update();
-        if (ret) sender.sendMessage("Point \"" + args[1] + "\" has been renamed to \"" + args[2] + "\"");
-        UtilCC.serverLogger("Point (ID:" + p.getId() + ") \"" + args[1] + "\" has been renamed to \"" + args[2] +
-                "\" by " + sender.getName(), UtilCC.DEFAULT_LOGS_FILE);
+
+        if (ret) {
+            sender.sendMessage("Point \"" + args[1] + "\" has been renamed to \"" + args[2] + "\"");
+            UtilCC.serverLogger("Point (ID:" + p.getId() + ") \"" + args[1] + "\" has been renamed to \"" + args[2] +
+                    "\" by " + sender.getName(), UtilCC.DEFAULT_LOGS_FILE);
+        }
         return (ret || die("Unknown error !", sender));
+    }
+
+    // Rename Faction
+    public static boolean cmdRenameFaction(CommandSender sender, String[] args) {
+        if (!UtilCC.checkFactionExists(args[1])) return die("The faction does not exist", sender);
+        if (UtilCC.checkFactionExists(args[2])) return die("A faction named \"" + args[2] + "\" already exists !", sender);
+        MapState ms = MapState.getInstance();
+        Faction f = ms.findFaction(args[1]);
+        f.setName(args[2]);
+        boolean ret = f.update();
+
+        if (ret) {
+            sender.sendMessage("Faction \"" + args[1] + "\" has been renamed to \"" + args[2] + "\"");
+            UtilCC.serverLogger("Faction (ID:" + f.getId() + ") \"" + args[1] + "\" has been renamed to \"" + args[2] +
+                    "\" by " + sender.getName(), UtilCC.DEFAULT_LOGS_FILE);
+            for (PlayerCC pcc : f.getOnlineMembers()) pcc.loadFaction();
+        }
+        return (ret || die ("Unknown error !", sender));
     }
 
     public static boolean cmdGeneratePoints(CommandSender sender, String[] args) {

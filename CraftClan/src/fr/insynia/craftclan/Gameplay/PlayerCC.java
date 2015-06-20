@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class PlayerCC implements Loadable {
     private final Material ITEM_FOR_ATTACK = Material.DIAMOND;
-    private final int NB_ITEMS_FOR_ATTACK = 10;
+    private final int NB_ITEMS_FOR_ATTACK = 5;
 
     public static final int BASE_MONEY_UPGRADE = 1000;
 
@@ -254,8 +254,8 @@ public class PlayerCC implements Loadable {
                     "Il est protégé jusqu'au: " + UtilCC.dateHumanReadable(protection.getEnd()));
             return false;
         }
-        if (hasEnough(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK)) {
-            decreaseItem(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK);
+        if (hasEnough(ITEM_FOR_ATTACK, point.getLevel() * NB_ITEMS_FOR_ATTACK)) {
+            decreaseItem(ITEM_FOR_ATTACK, point.getLevel() * NB_ITEMS_FOR_ATTACK);
             new Attack(faction.getId(), point.getFactionId(), point.getId());
             return true;
         } else {

@@ -354,7 +354,7 @@ public class PlayerCommands {
         return targetFaction.update();
     }
 
-    public static boolean cancelRequest(CommandSender sender, String[] args) {
+    public static boolean cancelRequest(CommandSender sender) {
         MapState ms = MapState.getInstance();
         PlayerCC p = ms.findPlayer(((Player) sender).getUniqueId());
 
@@ -362,6 +362,7 @@ public class PlayerCommands {
         if (r == null) return live("Aucune requête en cours", sender);
 
         ms.removeRequest(r.getId());
+        sender.sendMessage("Requête annulée !");
         return true;
     }
 
