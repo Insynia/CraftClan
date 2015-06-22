@@ -35,13 +35,12 @@ public class MenuCC {
     private final int CMD_HELP = 7;
     private final int CMD_F = 8;
     private NamedInventory menu;
-    private final Player p;
+    private Player p;
     private PlayerCC pcc;
     private ItemStack[] mainItems = new ItemStack[NB_MAIN];
     private ItemStack[] tutoItems = new ItemStack[NB_TUTO];
     private Page tuto, main;
     private Block tmpBlock;
-    private MenuEnchant menuEnchant;
 
     public MenuCC(Player p) {
         this.p = p;
@@ -91,7 +90,6 @@ public class MenuCC {
     }
 
     public void actionEvent(int slot, String name) {
-        Bukkit.getLogger().info(ChatColor.stripColor(name));
         switch (ChatColor.stripColor(name)) {
             case "Menu":
                 handleMenuAction(slot);
@@ -102,6 +100,10 @@ public class MenuCC {
     private void handleMenuAction(int slot) {
         switch (slot) {
             case CMD_ATTACK:
+                if (!checkMainWorld()) {
+                    menu.closeInventory();
+                    break;
+                }
                 if (tmpBlock != null) {
                     Point targetedPoint = MapState.getInstance().findPoint(tmpBlock.getLocation());
 
@@ -115,10 +117,20 @@ public class MenuCC {
                 menu.closeInventory();
                 break;
             case CMD_CAPTURE:
+                if (!checkMainWorld()) {
+                    menu.closeInventory();
+                    break;
+                }
                 PlayerCommands.cmdCapture(p);
                 menu.closeInventory();
                 break;
         }
+    }
+
+    private boolean checkMainWorld() {
+        if (p.getLocation().getWorld().getName().equals(MapState.DEFAULT_WORLD))
+            return true;
+        return false;
     }
 
     private void resetAttackBtn() {
@@ -131,25 +143,31 @@ public class MenuCC {
         ItemBuilder ib;
 
         Block targetedBlock = p.getTargetBlock((Set<Material>) null, 30);
-
-
-        if (targetedBlock == null) {
-            attackMsg = ChatColor.RED + "Vous devez regarder un des blocs d'un point ennemi !";
+        if (!checkMainWorld()) {
+            attackMsg = ChatColor.RED + "Impossible dans ce monde !";
         } else {
-            targetedPoint = MapState.getInstance().findPoint(targetedBlock.getLocation());
-            tmpBlock = targetedBlock;
-
-            if (targetedPoint == null) {
-                Bukkit.getLogger().warning("No point found in open menu ! A block with no point was found");
+            if (targetedBlock == null) {
                 attackMsg = ChatColor.RED + "Vous devez regarder un des blocs d'un point ennemi !";
             } else {
-                if (pcc.isOnAttackOn(targetedPoint) != null) {
-                    mat = Material.YELLOW_FLOWER;
-                    title = "Capituler";
-                    attackMsg = ChatColor.AQUA + "Se rendre";
+                targetedPoint = MapState.getInstance().findPoint(targetedBlock.getLocation());
+                tmpBlock = targetedBlock;
+
+                if (targetedPoint == null) {
+                    Bukkit.getLogger().warning("No point found in open menu ! A block with no point was found");
+                    attackMsg = ChatColor.RED + "Vous devez regarder un des blocs d'un point ennemi !";
                 } else {
-                    colorValid = (pcc.hasEnough(Material.DIAMOND, targetedPoint.getLevel() * 5) ? ChatColor.GREEN : ChatColor.RED);
-                    attackMsg = "L'attaque vous coûtera: " + colorValid + targetedPoint.getLevel() * 5 + " diamants" + ChatColor.RESET;
+                    if (pcc.isOnAttackOn(targetedPoint) != null) {
+                        mat = Material.YELLOW_FLOWER;
+                        title = "Capituler";
+                        attackMsg = ChatColor.AQUA + "Se rendre";
+                    } else {
+                        if (targetedPoint.getFactionId() == pcc.getFaction().getId()) {
+                            attackMsg = ChatColor.AQUA + "Vous ciblez un point qui vous appartient !";
+                        } else {
+                            colorValid = (pcc.hasEnough(Material.DIAMOND, targetedPoint.getLevel() * 5) ? ChatColor.GREEN : ChatColor.RED);
+                            attackMsg = "L'attaque vous coûtera: " + colorValid + targetedPoint.getLevel() * 5 + " diamants" + ChatColor.RESET;
+                        }
+                    }
                 }
             }
         }
@@ -167,16 +185,21 @@ public class MenuCC {
     private void resetCaptureBtn() {
         PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
         Point targetedPoint;
-        targetedPoint = MapState.getInstance().findPoint(p.getLocation());
         String msg;
 
-        if (pcc.isOnAttackOn(targetedPoint) == null)
-            msg = ChatColor.RED + "Vous n'êtes pas sur un point que vous attaquez";
-        else {
-            if (!pcc.isOnPointArea(p.getLocation()))
-                msg = ChatColor.RED + "Vous devez vous rapprocher du centre du point";
-            else
-                msg = ChatColor.GREEN + "Capturer ce point vous prendra: " + UtilCC.formatTime(targetedPoint.getCaptureTime());
+        if (!checkMainWorld()) {
+            msg = ChatColor.RED + "Impossible dans ce monde !";
+        } else {
+            targetedPoint = MapState.getInstance().findPoint(p.getLocation());
+
+            if (pcc.isOnAttackOn(targetedPoint) == null)
+                msg = ChatColor.RED + "Vous n'êtes pas sur un point que vous attaquez";
+            else {
+                if (!pcc.isOnPointArea(p.getLocation()))
+                    msg = ChatColor.RED + "Vous devez vous rapprocher du centre du point";
+                else
+                    msg = ChatColor.GREEN + "Capturer ce point vous prendra: " + UtilCC.formatTime(targetedPoint.getCaptureTime());
+            }
         }
 
         ItemBuilder ib = new ItemBuilder(Material.BANNER);

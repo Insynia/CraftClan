@@ -13,8 +13,7 @@ import org.bukkit.event.player.*;
 
 public class PlayerEvents implements Listener {
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event)
-    {
+    public void onPlayerLogin(PlayerLoginEvent event) {
         SQLManager sqlm = SQLManager.getInstance();
         Player p = event.getPlayer();
         sqlm.fetchQuery("SELECT * FROM users WHERE uuid = \"" + p.getUniqueId() + "\";", new PlayerCC());
@@ -62,8 +61,7 @@ public class PlayerEvents implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event)
-    {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         PlayerCC pcc = MapState.getInstance().findPlayer(event.getPlayer().getUniqueId());
         if (pcc == null) {
             Bukkit.getLogger().warning("TRIED TO REMOVE A NON EXISTENT PLAYER FROM MAPSTATE");

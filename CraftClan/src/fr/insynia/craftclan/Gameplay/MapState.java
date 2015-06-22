@@ -20,8 +20,10 @@ import java.util.UUID;
 public class MapState {
     public static final int SPAWN_RADIUS = 196;
     private static final int BASE_PAYDAY = 5;
-    public static String DEFAULT_WORLD = "world";
-    public static String FARM_WORLD = "world_farm";
+    public static final String NETHER_WORLD = "world_nether";
+    public static final String ENDER_WORLD = "world_the_end";
+    public static final String DEFAULT_WORLD = "world";
+    public static final String FARM_WORLD = "world_farm";
     private static MapState instance = null;
     private List<Point> points;
     private List<PlayerCC> playerCCs;

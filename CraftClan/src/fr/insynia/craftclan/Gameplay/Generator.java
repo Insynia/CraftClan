@@ -18,31 +18,6 @@ public class Generator {
         for (Point p : ms.getPoints()) p.materialize();
     }
 
-    public static void resetFarmingZone() {
-        Bukkit.getLogger().info("The farming zone is being reset !");
-        World farmingZone = Bukkit.getWorld(MapState.FARM_WORLD);
-        if (farmingZone != null) {
-            File folder = farmingZone.getWorldFolder();
-            UtilCC.kickPlayersFromWorld(MapState.FARM_WORLD);
-            if (Bukkit.getServer().unloadWorld(MapState.FARM_WORLD, true))
-                FileManagerCC.deleteFileOrFolder(folder);
-        }
-        createFarmWorld();
-    }
-
-    private static void createFarmWorld() {
-        final WorldCreator wc = new WorldCreator(MapState.FARM_WORLD);
-        wc.seed((new Random()).nextLong());
-        wc.type(WorldType.NORMAL);
-        Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClan"),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        wc.createWorld();
-                    }
-                });
-    }
-
     public static int generatePoints(int layers) {
         int x, z, nb = 0;
         int curLayer = 1;
@@ -125,5 +100,45 @@ public class Generator {
 
     private static int hotFix(int var) {
         return var > 0 ? var - 1 : var;
+    }
+
+    private static void createWorld(String name, World.Environment env) {
+        final WorldCreator wc = new WorldCreator(name);
+        wc.seed((new Random()).nextLong());
+        wc.type(WorldType.NORMAL);
+        wc.environment(env);
+        Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("CraftClan"),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        wc.createWorld();
+                    }
+                });
+    }
+
+    public static void deleteWorld(String name) {
+        Bukkit.getLogger().info("The world " + name + " is being reset !");
+        World curWorld = Bukkit.getWorld(name);
+        if (curWorld != null) {
+            File folder = curWorld.getWorldFolder();
+            UtilCC.kickPlayersFromWorld(name);
+            if (Bukkit.getServer().unloadWorld(name, true))
+                FileManagerCC.deleteFileOrFolder(folder);
+        }
+    }
+
+    public static void resetFarmingZone() {
+        deleteWorld(MapState.FARM_WORLD);
+        createWorld(MapState.FARM_WORLD, World.Environment.NORMAL);
+    }
+
+    public static void resetNether() {
+        deleteWorld(MapState.NETHER_WORLD);
+        createWorld(MapState.NETHER_WORLD, World.Environment.NETHER);
+    }
+
+    public static void resetTheEnd() {
+        deleteWorld(MapState.ENDER_WORLD);
+        createWorld(MapState.ENDER_WORLD, World.Environment.THE_END);
     }
 }

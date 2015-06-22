@@ -8,19 +8,22 @@ import fr.insynia.craftclan.Gameplay.Faction;
 import fr.insynia.craftclan.Gameplay.Generator;
 import fr.insynia.craftclan.Gameplay.MapState;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Random;
 
 public class InitPlugin {
     static Plugin p = null;
 
     public void init(Plugin plugin) {
         createTables();
-        fetchItems();
+        fetchData();
         Generator.resetFarmingZone();
         prepareFarmTimer(plugin);
         preparePayDay(plugin);
         prepareAreas(plugin);
-        // TODO Reminders for bit.do/ccvote1 bit.do/ccvote2
+        prepareReminders(plugin);
     }
 
     private void prepareAreas(Plugin plugin) {
@@ -47,6 +50,23 @@ public class InitPlugin {
                 }, 60 * 60 * 20, 60 * 60 * 20); // 1 hour
     }
 
+    private void prepareReminders(Plugin plugin) {
+        p = plugin;
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(p,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if (new Random().nextLong() % 3 == 0) // 1 chance sur 3 pour le reminder parrainage
+                            Bukkit.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "N'hésitez pas à parrainer, pleins de cadeaux à la clef ;)\n" +
+                                    "Allez voir sur forum.craftclan.fr section parrainages !");
+                        else
+                            Bukkit.getServer().broadcastMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Faites vivre le serveur !\n" + ChatColor.RESET +
+                                    "" + ChatColor.GREEN + "Votez chaque jour sur " + ChatColor.BOLD + "bit.do/ccvote1" +
+                                    ChatColor.RESET + "" + ChatColor.GREEN + " et " + ChatColor.BOLD + "bit.do/ccvote2");
+                    }
+                }, 60 * 20, 60 * 20 * 10); // 10 min
+    }
+
     private void prepareFarmTimer(Plugin plugin) {
         p = plugin;
         Bukkit.getScheduler().scheduleSyncRepeatingTask(p,
@@ -65,6 +85,26 @@ public class InitPlugin {
                                 }, 60 * 5 * 20); // 5 minutes
                     }
                 }, 60 * 20, 60 * 60 * 20 * 2); // 2 hours
+    }
+
+    private void prepareRegenTimer(Plugin plugin) {
+        p = plugin;
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(p,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getServer().broadcastMessage("L'Ender world se réinitialise !");
+                        Generator.resetTheEnd();
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(p,
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Bukkit.getServer().broadcastMessage("Le Nether se réinitialise !");
+                                        Generator.resetNether();
+                                    }
+                                }, 60 * 5 * 20); // 5 minutes
+                    }
+                }, 60 * 20, 60 * 60 * 20 * 6); // 6 hours
     }
 
     private void createTables() {
@@ -129,7 +169,7 @@ public class InitPlugin {
                 " PRIMARY KEY (id));");
     }
 
-    private void fetchItems() {
+    private void fetchData() {
         SQLManager sqlm = SQLManager.getInstance();
         String query = "SELECT * FROM points;";
         sqlm.fetchQuery(query, new PointList());

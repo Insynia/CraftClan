@@ -239,7 +239,10 @@ public class PlayerCC implements Loadable {
     }
 
     public boolean willAttack(Block block) {
-         if (UtilCC.blockAttackBlacklist(block)) return false;
+        Player p = Bukkit.getPlayer(uuid);
+
+        if (!p.getWorld().getName().equals(MapState.DEFAULT_WORLD)) return false;
+        if (UtilCC.blockAttackBlacklist(block)) return false;
         Point point = MapState.getInstance().findPoint(block.getLocation());
         if (point == null)
             return false;
@@ -262,7 +265,7 @@ public class PlayerCC implements Loadable {
             new Attack(faction.getId(), point.getFactionId(), point.getId());
             return true;
         } else {
-            Bukkit.getPlayer(uuid).sendMessage("Vous n'avez pas assez de diamants pour attaquer ce point");
+            sendMessage("Vous n'avez pas assez de diamants pour attaquer ce point");
         }
         return false;
     }
