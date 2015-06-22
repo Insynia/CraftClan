@@ -91,7 +91,7 @@ public class CommandsCC {
                     if (!UtilCC.checkArgsChatCommand(args, 1)) return die(help, sender);
                     return (PlayerCommands.setFactionStatus(sender, args) || die(help, sender));
                 case "cancelrequest":
-                    return (PlayerCommands.cancelRequest(sender, args));
+                    return (PlayerCommands.cancelRequest(sender));
                 case "help":
                     sender.sendMessage("Vous pouvez consulter les règles, conditions d'utilisation et commandes disponibles sur notre forum: http://forum.craftclan.fr");
                     return true;
@@ -207,13 +207,20 @@ public class CommandsCC {
                     if (!UtilCC.checkArgsChatCommand(args, genPointsReqArgs)) return die(help, sender);
                     return (AdminCommands.cmdGeneratePoints(sender, args) || die(help, sender));
                 case "renamepoint":
-                    int renamePointsReqArgs = 2;
-                    help = "\"renamepoint\" command needs \"" + (renamePointsReqArgs) + "\" parameters:\n" +
+                    int renamePointReqArgs = 2;
+                    help = "\"renamepoint\" command needs \"" + (renamePointReqArgs) + "\" parameters:\n" +
                             "[PointName]    [NewName]\n" +
                             "<String>       <String>";
 
-                    if (!UtilCC.checkArgsChatCommand(args, renamePointsReqArgs)) return die(help, sender);
+                    if (!UtilCC.checkArgsChatCommand(args, renamePointReqArgs)) return die(help, sender);
                     return (AdminCommands.cmdRenamePoint(sender, args) || die(help, sender));
+                case "renamefaction":
+                    int renameFactionReqArgs = 2;
+                    help = "\"renamefaction\" command needs \"" + (renameFactionReqArgs) + "\" parameters:\n" +
+                            "[FactionName]    [NewName]\n" +
+                            "<String>       <String>";
+                    if (!UtilCC.checkArgsChatCommand(args, renameFactionReqArgs)) return die(help, sender);
+                    return (AdminCommands.cmdRenameFaction(sender, args) || die(help, sender));
                 case "regenpoints":
                     return (AdminCommands.cmdRegeneratePoints(sender));
                 default:

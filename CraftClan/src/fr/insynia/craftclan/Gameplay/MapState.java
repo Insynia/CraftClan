@@ -294,13 +294,17 @@ public class MapState {
     }
 
     public void payDay() {
+        String msg = "";
+        int payday = 0;
         for (PlayerCC pcc : playerCCs) {
             for (Point p : points) {
                 if (p.getFactionId() == pcc.getFaction().getId()) {
-                    EconomyCC.give(pcc.getName(), BigDecimal.valueOf(p.getLevel() * BASE_PAYDAY));
-                    pcc.sendMessage(ChatColor.GREEN + "+" + p.getLevel() * BASE_PAYDAY + "$");
+                    payday += p.getLevel() * BASE_PAYDAY;
+                    msg += ChatColor.GREEN + "+" + p.getLevel() * BASE_PAYDAY + "$ ";
                 }
             }
+            EconomyCC.give(pcc.getName(), BigDecimal.valueOf(payday));
+            pcc.sendMessage(msg + ChatColor.RESET + (!msg.equals("") ? "\n= " : "= ") + ChatColor.AQUA + payday + "$");
         }
     }
 

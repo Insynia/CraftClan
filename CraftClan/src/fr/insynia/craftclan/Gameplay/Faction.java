@@ -126,6 +126,11 @@ public class Faction implements IDable {
         this.status = status;
     }
 
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void requestedBy(PlayerCC p) {
         Request request = new Request(factionId, p.getName());
         request.save();

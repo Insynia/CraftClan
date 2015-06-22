@@ -152,7 +152,7 @@ public class Point implements IDable {
     public boolean setPointLevel(int newLevel) {
         this.level = newLevel;
         boolean ret = update();
-        if (ret) spawnPointStructure(level);
+        if (ret) materialize();
         return ret;
     }
 
