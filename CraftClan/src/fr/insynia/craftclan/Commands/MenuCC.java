@@ -3,6 +3,7 @@ package fr.insynia.craftclan.Commands;
 import fr.insynia.craftclan.Gameplay.MapState;
 import fr.insynia.craftclan.Gameplay.PlayerCC;
 import fr.insynia.craftclan.Gameplay.Point;
+import fr.insynia.craftclan.Utils.MenuEnchant;
 import fr.insynia.craftclan.Utils.UtilCC;
 import me.libraryaddict.inventory.ItemBuilder;
 import me.libraryaddict.inventory.NamedInventory;
@@ -13,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Set;
 
@@ -39,6 +41,7 @@ public class MenuCC {
     private ItemStack[] tutoItems = new ItemStack[NB_TUTO];
     private Page tuto, main;
     private Block tmpBlock;
+    private MenuEnchant menuEnchant;
 
     public MenuCC(Player p) {
         this.p = p;
@@ -109,12 +112,13 @@ public class MenuCC {
                             p.sendMessage(ChatColor.RED + "Vous ne pouvez pas attaquer");
                     }
                 }
+                menu.closeInventory();
                 break;
             case CMD_CAPTURE:
                 PlayerCommands.cmdCapture(p);
+                menu.closeInventory();
                 break;
         }
-        menu.closeInventory();
     }
 
     private void resetAttackBtn() {
@@ -178,5 +182,16 @@ public class MenuCC {
         ItemBuilder ib = new ItemBuilder(Material.BANNER);
         ib.setTitle("Capture").addLore(msg);
         mainItems[CMD_CAPTURE] = ib.build();
+    }
+
+    public static ItemStack getMenu() {
+        ItemStack ret = new ItemStack(Material.BOOK);
+        ItemMeta im;
+
+        ret.addEnchantment(new MenuEnchant(), 0);
+        im = ret.getItemMeta();
+        im.setDisplayName(ChatColor.DARK_PURPLE + "Menu");
+        ret.setItemMeta(im);
+        return ret;
     }
 }

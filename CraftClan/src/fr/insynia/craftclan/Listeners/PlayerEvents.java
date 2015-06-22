@@ -1,6 +1,7 @@
 package fr.insynia.craftclan.Listeners;
 
 import fr.insynia.craftclan.Base.SQLManager;
+import fr.insynia.craftclan.Commands.MenuCC;
 import fr.insynia.craftclan.Gameplay.MapState;
 import fr.insynia.craftclan.Gameplay.PlayerCC;
 import org.bukkit.Bukkit;
@@ -8,10 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 public class PlayerEvents implements Listener {
     @EventHandler
@@ -20,10 +18,6 @@ public class PlayerEvents implements Listener {
         SQLManager sqlm = SQLManager.getInstance();
         Player p = event.getPlayer();
         sqlm.fetchQuery("SELECT * FROM users WHERE uuid = \"" + p.getUniqueId() + "\";", new PlayerCC());
-
-        if (!p.hasPlayedBefore())
-            p.sendMessage("Le simple fait de jouer sur ce serveur vous engage à respecter nos" +
-                    " conditions d'utilisation présentes sur le forum: http://forum.craftclan.fr");
 
         PlayerCC player = MapState.getInstance().findPlayer(p.getUniqueId());
         if (player == null) {
@@ -34,16 +28,31 @@ public class PlayerEvents implements Listener {
     }
 
     @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        Player p = event.getPlayer();
+
+        if (!p.getInventory().contains(MenuCC.getMenu()))
+            p.getInventory().addItem(MenuCC.getMenu());
+    }
+
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
         PlayerCC player = MapState.getInstance().findPlayer(p.getUniqueId());
         player.loadFaction();
+
+        if (!p.getInventory().contains(MenuCC.getMenu()))
+            p.getInventory().addItem(MenuCC.getMenu());
+        if (!p.hasPlayedBefore())
+            p.sendMessage("Le simple fait de jouer sur ce serveur vous engage à respecter nos" +
+                    " conditions d'utilisation présentes sur le forum: http://forum.craftclan.fr");
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         PlayerCC pcc = MapState.getInstance().findPlayer(event.getEntity().getUniqueId());
         pcc.failAttacks();
+        event.getDrops().remove(MenuCC.getMenu());
     }
 
     @EventHandler

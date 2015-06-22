@@ -5,6 +5,7 @@ import fr.insynia.craftclan.Listeners.MenuEvents;
 import fr.insynia.craftclan.Listeners.PlayerEvents;
 import fr.insynia.craftclan.Listeners.PlayerRestriction;
 import fr.insynia.craftclan.Listeners.PvPRestriction;
+import fr.insynia.craftclan.Utils.MenuEnchant;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,6 +27,7 @@ public class CraftClanPlugin extends JavaPlugin {
         server.getPluginManager().registerEvents(new PlayerEvents(), this);
         server.getPluginManager().registerEvents(new PvPRestriction(), this);
         server.getPluginManager().registerEvents(new MenuEvents(), this);
+        MenuEnchant.registerMe();
     }
 
     // Fired when plugin is disabled
