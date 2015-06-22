@@ -31,18 +31,24 @@ public class PlayerEvents implements Listener {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player p = event.getPlayer();
 
-        if (!p.getInventory().contains(MenuCC.getMenu()))
-            p.getInventory().addItem(MenuCC.getMenu());
+        if (!p.getInventory().contains(MenuCC.getMenu())) {
+            if (p.getInventory().getItem(8) != null)
+                p.getWorld().dropItem(p.getLocation(), p.getInventory().getItem(8));
+            p.getInventory().setItem(8, MenuCC.getMenu());
+        }
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
-        PlayerCC player = MapState.getInstance().findPlayer(p.getUniqueId());
-        player.loadFaction();
+        PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
+        pcc.loadFaction();
 
-        if (!p.getInventory().contains(MenuCC.getMenu()))
-            p.getInventory().addItem(MenuCC.getMenu());
+        if (!p.getInventory().contains(MenuCC.getMenu())) {
+            if (p.getInventory().getItem(8) != null)
+                p.getWorld().dropItem(p.getLocation(), p.getInventory().getItem(8));
+            p.getInventory().setItem(8, MenuCC.getMenu());
+        }
         if (!p.hasPlayedBefore())
             p.sendMessage("Le simple fait de jouer sur ce serveur vous engage à respecter nos" +
                     " conditions d'utilisation présentes sur le forum: http://forum.craftclan.fr");
