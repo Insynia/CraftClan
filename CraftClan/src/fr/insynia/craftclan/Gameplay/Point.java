@@ -31,6 +31,7 @@ public class Point implements IDable {
     private int factionId;
     private int level;
     private int id;
+    private Object captureTime;
 
 
     public Point(String name, int radius, Location loc, int level, int factionId) {
@@ -220,5 +221,9 @@ public class Point implements IDable {
         if (MapState.getInstance().findAttackByPointId(id) != null)
             return true;
         return false;
+    }
+
+    public int getCaptureTime() {
+        return (int)(10 * Math.pow(level, 2));
     }
 }

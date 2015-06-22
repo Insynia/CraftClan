@@ -20,6 +20,7 @@ public class InitPlugin {
         prepareFarmTimer(plugin);
         preparePayDay(plugin);
         prepareAreas(plugin);
+        // TODO Reminders for bit.do/ccvote1 bit.do/ccvote2
     }
 
     private void prepareAreas(Plugin plugin) {

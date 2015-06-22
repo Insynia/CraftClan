@@ -23,13 +23,12 @@ public class PlayerCommands {
     private static final int MAX_MEMBERS = 20;
 
     // Capture a point
-    public static boolean cmdCapture(CommandSender sender, Location loc) {
-        Player p = (Player) sender;
+    public static boolean cmdCapture(Player p) {
         PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
         if (pcc == null) return false;
 
-        Point point = pcc.canCapture(loc);
-        if (point == null) return live("Vous ne pouvez pas capturer ce point !", sender);
+        Point point = pcc.canCapture(p.getLocation());
+        if (point == null) return live("Vous ne pouvez pas capturer ce point !", p);
 
         pcc.startCapture(point, p);
         return true;
@@ -451,5 +450,13 @@ public class PlayerCommands {
         else
             pcc.setTalkingToFaction(true);
         return true;
+    }
+
+    public static void surrender(PlayerCC pcc, Point targetedPoint) {
+        if (pcc == null || targetedPoint == null) return;
+        if (pcc.isOnAttackOn(targetedPoint) != null) {
+            pcc.failAttack(targetedPoint);
+            pcc.sendMessage("Capitulation ! Vous n'êtes plus en mode attaque sur le point \"" + targetedPoint.getName() + "\"");
+        }
     }
 }

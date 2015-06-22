@@ -1,7 +1,7 @@
 package fr.insynia.craftclan.Base;
 
-import fr.insynia.craftclan.Base.InitPlugin;
 import fr.insynia.craftclan.Commands.CommandsCC;
+import fr.insynia.craftclan.Listeners.MenuEvents;
 import fr.insynia.craftclan.Listeners.PlayerEvents;
 import fr.insynia.craftclan.Listeners.PlayerRestriction;
 import fr.insynia.craftclan.Listeners.PvPRestriction;
@@ -25,6 +25,7 @@ public class CraftClanPlugin extends JavaPlugin {
         server.getPluginManager().registerEvents(new PlayerRestriction(), this);
         server.getPluginManager().registerEvents(new PlayerEvents(), this);
         server.getPluginManager().registerEvents(new PvPRestriction(), this);
+        server.getPluginManager().registerEvents(new MenuEvents(), this);
     }
 
     // Fired when plugin is disabled

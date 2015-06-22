@@ -1,9 +1,9 @@
 package fr.insynia.craftclan.Gameplay;
 
 import fr.insynia.craftclan.Base.SQLManager;
+import fr.insynia.craftclan.Commands.MenuCC;
 import fr.insynia.craftclan.Interfaces.Loadable;
 import fr.insynia.craftclan.Utils.EconomyCC;
-import fr.insynia.craftclan.Utils.MapUtils;
 import fr.insynia.craftclan.Utils.UtilCC;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class PlayerCC implements Loadable {
     private final Material ITEM_FOR_ATTACK = Material.DIAMOND;
-    private final int NB_ITEMS_FOR_ATTACK = 10;
+    private final int NB_ITEMS_FOR_ATTACK = 5;
 
     public static final int BASE_MONEY_UPGRADE = 1000;
 
@@ -34,6 +34,7 @@ public class PlayerCC implements Loadable {
     private UUID uuid;
     private int timeToCapture = 10;
     private boolean talkingToFaction = false;
+    private MenuCC menu;
 
     public PlayerCC(){}
 
@@ -155,7 +156,7 @@ public class PlayerCC implements Loadable {
     }
 
     public void startCapture(final Point point, final Player p) {
-        timeToCapture = (int)(10 * Math.pow(point.getLevel(), 2));
+        timeToCapture = point.getCaptureTime();
         final PlayerCC pcc = this;
 
         if (isOnAttackOn(point) == null) {
@@ -172,6 +173,7 @@ public class PlayerCC implements Loadable {
         }
 
         Timer captureLoop = new Timer(true);
+        //PacketUtils.displayLoadingBar("Capture en cours...", p, timeToCapture, true);
         captureLoop.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -225,6 +227,7 @@ public class PlayerCC implements Loadable {
             inventory.addItem(new ItemStack(type, nb));
     }
 
+    // Returns the attack of this player for this point if it exists and the player has not failed
     public Attack isOnAttackOn(Point point) {
         if (point == null) return null;
         List<Attack> attacks = MapState.getInstance().getAttacks();
@@ -236,8 +239,8 @@ public class PlayerCC implements Loadable {
     }
 
     public boolean willAttack(Block block) {
-        if (UtilCC.blockAttackBlacklist(block)) return false;
-        Point point = MapUtils.getLocationPoint(block.getLocation());
+         if (UtilCC.blockAttackBlacklist(block)) return false;
+        Point point = MapState.getInstance().findPoint(block.getLocation());
         if (point == null)
             return false;
         if (point.isAttacked()) {
@@ -254,8 +257,8 @@ public class PlayerCC implements Loadable {
                     "Il est protégé jusqu'au: " + UtilCC.dateHumanReadable(protection.getEnd()));
             return false;
         }
-        if (hasEnough(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK)) {
-            decreaseItem(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK);
+        if (hasEnough(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK * point.getLevel())) {
+            decreaseItem(ITEM_FOR_ATTACK, NB_ITEMS_FOR_ATTACK * point.getLevel());
             new Attack(faction.getId(), point.getFactionId(), point.getId());
             return true;
         } else {
@@ -385,5 +388,22 @@ public class PlayerCC implements Loadable {
             sendMessage("Vous parlez maintenant à tous les joueurs du serveur");
 
         this.talkingToFaction = talkingToFaction;
+    }
+
+    public MenuCC getMenu() {
+        if (menu == null)
+            menu = new MenuCC(Bukkit.getPlayer(uuid));
+        return menu;
+    }
+
+    public void failAttack(Point targetedPoint) {
+        List<Attack> attacks = MapState.getInstance().getAttacks();
+
+        for (Attack a : attacks)
+            if (a.getFactionId() == faction.getId() && a.getPoint().getId() == targetedPoint.getId()) {
+                a.addFailerWithoutPurge(this);
+                break;
+            }
+        MapState.getInstance().purgeAttacks();
     }
 }

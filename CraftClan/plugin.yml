@@ -1,6 +1,7 @@
 name: CraftClan
 main: fr.insynia.craftclan.Base.CraftClanPlugin
 version: 1.0
+depend: [InventoryApi]
 commands:
    cc:
       description: Every user command.

@@ -1,8 +1,11 @@
 package fr.insynia.craftclan.Gameplay;
 
 import fr.insynia.craftclan.Utils.EconomyCC;
+import fr.insynia.craftclan.Utils.UtilCC;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.math.BigDecimal;
@@ -28,12 +31,12 @@ public class MapState {
     private List<Attack> attacks;
 
     protected MapState() {
-        points = new ArrayList<Point>();
+        points = new ArrayList<>();
         protections = new ArrayList<>();
-        requests = new ArrayList<Request>();
-        playerCCs = new ArrayList<PlayerCC>();
-        factions = new ArrayList<Faction>();
-        attacks = new ArrayList<Attack>();
+        requests = new ArrayList<>();
+        playerCCs = new ArrayList<>();
+        factions = new ArrayList<>();
+        attacks = new ArrayList<>();
         launchReminders(Bukkit.getPluginManager().getPlugin("CraftClan"));
     }
     public static MapState getInstance() {
@@ -298,5 +301,20 @@ public class MapState {
                 }
             }
         }
+    }
+
+    public void menuAction(Player player, int slot, String name) {
+        PlayerCC pcc = findPlayer(player.getUniqueId());
+
+        if (pcc == null) return;
+
+        pcc.getMenu().actionEvent(slot, name);
+    }
+
+    public Point findPoint(Location location) {
+        for (Point p : points)
+            if (UtilCC.distanceBasicFull(p.getLocation(), location) <= p.getRadius())
+                return p;
+        return null;
     }
 }

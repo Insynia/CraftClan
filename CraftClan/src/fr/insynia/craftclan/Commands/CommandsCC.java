@@ -1,5 +1,7 @@
 package fr.insynia.craftclan.Commands;
 
+import fr.insynia.craftclan.Gameplay.MapState;
+import fr.insynia.craftclan.Gameplay.PlayerCC;
 import fr.insynia.craftclan.Utils.UtilCC;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -27,12 +29,16 @@ public class CommandsCC {
         if (cmd.getName().equalsIgnoreCase("cc")) {
             if (args.length == 0) return false;
             switch (args[0].toLowerCase()) {
+                case "menu":
+                    PlayerCC pcc = MapState.getInstance().findPlayer(((Player) sender).getUniqueId());
+                    pcc.getMenu().open();
+                    return true;
                 case "f":
                     help = "Votre faction ne peut pas communiquer en privé";
                     return (PlayerCommands.cmdTalkToFaction(sender, loc) || die(help, sender));
                 case "capture":
                     help = "\"capture\": Vous devez être à proximité d'un point ennemi pour pouvoir le capturer";
-                    return (PlayerCommands.cmdCapture(sender, loc) || die(help, sender));
+                    return (PlayerCommands.cmdCapture((Player) sender) || die(help, sender));
                 case "farm":
                     help = "\"farm\": Vous êtes trop loin du spawn";
                     return (PlayerCommands.cmdGoFarm(sender, loc) || die(help, sender));
@@ -107,6 +113,9 @@ public class CommandsCC {
             if (args.length == 0) return false;
 
             switch (args[0].toLowerCase()) {
+//                case "mount":
+//                    return (AdminCommands.cmdMount(sender, args));
+
                 case "addpoint":
                     int addPointReqArgs = 3;
                     help = "\"addpoint\" command needs " + (addPointReqArgs) + " parameters:\n" +

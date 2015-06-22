@@ -56,7 +56,7 @@ public class MaperCC {
                     am.setLineStyle(1, 0.8, f.getColorHex());
                     am.setFillStyle(0.1, f.getColorHex());
                     am.setDescription("Nom du point: " + point.getName() + "<br>Faction: " + f.getName()
-                            + "<br>Taille: " + point.getRadius() + "x" + point.getRadius());
+                            + "<br>Taille: " + point.getRadius() * 2 + "x" + point.getRadius() * 2);
                 }
                 am.setRangeY(point.getLocation().getY(), point.getLocation().getY() + 1);
             } else {

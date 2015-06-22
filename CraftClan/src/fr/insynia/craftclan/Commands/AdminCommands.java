@@ -16,6 +16,13 @@ import java.util.Set;
  */
 public class AdminCommands {
 
+//    public static boolean cmdMount(CommandSender sender, String[] args) {
+//        World world = Bukkit.getWorld(MapState.DEFAULT_WORLD);
+//        Entity ent = world.spawnEntity(world.getSpawnLocation(), EntityType.valueOf(args[2]));
+//        ent.setPassenger(Bukkit.getPlayer(MapState.getInstance().findPlayer(args[1]).getUUID()));
+//        return true;
+//    }
+
     // Add a Faction.
     public static boolean cmdAddFaction(CommandSender sender, String[] args) {
         if (!UtilCC.checkColor(args[2])) {
@@ -167,5 +174,4 @@ public class AdminCommands {
         sender.sendMessage(msg);
         return false;
     }
-
 }

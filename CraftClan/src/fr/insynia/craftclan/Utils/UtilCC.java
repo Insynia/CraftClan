@@ -254,4 +254,12 @@ public class UtilCC {
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Bukkit.getLogger().info(msg + " on " + format.format(time));
     }
+
+    public static String formatTime(int totalSecs) {
+        int hours = totalSecs / 3600;
+        int minutes = (totalSecs % 3600) / 60;
+        int seconds = totalSecs % 60;
+
+        return String.format("%02dh%02dm%02ds", hours, minutes, seconds);
+    }
 }
