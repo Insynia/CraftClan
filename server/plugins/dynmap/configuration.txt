@@ -38,8 +38,8 @@ components:
   - class: org.dynmap.ClientConfigurationComponent
   
   - class: org.dynmap.InternalClientUpdateComponent
-    sendhealth: true
-    sendposition: true
+    sendhealth: false
+    sendposition: false
     allowwebchat: true
     webchat-interval: 5
     hidewebchatip: false
