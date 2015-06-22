@@ -16,7 +16,6 @@ public class Generator {
     public static void regenerate() {
         MapState ms = MapState.getInstance();
         for (Point p : ms.getPoints()) p.materialize();
-
     }
 
     public static void resetFarmingZone() {
