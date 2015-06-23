@@ -307,6 +307,7 @@ public class MapState {
             }
             EconomyCC.give(pcc.getName(), BigDecimal.valueOf(payday));
             pcc.sendMessage(msg + ChatColor.RESET + (!msg.equals("") ? "\n= " : "= ") + ChatColor.AQUA + payday + "$");
+            payday = 0;
         }
     }
 
