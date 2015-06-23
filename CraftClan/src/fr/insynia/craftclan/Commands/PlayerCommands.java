@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class PlayerCommands {
 
-    private static final int DISTANCE_FARM_CMD = 50;
+    public static final int DISTANCE_FARM_CMD = 50;
     private static final int MAX_MEMBERS = 20;
 
     // Capture a point
@@ -72,10 +72,8 @@ public class PlayerCommands {
     }
 
     // Get out farm world
-    public static boolean cmdStopFarm(CommandSender sender, Location loc) {
-        final Player p = (Player) sender;
-
-        sender.sendMessage("Vous allez être téléporté dans 10s");
+    public static boolean cmdStopFarm(final Player p) {
+        p.sendMessage("Vous allez être téléporté dans 10s");
 
         if (p.getLocation().getWorld() != Bukkit.getWorld(MapState.FARM_WORLD))
             return false;
@@ -89,21 +87,20 @@ public class PlayerCommands {
     }
 
     // Go to farm world
-    public static boolean cmdGoFarm(final CommandSender sender, Location loc) {
-        final Player p = (Player) sender;
+    public static boolean cmdGoFarm(final Player p) {
         PlayerCC pcc = MapState.getInstance().findPlayer(p.getUniqueId());
         if (pcc == null) return false;
-        if (pcc.isOnWorld(MapState.FARM_WORLD)) return false;
+        if (!pcc.isOnWorld(MapState.DEFAULT_WORLD)) return false;
         if (UtilCC.distanceBasic(Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation(), p.getLocation()) >= DISTANCE_FARM_CMD) return false;
 
-        sender.sendMessage("Vous allez être téléporté dans 10s");
+        p.sendMessage("Vous allez être téléporté dans 10s");
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("CraftClan"), new Runnable() {
             @Override
             public void run() {
                 p.teleport(Bukkit.getWorld(MapState.FARM_WORLD).getSpawnLocation());
-                sender.sendMessage("Attention, le PvP est activé dans cette zone ! Surveillez vos diamants ;)");
-                sender.sendMessage("Tapez /cc stopfarm pour revenir au spawn");
+                p.sendMessage("Attention, le PvP est activé dans cette zone ! Surveillez vos diamants ;)");
+                p.sendMessage("Tapez /cc stopfarm pour revenir au spawn");
             }
         }, 10 * 20);
 

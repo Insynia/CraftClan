@@ -21,9 +21,10 @@ public class MenuEvents implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         MapState.getInstance().menuAction(player, event.getSlot(), event.getInventory().getName());
-        if (event.getCurrentItem().equals(MenuCC.getMenu())) {
-            event.setCancelled(true);
-        }
+        if (event.getCurrentItem() != null)
+            if (event.getCurrentItem().equals(MenuCC.getMenu())) {
+                event.setCancelled(true);
+            }
     }
 
     @EventHandler

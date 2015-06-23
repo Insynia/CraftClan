@@ -23,23 +23,22 @@ import java.util.Set;
  * Created by Doc on 19/06/15 at 04:53.
  */
 public class MenuCC {
-    private final int NB_TUTO = 1;
+    private final int NB_TUTO = 9;
     private final int NB_MAIN = 9;
+    private final int NB_FACTION = 9;
     private final int LINK_TUTO = 0;
     private final int CMD_ATTACK = 1;
     private final int CMD_CAPTURE = 2;
     private final int CMD_FARM = 3;
-    private final int CMD_UPGRADE = 4;
-    private final int CMD_MEMBERS = 5;
-    private final int CMD_FACTIONS = 6;
-    private final int CMD_HELP = 7;
-    private final int CMD_F = 8;
+    private final int CMD_F = 4;
+    private final int LINK_FACTION = 5;
     private NamedInventory menu;
     private Player p;
     private PlayerCC pcc;
     private ItemStack[] mainItems = new ItemStack[NB_MAIN];
     private ItemStack[] tutoItems = new ItemStack[NB_TUTO];
-    private Page tuto, main;
+    private ItemStack[] factionItems = new ItemStack[NB_FACTION];
+    private Page tuto, faction, main;
     private Block tmpBlock;
 
     public MenuCC(Player p) {
@@ -53,9 +52,11 @@ public class MenuCC {
             menu = new NamedInventory("menu", p);
 
         setTutoPage();
+        setFactionPage();
         setMainPage();
 
-        menu.linkPage(mainItems[0], tuto);
+        menu.linkPage(mainItems[LINK_TUTO], tuto);
+        menu.linkPage(mainItems[LINK_FACTION], faction);
         menu.linkPage(tutoItems[0], main);
         menu.setPage(main);
     }
@@ -68,33 +69,64 @@ public class MenuCC {
     private void resetMainPage() {
         resetAttackBtn();
         resetCaptureBtn();
+        resetFBtn();
+        resetFarmBtn();
         this.main = new Page("main", ChatColor.DARK_PURPLE + "Menu");
         menu.setPage(main, mainItems);
     }
+
+    //////// Pages initialization v v v
 
     private void setMainPage() {
         mainItems[LINK_TUTO] = new ItemBuilder(Material.BOOK_AND_QUILL).setTitle("Tutoriel").addLore(ChatColor.AQUA + "Besoin d'aide ?").build();
         mainItems[CMD_ATTACK] = new ItemBuilder(Material.DIAMOND_SWORD).setTitle("Attaque").addLore(ChatColor.RED + "Veuillez vous approcher d'un point ennemi").build();
         mainItems[CMD_CAPTURE] = new ItemBuilder(Material.BANNER).setTitle("Capture").addLore(ChatColor.RED + "Vous devez être en mode attaque").build();
+        mainItems[CMD_FARM] = new ItemBuilder(Material.DIAMOND).setTitle("Zone de farm").addLore(ChatColor.RED + "Vous devez être à proximité du spawn").build();
+        mainItems[CMD_F] = new ItemBuilder(Material.SIGN).setTitle("Chat de clan").addLore("Chat général activé").build();
+        mainItems[LINK_FACTION] = new ItemBuilder(Material.BOOK_AND_QUILL).setTitle("Commandes de clan").addLore(ChatColor.AQUA + "Commandes en rapport avec les clans").build();
 
         this.main = new Page("main", ChatColor.DARK_PURPLE + "Menu");
         menu.setPage(main, mainItems);
     }
 
     private void setTutoPage() {
-        Page tuto = new Page("tuto", ChatColor.GOLD + "Tutoriel");
+        Page tuto = new Page("tuto", ChatColor.DARK_PURPLE + "Tutoriel");
         tutoItems[0] = new ItemBuilder(Material.EGG).setTitle("En construction").addLore(ChatColor.AQUA + "Patience ;)").build();
 
         menu.setPage(tuto, tutoItems);
         this.tuto = tuto;
     }
 
+    private void setFactionPage() {
+        Page faction = new Page("faction", ChatColor.DARK_PURPLE + "Clan");
+        factionItems[0] = new ItemBuilder(Material.EGG).setTitle("En construction").addLore(ChatColor.AQUA + "Patience ;)").build();
+
+        menu.setPage(faction, factionItems);
+        this.faction = faction;
+    }
+
+    //////// Pages initialization ^ ^ ^
+
+    //////// Handlers v v v
+
     public void actionEvent(int slot, String name) {
         switch (ChatColor.stripColor(name)) {
             case "Menu":
                 handleMenuAction(slot);
                 break;
+            case "Clan":
+                handleClanAction(slot);
+                break;
         }
+    }
+    private void handleClanAction(int slot) {
+//        switch (slot) {
+//            case CMD_ATTACK:
+//                if (!checkMainWorld()) {
+//                    menu.closeInventory();
+//                    break;
+//                }
+//        }
     }
 
     private void handleMenuAction(int slot) {
@@ -124,8 +156,26 @@ public class MenuCC {
                 PlayerCommands.cmdCapture(p);
                 menu.closeInventory();
                 break;
+            case CMD_FARM:
+                String worldName = p.getLocation().getWorld().getName();
+                if (!(worldName.equals(MapState.DEFAULT_WORLD) || worldName.equals(MapState.FARM_WORLD))) {
+                    menu.closeInventory();
+                    break;
+                }
+                if (worldName.equals(MapState.DEFAULT_WORLD))
+                    PlayerCommands.cmdGoFarm(p);
+                else
+                    PlayerCommands.cmdStopFarm(p);
+                menu.closeInventory();
+                break;
+            case CMD_F:
+                pcc.setTalkingToFaction(!pcc.isTalkingToFaction());
+                menu.closeInventory();
+                break;
         }
     }
+
+    //////// Handlers ^ ^ ^
 
     private boolean checkMainWorld() {
         if (p.getLocation().getWorld().getName().equals(MapState.DEFAULT_WORLD))
@@ -205,6 +255,37 @@ public class MenuCC {
         ItemBuilder ib = new ItemBuilder(Material.BANNER);
         ib.setTitle("Capture").addLore(msg);
         mainItems[CMD_CAPTURE] = ib.build();
+    }
+
+    private void resetFBtn() {
+        String msg = (pcc.isTalkingToFaction() ? "Chat de clan activé" : "Chat général activé");
+
+        ItemBuilder ib = new ItemBuilder(Material.SIGN);
+        ib.setTitle(pcc.isTalkingToFaction() ? "Chat général" : "Chat de clan").addLore(msg);
+        mainItems[CMD_F] = ib.build();
+    }
+
+    private void resetFarmBtn() {
+        String msg, worldName, title = "Zone de farm";
+
+        worldName = p.getLocation().getWorld().getName();
+
+        if (worldName.equals(MapState.DEFAULT_WORLD)) {
+            if (UtilCC.distanceBasic(Bukkit.getWorld(MapState.DEFAULT_WORLD).getSpawnLocation(), p.getLocation()) >= PlayerCommands.DISTANCE_FARM_CMD)
+                msg = ChatColor.RED + "Vous devez être à proximité du spawn";
+            else
+                msg = ChatColor.AQUA + "Tp en zone de farm";
+            title = "Zone de farm";
+
+        } else if (worldName.equals(MapState.FARM_WORLD)) {
+            msg = ChatColor.AQUA + "Tp dans le monde normal";
+            title = "Retour au monde normal";
+        } else
+            msg = ChatColor.RED + "Impossible dans ce monde !";
+
+        ItemBuilder ib = new ItemBuilder(Material.DIAMOND);
+        ib.setTitle(title).addLore(msg);
+        mainItems[CMD_FARM] = ib.build();
     }
 
     public static ItemStack getMenu() {

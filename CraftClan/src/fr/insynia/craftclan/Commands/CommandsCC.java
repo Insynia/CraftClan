@@ -41,10 +41,10 @@ public class CommandsCC {
                     return (PlayerCommands.cmdCapture((Player) sender) || die(help, sender));
                 case "farm":
                     help = "\"farm\": Vous êtes trop loin du spawn";
-                    return (PlayerCommands.cmdGoFarm(sender, loc) || die(help, sender));
+                    return (PlayerCommands.cmdGoFarm((Player) sender) || die(help, sender));
                 case "stopfarm":
                     help = "\"stopfarm\": Vous n'êtes pas dans la zone de farm";
-                    return (PlayerCommands.cmdStopFarm(sender, loc) || die(help, sender));
+                    return (PlayerCommands.cmdStopFarm((Player) sender) || die(help, sender));
                 case "newfaction":
                     help = "La commande \"newfaction\" requiert 2 paramètres:\n" +
                             "[Nom] [Couleur]";
