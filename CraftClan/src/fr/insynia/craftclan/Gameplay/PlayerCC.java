@@ -242,10 +242,14 @@ public class PlayerCC implements Loadable {
         Player p = Bukkit.getPlayer(uuid);
 
         if (!p.getWorld().getName().equals(MapState.DEFAULT_WORLD)) return false;
-        if (UtilCC.blockAttackBlacklist(block)) return false;
+//        if (UtilCC.blockAttackBlacklist(block)) return false;
         Point point = MapState.getInstance().findPoint(block.getLocation());
         if (point == null)
             return false;
+        if (point.getLevel() == 0) {
+            sendMessage("Ce point ne peut pas être attaqué");
+            return false;
+        }
         if (point.isAttacked()) {
             sendMessage("Ce point subit déjà une attaque");
             return false;

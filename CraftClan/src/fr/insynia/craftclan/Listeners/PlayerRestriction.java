@@ -64,7 +64,7 @@ public class PlayerRestriction implements Listener {
             return false;
 
         Attack attack = pcc.isOnAttackOn(curPoint);
-        if (attack != null || pcc.willAttack(event.getBlock())) // When player is attacking the point OR the attacks is well created
+        if (attack != null) // When player is attacking the point
             return true;
         return false;
     }

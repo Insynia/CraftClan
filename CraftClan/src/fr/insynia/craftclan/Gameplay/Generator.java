@@ -99,7 +99,7 @@ public class Generator {
     }
 
     private static int hotFix(int var) {
-        return var > 0 ? var - 1 : var;
+        return var < 0 ? var + 1 : var;
     }
 
     private static void createWorld(String name, World.Environment env) {
