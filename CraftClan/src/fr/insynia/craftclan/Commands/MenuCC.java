@@ -25,20 +25,20 @@ import java.util.Set;
 public class MenuCC {
     private final int NB_TUTO = 9;
     private final int NB_MAIN = 9;
-    private final int NB_FACTION = 9;
+    private final int NB_CLAN = 9;
     private final int LINK_TUTO = 0;
     private final int CMD_ATTACK = 1;
     private final int CMD_CAPTURE = 2;
     private final int CMD_FARM = 3;
     private final int CMD_F = 4;
-    private final int LINK_FACTION = 5;
+    private final int LINK_CLAN = 5;
     private NamedInventory menu;
     private Player p;
     private PlayerCC pcc;
     private ItemStack[] mainItems = new ItemStack[NB_MAIN];
     private ItemStack[] tutoItems = new ItemStack[NB_TUTO];
-    private ItemStack[] factionItems = new ItemStack[NB_FACTION];
-    private Page tuto, faction, main;
+    private ItemStack[] clanItems = new ItemStack[NB_CLAN];
+    private Page tuto, clan, main;
     private Block tmpBlock;
 
     public MenuCC(Player p) {
@@ -56,7 +56,7 @@ public class MenuCC {
         setMainPage();
 
         menu.linkPage(mainItems[LINK_TUTO], tuto);
-        menu.linkPage(mainItems[LINK_FACTION], faction);
+        menu.linkPage(mainItems[LINK_CLAN], clan);
         menu.linkPage(tutoItems[0], main);
         menu.setPage(main);
     }
@@ -83,7 +83,7 @@ public class MenuCC {
         mainItems[CMD_CAPTURE] = new ItemBuilder(Material.BANNER).setTitle("Capture").addLore(ChatColor.RED + "Vous devez être en mode attaque").build();
         mainItems[CMD_FARM] = new ItemBuilder(Material.DIAMOND).setTitle("Zone de farm").addLore(ChatColor.RED + "Vous devez être à proximité du spawn").build();
         mainItems[CMD_F] = new ItemBuilder(Material.SIGN).setTitle("Chat de clan").addLore("Chat général activé").build();
-        mainItems[LINK_FACTION] = new ItemBuilder(Material.BOOK_AND_QUILL).setTitle("Commandes de clan").addLore(ChatColor.AQUA + "Commandes en rapport avec les clans").build();
+        mainItems[LINK_CLAN] = new ItemBuilder(Material.BOOK_AND_QUILL).setTitle("Commandes de clan").addLore(ChatColor.AQUA + "Commandes en rapport avec les clans").build();
 
         this.main = new Page("main", ChatColor.DARK_PURPLE + "Menu");
         menu.setPage(main, mainItems);
@@ -98,11 +98,11 @@ public class MenuCC {
     }
 
     private void setFactionPage() {
-        Page faction = new Page("faction", ChatColor.DARK_PURPLE + "Clan");
-        factionItems[0] = new ItemBuilder(Material.EGG).setTitle("En construction").addLore(ChatColor.AQUA + "Patience ;)").build();
+        Page faction = new Page("clan", ChatColor.DARK_PURPLE + "Clan");
+        clanItems[0] = new ItemBuilder(Material.EGG).setTitle("En construction").addLore(ChatColor.AQUA + "Patience ;)").build();
 
-        menu.setPage(faction, factionItems);
-        this.faction = faction;
+        menu.setPage(faction, clanItems);
+        this.clan = faction;
     }
 
     //////// Pages initialization ^ ^ ^
