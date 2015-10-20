@@ -63,7 +63,7 @@ Le pwd est celui du depot git local
 cd server
 ````
 
-3 variables d'envirronnement doivent être définies:
+3 variables d'environnement doivent être définies:
 - DB_USERNAME
 - DB_URL
 - DB_PASSWORD
