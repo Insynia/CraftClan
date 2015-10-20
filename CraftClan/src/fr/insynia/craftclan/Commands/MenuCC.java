@@ -30,7 +30,7 @@ public class MenuCC {
     private final int CMD_ATTACK = 1;
     private final int CMD_CAPTURE = 2;
     private final int CMD_FARM = 3;
-    private final int CMD_F = 4;
+    private final int CMD_CHATF = 4;
     private final int LINK_CLAN = 5;
     private NamedInventory menu;
     private Player p;
@@ -82,7 +82,7 @@ public class MenuCC {
         mainItems[CMD_ATTACK] = new ItemBuilder(Material.DIAMOND_SWORD).setTitle("Attaque").addLore(ChatColor.RED + "Veuillez vous approcher d'un point ennemi").build();
         mainItems[CMD_CAPTURE] = new ItemBuilder(Material.BANNER).setTitle("Capture").addLore(ChatColor.RED + "Vous devez être en mode attaque").build();
         mainItems[CMD_FARM] = new ItemBuilder(Material.DIAMOND).setTitle("Zone de farm").addLore(ChatColor.RED + "Vous devez être à proximité du spawn").build();
-        mainItems[CMD_F] = new ItemBuilder(Material.SIGN).setTitle("Chat de clan").addLore("Chat général activé").build();
+        mainItems[CMD_CHATF] = new ItemBuilder(Material.SIGN).setTitle("Chat de clan").addLore("Chat général activé").build();
         mainItems[LINK_CLAN] = new ItemBuilder(Material.BOOK_AND_QUILL).setTitle("Commandes de clan").addLore(ChatColor.AQUA + "Commandes en rapport avec les clans").build();
 
         this.main = new Page("main", ChatColor.DARK_PURPLE + "Menu");
@@ -168,7 +168,7 @@ public class MenuCC {
                     PlayerCommands.cmdStopFarm(p);
                 menu.closeInventory();
                 break;
-            case CMD_F:
+            case CMD_CHATF:
                 pcc.setTalkingToFaction(!pcc.isTalkingToFaction());
                 menu.closeInventory();
                 break;
@@ -262,7 +262,7 @@ public class MenuCC {
 
         ItemBuilder ib = new ItemBuilder(Material.SIGN);
         ib.setTitle(pcc.isTalkingToFaction() ? "Chat général" : "Chat de clan").addLore(msg);
-        mainItems[CMD_F] = ib.build();
+        mainItems[CMD_CHATF] = ib.build();
     }
 
     private void resetFarmBtn() {
